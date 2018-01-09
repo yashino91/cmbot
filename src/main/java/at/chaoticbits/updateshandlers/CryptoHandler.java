@@ -35,12 +35,8 @@ public class CryptoHandler extends TelegramLongPollingBot {
 
                 String command = message.getText();
 
-                if (command.startsWith("/cm")) {
-
-                    if (command.equals("/cm"))
-                        sendMessageRequest.setText("Missing parameter. Syntax: /cm currency. For example: /cm ethereum");
-                    else
-                        sendMessageRequest.setText(CoinMarketCapService.getInstance().fetchCurrency(command.substring(command.indexOf(' ') + 1, command.length())));
+                if (command.startsWith("/")) {
+                    sendMessageRequest.setText(CoinMarketCapService.getInstance().fetchCurrency(command.substring(1, command.length())));
                 }
 
 
