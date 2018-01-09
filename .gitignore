@@ -1,0 +1,17 @@
+### Package Files #
+target/
+*.jar
+
+### virtual machine crash logs
+hs_err_pid*
+
+### IDE files
+.idea/
+copyright/
+*.iml
+
+### File System specific files
+.DS_STORE
+
+### logs
+*.log
