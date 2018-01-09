@@ -61,6 +61,6 @@ public class CryptoHandler extends TelegramLongPollingBot {
 
     @Override
     public String getBotToken() {
-        return BotConfig.DEVTOKEN;
+        return BotConfig.CMBOTTOKEN;
     }
 }
