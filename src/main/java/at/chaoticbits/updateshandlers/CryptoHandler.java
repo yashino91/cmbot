@@ -73,6 +73,6 @@ public class CryptoHandler extends TelegramLongPollingBot {
 
     @Override
     public String getBotToken() {
-        return BotConfig.CMBOTTOKEN;
+        return System.getenv("CMBOT_TELEGRAM_TOKEN");
     }
 }
