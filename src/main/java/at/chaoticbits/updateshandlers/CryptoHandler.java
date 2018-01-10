@@ -1,13 +1,16 @@
 package at.chaoticbits.updateshandlers;
 
-import at.chaoticbits.utils.BotConfig;
-import at.chaoticbits.services.CoinMarketCapService;
+import at.chaoticbits.coinmarket.CoinMarketScheduler;
+import at.chaoticbits.config.BotConfig;
+import at.chaoticbits.coinmarket.CoinMarketCapService;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.Message;
 import org.telegram.telegrambots.api.objects.Update;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
 import org.telegram.telegrambots.logging.BotLogger;
+
+import java.util.Timer;
 
 
 /**
@@ -16,6 +19,19 @@ import org.telegram.telegrambots.logging.BotLogger;
 public class CryptoHandler extends TelegramLongPollingBot {
 
     private static final String LOGTAG  = "CryptoHandler";
+
+
+    /**
+     * Instantiate CryptoHandler and start coin market scheduler
+     */
+    public CryptoHandler() {
+
+        CoinMarketScheduler cmScheduler = new CoinMarketScheduler () ;
+
+        int initialDelay = 100 ;
+        int fixedRate = 60 * 60 * 1000; // every hour
+        new Timer().schedule(cmScheduler, initialDelay, fixedRate) ;
+    }
 
 
     @Override

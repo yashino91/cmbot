@@ -8,7 +8,6 @@ import org.telegram.telegrambots.logging.BotLogger;
 import org.telegram.telegrambots.logging.BotsFileHandler;
 
 import java.io.IOException;
-import java.util.logging.ConsoleHandler;
 import java.util.logging.Level;
 
 
@@ -24,7 +23,6 @@ public class Main {
     public static void main(String[] args) {
 
         BotLogger.setLevel(Level.ALL);
-        BotLogger.registerLogger(new ConsoleHandler());
         try {
             BotLogger.registerLogger(new BotsFileHandler());
         } catch (IOException e) {
@@ -32,6 +30,7 @@ public class Main {
         }
 
         try {
+
             ApiContextInitializer.init();
             TelegramBotsApi telegramBotsApi = createLongPollingTelegramBotsApi();
             try {
