@@ -1,4 +1,4 @@
-package at.chaoticbits.services;
+package at.chaoticbits.coinmarket;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
@@ -59,14 +59,16 @@ public class CoinMarketCapService {
 
 
     /**
-     *Fetch the information of the given currency
+     * Fetch the information of the given currency
      * @param currency currency (bitcoin, ethereum, etc..)
      * @return formatted string containing currency information or error details
      */
     public String fetchCurrency(String currency) {
 
+        String slug = getCurrencySlug(currency);
+
         try {
-            String completURL = API_URL + currency + "/?convert=EUR";
+            String completURL = API_URL + slug + "/?convert=EUR";
             CloseableHttpClient client = HttpClientBuilder.create().setSSLHostnameVerifier(new NoopHostnameVerifier()).build();
             HttpGet request = new HttpGet(completURL);
 
@@ -97,6 +99,16 @@ public class CoinMarketCapService {
             BotLogger.error(LOGTAG, e);
             return  "*Error parsing response: *" + e.getMessage();
         }
+    }
+
+    private String getCurrencySlug(String currency) {
+
+        String slug = CoinMarketContainer.instance.findSlug(currency.toUpperCase());
+
+        if(slug == null)
+            return currency;
+
+        return slug;
     }
 
 

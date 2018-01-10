@@ -1,4 +1,4 @@
-package at.chaoticbits.utils;
+package at.chaoticbits.config;
 
 
 public class BotConfig {
