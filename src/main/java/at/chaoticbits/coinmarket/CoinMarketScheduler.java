@@ -12,6 +12,9 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.telegram.telegrambots.logging.BotLogger;
 
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.TimerTask;
 
 /**
@@ -45,13 +48,28 @@ public class CoinMarketScheduler extends TimerTask {
 
                 JSONArray jsonArray = new JSONArray(responseString);
 
-                for (int i = 0; i < jsonArray.length(); i++) {
-                    JSONObject jsonObject = jsonArray.getJSONObject(i);
-                    CoinMarketContainer.instance.addOrUpdateSymbolSlug(jsonObject.getString("symbol"), jsonObject.getString("slug"));
+
+                try (PrintWriter writer = new PrintWriter("./telegram-commands/top-coins.txt", "UTF-8")) {
+
+                    for (int i = 0; i < jsonArray.length(); i++) {
+
+                        JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+                        // populate top 85 coins in telegram commands
+                        if (i < 85)
+                            updateBotCommands(writer, jsonObject);
+
+                        CoinMarketContainer.instance.addOrUpdateSymbolSlug(jsonObject.getString("symbol"), jsonObject.getString("slug"));
+                    }
+
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } catch (UnsupportedEncodingException e) {
+                    e.printStackTrace();
                 }
 
-                BotLogger.info(LOGTAG, "Successfully updated symbol slugs");
 
+                BotLogger.info(LOGTAG, "Successfully updated symbol slugs");
             } else {
                 BotLogger.warn(LOGTAG, "StatusCode: " + response.getStatusLine().getStatusCode());
 
@@ -59,6 +77,11 @@ public class CoinMarketScheduler extends TimerTask {
         } catch (Exception e) {
             BotLogger.error(LOGTAG, "Error parsing new symbol slug list: " + e.getMessage());
         }
+
+    }
+
+    private void updateBotCommands(PrintWriter writer, JSONObject jsonObject) {
+            writer.println(jsonObject.getString("symbol").toLowerCase() + " - " + jsonObject.getString("name"));
 
     }
 }
