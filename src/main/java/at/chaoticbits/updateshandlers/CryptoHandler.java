@@ -47,23 +47,21 @@ public class CryptoHandler extends TelegramLongPollingBot {
                 //create a object that contains the information to send back the message
                 SendMessage sendMessageRequest = new SendMessage();
                 sendMessageRequest.enableMarkdown(true);
-                sendMessageRequest.setChatId(message.getChatId().toString());
+                sendMessageRequest.setChatId(message.getChatId());
 
                 String command = message.getText();
 
                 if (command.startsWith("/")) {
                     sendMessageRequest.setText(CoinMarketCapService.getInstance().fetchCurrency(command.substring(1, command.length())));
-                }
 
-
-                try {
-                    sendMessage(sendMessageRequest);
-                } catch (TelegramApiException e) {
-                    BotLogger.error(LOGTAG, e);
+                    try {
+                        sendMessage(sendMessageRequest);
+                    } catch (TelegramApiException e) {
+                        BotLogger.error(LOGTAG, e);
+                    }
                 }
             }
         }
-
     }
 
     @Override
