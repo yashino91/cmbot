@@ -1,13 +1,7 @@
 package at.chaoticbits.coinmarket;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.conn.ssl.NoopHostnameVerifier;
-import org.apache.http.entity.BufferedHttpEntity;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.util.EntityUtils;
+import at.chaoticbits.api.Api;
+import at.chaoticbits.api.Response;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.telegram.telegrambots.logging.BotLogger;
@@ -15,6 +9,7 @@ import org.telegram.telegrambots.logging.BotLogger;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.util.Objects;
 import java.util.TimerTask;
 
 /**
@@ -30,23 +25,17 @@ public class CoinMarketScheduler extends TimerTask {
     }
 
 
+
     @Override
     public void run () {
 
         try {
 
-            CloseableHttpClient client = HttpClientBuilder.create().setSSLHostnameVerifier(new NoopHostnameVerifier()).build();
-            HttpGet request = new HttpGet("https://files.coinmarketcap.com/generated/search/quick_search.json");
+            Response response = Api.fetch("https://files.coinmarketcap.com/generated/search/quick_search.json");
 
-            CloseableHttpResponse response = client.execute(request);
-            HttpEntity ht = response.getEntity();
+            if (Objects.requireNonNull(response).getStatus() == 200) {
 
-            BufferedHttpEntity buf = new BufferedHttpEntity(ht);
-            String responseString = EntityUtils.toString(buf, "UTF-8");
-
-            if (response.getStatusLine().getStatusCode() == 200) {
-
-                JSONArray jsonArray = new JSONArray(responseString);
+                JSONArray jsonArray = new JSONArray(response.getBody());
 
 
                 try (PrintWriter writer = new PrintWriter("./telegram-commands/top-coins.txt", "UTF-8")) {
@@ -62,20 +51,17 @@ public class CoinMarketScheduler extends TimerTask {
                         CoinMarketContainer.instance.addOrUpdateSymbolSlug(jsonObject.getString("symbol"), jsonObject.getString("slug"));
                     }
 
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                } catch (UnsupportedEncodingException e) {
+                    BotLogger.info(LOGTAG, "Successfully updated symbol slugs");
+
+                } catch (FileNotFoundException | UnsupportedEncodingException e) {
                     e.printStackTrace();
                 }
-
-
-                BotLogger.info(LOGTAG, "Successfully updated symbol slugs");
             } else {
-                BotLogger.warn(LOGTAG, "StatusCode: " + response.getStatusLine().getStatusCode());
+                BotLogger.warn(LOGTAG, "StatusCode: " + response.getStatus());
 
             }
         } catch (Exception e) {
-            BotLogger.error(LOGTAG, "Error parsing new symbol slug list: " + e.getMessage());
+            BotLogger.error(LOGTAG, "Error parsing new symbol slug list: " + e);
         }
 
     }

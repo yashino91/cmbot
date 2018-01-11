@@ -1,19 +1,14 @@
 package at.chaoticbits.coinmarket;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.conn.ssl.NoopHostnameVerifier;
-import org.apache.http.entity.BufferedHttpEntity;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.util.EntityUtils;
+import at.chaoticbits.api.Api;
+import at.chaoticbits.api.Response;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.telegram.telegrambots.logging.BotLogger;
 
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
-
+import java.util.Objects;
 
 
 /**
@@ -71,31 +66,16 @@ public class CoinMarketCapService {
             slug = "basic-attention-token";
 
         try {
-            String completURL = API_URL + slug + "/?convert=EUR";
-            CloseableHttpClient client = HttpClientBuilder.create().setSSLHostnameVerifier(new NoopHostnameVerifier()).build();
-            HttpGet request = new HttpGet(completURL);
 
-            CloseableHttpResponse response = client.execute(request);
-            HttpEntity ht = response.getEntity();
+            Response response = Api.fetch(API_URL + slug + "/?convert=EUR");
 
-            BufferedHttpEntity buf = new BufferedHttpEntity(ht);
-            String responseString = EntityUtils.toString(buf, "UTF-8");
+            if (Objects.requireNonNull(response).getStatus() == 200) {
+                JSONArray jsonArray = new JSONArray(response.getBody());
 
-            if (response.getStatusLine().getStatusCode() == 200) {
-
-                JSONObject jsonObject;
-
-                // correct received coinmarket cap json
-                StringBuilder sb = new StringBuilder(responseString);
-                sb.deleteCharAt(0);
-                sb.deleteCharAt(responseString.length() - 2);
-
-                jsonObject = new JSONObject("{result:" + sb.toString() + "}");
-
-                return formatCurrencyResult(jsonObject.getJSONObject("result"));
+                return formatCurrencyResult(jsonArray.getJSONObject(0));
 
             } else {
-                BotLogger.warn(LOGTAG, "StatusCode: " + response.getStatusLine().getStatusCode());
+                BotLogger.warn(LOGTAG, "StatusCode: " + response.getStatus());
                 return "*Error: * \"" + currency + "\" not found";
             }
         } catch (Exception e) {
