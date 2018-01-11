@@ -3,6 +3,7 @@ package at.chaoticbits.coinmarket;
 import java.util.HashMap;
 import java.util.Map;
 
+
 public class CoinMarketContainer {
 
     public static final CoinMarketContainer instance = new CoinMarketContainer();
