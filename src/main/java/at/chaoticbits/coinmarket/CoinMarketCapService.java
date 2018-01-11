@@ -67,6 +67,9 @@ public class CoinMarketCapService {
 
         String slug = getCurrencySlug(currency);
 
+        if (currency.toLowerCase().equals("bat"))
+            slug = "basic-attention-token";
+
         try {
             String completURL = API_URL + slug + "/?convert=EUR";
             CloseableHttpClient client = HttpClientBuilder.create().setSSLHostnameVerifier(new NoopHostnameVerifier()).build();
