@@ -24,7 +24,7 @@ public class Main {
 
         BotLogger.setLevel(Level.ALL);
         try {
-            BotLogger.registerLogger(new BotsFileHandler());
+            BotLogger.registerLogger(new BotsFileHandler("./logs/TelegramBots%g.%u.log"));
         } catch (IOException e) {
             BotLogger.severe(LOGTAG, e);
         }

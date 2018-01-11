@@ -13,9 +13,7 @@ copyright/
 ### File System specific files
 .DS_STORE
 
-### logs
-*.log
-
 ### misc
 /scripts/
 /telegram-commands/
+/logs/
