@@ -10,6 +10,10 @@ A simple telegram bot for fetching price information about crypto currencies fro
 ![Alt text](/screenshots/bot-example.png?raw=true "Bot Example")
 
 
+
+You can try it out  [here](https://telegram.me/PriceLeechBot).
+
+
 ## Installation
 
 In order to run the bot, you have to set your telegram bot api token as an environment variable:
