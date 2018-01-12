@@ -5,10 +5,19 @@
 [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/dwyl/esta/issues)
 
 
-A simple telegram bot for fetching price information about currencies at CoinMarketCap.
+A simple telegram bot for fetching price information about crypto currencies from CoinMarketCap.
+
+![Alt text](/screenshots/bot-example.png?raw=true "Bot Example")
 
 
 ## Installation
+
+In order to run the bot, you have to set your telegram bot api token as an environment variable:
+
+
+```sh
+$CMBOT_TELEGRAM_TOKEN={YOUR_API_KEY}
+```
 
 
 ```sh
@@ -26,18 +35,8 @@ $ docker run cmbot
 
 ### Run application without Docker
 
+Make sure you have at least jdk8 installed.
+
 ```sh
 $ java -jar target/cmbot-<version>.jar
-```
-
-## Contribution
-
-If you like to contribute or work on your own on this project, make sure that you have installed the following components on you system:
-- Maven 3
-- JDK 8
-
-```sh
-$ git clone https://github.com/yashino91/cmbot.git
-$ cd cmbot/
-$ mvn clean install
 ```
