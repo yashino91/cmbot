@@ -19,12 +19,23 @@ In order to run the bot, you have to set your telegram bot api token as an envir
 $CMBOT_TELEGRAM_TOKEN={YOUR_API_KEY}
 ```
 
+[Download](https://github.com/yashino91/cmbot/releases) the latest jar release and run the following command:
+
+```sh
+$ java -jar cmbot-<version>.jar
+```
+
+
+## Build from Source
+
 
 ```sh
 $ git clone https://github.com/yashino91/cmbot.git
 $ cd cmbot/
 $ mvn assembly:assembly
 ```
+
+
 
 ### Run application using Docker
 
@@ -34,8 +45,6 @@ $ docker run cmbot
 ```
 
 ### Run application without Docker
-
-Make sure you have at least jdk8 installed.
 
 ```sh
 $ java -jar target/cmbot-<version>.jar
