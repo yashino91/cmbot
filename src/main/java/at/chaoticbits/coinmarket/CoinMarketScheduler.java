@@ -29,6 +29,18 @@ public class CoinMarketScheduler extends TimerTask {
     @Override
     public void run () {
 
+        updateErc20TokenList();
+        updateSymbolSlugs();
+    }
+
+
+    /**
+     * Fetch CMC coin information and populate map with symbols related to their slug,
+     * in order to support searching via symbols (btc, eth,...)
+     * CoinNarketCap API currently only supports search by slug (itcoin, ethereum,...)
+     */
+    private void updateSymbolSlugs() {
+
         try {
 
             Response response = Api.fetch("https://files.coinmarketcap.com/generated/search/quick_search.json");
@@ -48,7 +60,7 @@ public class CoinMarketScheduler extends TimerTask {
                         if (i < 85)
                             updateBotCommands(writer, jsonObject);
 
-                        CoinMarketContainer.instance.addOrUpdateSymbolSlug(jsonObject.getString("symbol"), jsonObject.getString("slug"));
+                        CoinMarketContainer.symbolSlugs.put(jsonObject.getString("symbol"), jsonObject.getString("slug"));
                     }
 
                     BotLogger.info(LOGTAG, "Successfully updated symbol slugs");
@@ -63,8 +75,34 @@ public class CoinMarketScheduler extends TimerTask {
         } catch (Exception e) {
             BotLogger.error(LOGTAG, "Error parsing new symbol slug list: " + e);
         }
-
     }
+
+
+    /**
+     * Fetch Erc20 tokens and update cache
+     */
+    private void updateErc20TokenList() {
+
+        Response response = Api.fetch("https://raw.githubusercontent.com/kvhnuke/etherwallet/mercury/app/scripts/tokens/ethTokens.json");
+
+        if (Objects.requireNonNull(response).getStatus() == 200) {
+
+            JSONArray jsonArray = new JSONArray(response.getBody());
+
+            for (int i = 0; i < jsonArray.length(); i++) {
+                String erc20Symbol = jsonArray.getJSONObject(i).getString("symbol");
+                String erc20Address = jsonArray.getJSONObject(i).getString("address");
+                CoinMarketContainer.erc20Tokens.put(erc20Symbol, erc20Address);
+            }
+
+            BotLogger.info(LOGTAG, "Successfully updated erc20 tokens");
+
+        } else {
+            BotLogger.warn(LOGTAG, "StatusCode: " + response.getStatus());
+
+        }
+    }
+
 
     private void updateBotCommands(PrintWriter writer, JSONObject jsonObject) {
             writer.println(jsonObject.getString("symbol").toLowerCase() + " - " + jsonObject.getString("name"));

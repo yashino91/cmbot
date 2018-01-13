@@ -6,17 +6,7 @@ import java.util.Map;
 
 public class CoinMarketContainer {
 
-    public static final CoinMarketContainer instance = new CoinMarketContainer();
+    public static Map<String, String> symbolSlugs = new HashMap<>();
 
-
-    private Map<String, String> symbolSlugs = new HashMap<>();
-
-
-    public void addOrUpdateSymbolSlug(String symbol, String slug) {
-        this.symbolSlugs.put(symbol, slug);
-    }
-
-    public String findSlug(String symbol) {
-        return this.symbolSlugs.get(symbol);
-    }
+    public static Map<String, String> erc20Tokens = new HashMap<>();
 }
