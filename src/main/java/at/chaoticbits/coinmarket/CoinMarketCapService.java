@@ -86,7 +86,7 @@ public class CoinMarketCapService {
 
     private String getCurrencySlug(String currency) {
 
-        String slug = CoinMarketContainer.instance.findSlug(currency.toUpperCase());
+        String slug = CoinMarketContainer.symbolSlugs.get(currency.toUpperCase());
 
         if(slug == null)
             return currency;
@@ -103,13 +103,18 @@ public class CoinMarketCapService {
      */
     private String formatCurrencyResult(JSONObject currencyInfo) {
 
+        String symbol       = currencyInfo.getString("symbol");
         String change1h     = currencyInfo.isNull("percent_change_1h") ? "-" : currencyInfo.getString("percent_change_1h") + " %";
         String change24h    = currencyInfo.isNull("percent_change_24h") ? "-" : currencyInfo.getString("percent_change_24h") + " %";
         String change7d     = currencyInfo.isNull("percent_change_7d") ? "-" : currencyInfo.getString("percent_change_7d") + " %";
         String volume24h    = currencyInfo.isNull("24h_volume_usd") ? "-" : formatPrice(currencyInfo.getBigDecimal("24h_volume_usd"));
         String marketCap    = currencyInfo.isNull("market_cap_usd") ? "-" : formatPrice(currencyInfo.getBigDecimal("market_cap_usd"));
 
-        return  "[" + currencyInfo.getString("name") + "](https://coinmarketcap.com/currencies/" + currencyInfo.getString("name")  + ") (" + currencyInfo.getString("symbol") + ")" + "\n\n" +
+
+        String erc20Token =  CoinMarketContainer.erc20Tokens.containsKey(symbol) ? "_Erc20_\n\n" : "\n";
+
+        return  "[" + currencyInfo.getString("name") + "](https://coinmarketcap.com/currencies/" + currencyInfo.getString("name")  + ") (" + symbol + ")" + "\n" +
+                erc20Token +
                 "*Rank: *" + currencyInfo.getString("rank") + "\n" +
                 "*EUR: *" + formatPrice(currencyInfo.getBigDecimal("price_eur"), "€") + "\n" +
                 "*USD: *" + formatPrice(currencyInfo.getBigDecimal("price_usd")) + "\n" +
