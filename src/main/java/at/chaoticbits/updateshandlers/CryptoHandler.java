@@ -52,7 +52,7 @@ public class CryptoHandler extends TelegramLongPollingBot {
                 String command = message.getText();
 
                 if (command.startsWith("/")) {
-                    sendMessageRequest.setText(CoinMarketCapService.getInstance().fetchCurrency(command.substring(1, command.length())));
+                    sendMessageRequest.setText(CoinMarketCapService.getInstance().getFormattedCurrencyDetails(command.substring(1, command.length())));
 
                     try {
                         sendMessage(sendMessageRequest);

@@ -42,7 +42,7 @@ public class Api {
             return new Response(response.getStatusLine().getStatusCode(), EntityUtils.toString(buf, "UTF-8"));
 
         } catch (IOException e) {
-            BotLogger.error(LOGTAG, "Error fetching " + url + "\n" + e);
+            BotLogger.error(LOGTAG, "Error fetching " + url + "\n" + e.getMessage());
             return null;
         }
     }
