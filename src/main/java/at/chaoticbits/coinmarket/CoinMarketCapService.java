@@ -55,6 +55,12 @@ public class CoinMarketCapService {
     }
 
 
+    /**
+     * Fetch all details about the given currency at CoinMarketCap
+     * and formats the result as a string
+     * @param currency currency
+     * @return formatted string with detailed information about the requested currency
+     */
     public String getFormattedCurrencyDetails(String currency) {
         JSONObject fetchedCurrency;
 
@@ -72,7 +78,7 @@ public class CoinMarketCapService {
     /**
      * Fetch the information of the given currency
      * @param currency currency (bitcoin, ethereum, etc..)
-     * @return formatted string containing currency information or error details
+     * @return JSONObject including price information
      */
     private JSONObject fetchCurrency(String currency) throws IllegalStateException{
 
@@ -99,6 +105,12 @@ public class CoinMarketCapService {
 
     }
 
+
+    /**
+     * Maps the requested currency to the appropriate slug for later price fetching
+     * @param currency currency
+     * @return slug
+     */
     private String getCurrencySlug(String currency) {
 
         String slug = CoinMarketContainer.symbolSlugs.get(currency.toUpperCase());
@@ -133,6 +145,7 @@ public class CoinMarketCapService {
                 "*Rank: *" + currencyInfo.getString("rank") + "\n" +
                 "*EUR: *" + formatPrice(currencyInfo.getBigDecimal("price_eur"), "€") + "\n" +
                 "*USD: *" + formatPrice(currencyInfo.getBigDecimal("price_usd")) + "\n" +
+                "*BTC: *" + formatPrice(currencyInfo.getBigDecimal("price_btc"), "") + "\n" +
                 "*1h: *" + change1h + "\n" +
                 "*24h: *" + change24h + "\n" +
                 "*7d: *" + change7d + "\n" +
@@ -168,7 +181,7 @@ public class CoinMarketCapService {
         if (price.multiply(new BigDecimal("1")).compareTo(BigDecimal.ONE) > 0)
             df = new DecimalFormat("#,###.00");
         else
-            df = new DecimalFormat("0.00000");
+            df = new DecimalFormat("0.00000000");
 
         return " " + symbol + df.format(price);
     }
