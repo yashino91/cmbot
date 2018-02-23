@@ -130,10 +130,11 @@ public class CoinMarketCapService {
      */
     private String formatCurrencyResult(JSONObject currencyInfo) {
 
+
         String symbol       = currencyInfo.getString("symbol");
-        String change1h     = currencyInfo.isNull("percent_change_1h") ? "-" : currencyInfo.getString("percent_change_1h") + " %";
-        String change24h    = currencyInfo.isNull("percent_change_24h") ? "-" : currencyInfo.getString("percent_change_24h") + " %";
-        String change7d     = currencyInfo.isNull("percent_change_7d") ? "-" : currencyInfo.getString("percent_change_7d") + " %";
+        String change1h     = currencyInfo.isNull("percent_change_1h") ? "-" : getFormattedPercentage("percent_change_1h", currencyInfo);
+        String change24h    = currencyInfo.isNull("percent_change_24h") ? "-" : getFormattedPercentage("percent_change_24h", currencyInfo);
+        String change7d     = currencyInfo.isNull("percent_change_7d") ? "-" : getFormattedPercentage("percent_change_7d", currencyInfo);
         String volume24h    = currencyInfo.isNull("24h_volume_usd") ? "-" : formatPrice(currencyInfo.getBigDecimal("24h_volume_usd"));
         String marketCap    = currencyInfo.isNull("market_cap_usd") ? "-" : formatPrice(currencyInfo.getBigDecimal("market_cap_usd"));
 
@@ -152,6 +153,18 @@ public class CoinMarketCapService {
                 "*Volume24h: *" + volume24h + "\n" +
                 "*MarketCap: *" + marketCap;
 
+    }
+
+
+    private String getUpOrDownEmoji(BigDecimal price) {
+        if (price.compareTo(BigDecimal.ZERO) > 0)
+            return ":chart_with_upwards_trend:";
+
+        return ":chart_with_downwards_trend:";
+    }
+
+    private String getFormattedPercentage(String key, JSONObject currencyInfo) {
+        return currencyInfo.getString(key) + "% \t" + getUpOrDownEmoji(currencyInfo.getBigDecimal(key));
     }
 
 
