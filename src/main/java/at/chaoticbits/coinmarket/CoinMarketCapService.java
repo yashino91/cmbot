@@ -6,7 +6,9 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.telegram.telegrambots.logging.BotLogger;
 
+import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
+import java.net.URLEncoder;
 import java.text.DecimalFormat;
 import java.util.Objects;
 
@@ -53,35 +55,48 @@ public class CoinMarketCapService {
     }
 
 
+    public String getFormattedCurrencyDetails(String currency) {
+        JSONObject fetchedCurrency;
+
+        try {
+            fetchedCurrency = fetchCurrency(currency);
+        } catch (IllegalStateException e) {
+            BotLogger.error(LOGTAG,  e.getMessage());
+            return e.getMessage();
+        }
+
+        return formatCurrencyResult(fetchedCurrency);
+    }
+
+
     /**
      * Fetch the information of the given currency
      * @param currency currency (bitcoin, ethereum, etc..)
      * @return formatted string containing currency information or error details
      */
-    public String fetchCurrency(String currency) {
+    private JSONObject fetchCurrency(String currency) throws IllegalStateException{
 
         String slug = getCurrencySlug(currency);
 
         if (currency.toLowerCase().equals("bat"))
             slug = "basic-attention-token";
 
+
+        Response response;
         try {
-
-            Response response = Api.fetch(API_URL + slug + "/?convert=EUR");
-
-            if (Objects.requireNonNull(response).getStatus() == 200) {
-                JSONArray jsonArray = new JSONArray(response.getBody());
-
-                return formatCurrencyResult(jsonArray.getJSONObject(0));
-
-            } else {
-                BotLogger.warn(LOGTAG, "StatusCode: " + response.getStatus());
-                return "*Error: * \"" + currency + "\" not found";
-            }
-        } catch (Exception e) {
-            BotLogger.error(LOGTAG, e);
-            return  "*Error parsing response: *" + e.getMessage();
+            response = Api.fetch(API_URL + URLEncoder.encode(slug, "UTF-8") + "/?convert=EUR");
+        } catch (UnsupportedEncodingException e) {
+            throw new IllegalStateException("Error encoding currency string: " + e.getMessage());
         }
+
+        if (Objects.requireNonNull(response).getStatus() == 200)
+            return new JSONArray(response.getBody()).getJSONObject(0);
+
+        else if (Objects.requireNonNull(response).getStatus() == 404)
+            throw new IllegalStateException("Currency not found: *" + currency + "*");
+        else
+            throw new IllegalStateException("Error! StatusCode: " + response.getStatus());
+
     }
 
     private String getCurrencySlug(String currency) {
