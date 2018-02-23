@@ -3,6 +3,7 @@ package at.chaoticbits.updateshandlers;
 import at.chaoticbits.coinmarket.CoinMarketScheduler;
 import at.chaoticbits.config.BotConfig;
 import at.chaoticbits.coinmarket.CoinMarketCapService;
+import com.vdurmont.emoji.EmojiParser;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.Message;
 import org.telegram.telegrambots.api.objects.Update;
@@ -52,7 +53,7 @@ public class CryptoHandler extends TelegramLongPollingBot {
                 String command = message.getText();
 
                 if (command.startsWith("/")) {
-                    sendMessageRequest.setText(CoinMarketCapService.getInstance().getFormattedCurrencyDetails(command.substring(1, command.length())));
+                    sendMessageRequest.setText(EmojiParser.parseToUnicode(CoinMarketCapService.getInstance().getFormattedCurrencyDetails(command.substring(1, command.length()))));
 
                     try {
                         sendMessage(sendMessageRequest);
