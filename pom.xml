@@ -7,7 +7,6 @@
     <groupId>at.chaoticbits</groupId>
     <artifactId>cmbot</artifactId>
     <version>0.1.0</version>
-
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -18,6 +17,14 @@
         <commonsio.version>2.5</commonsio.version>
     </properties>
 
+    <repositories>
+        <repository>
+            <id>emoji-repo</id>
+            <name>Custom Emoji Repo with appropriate org.json dependency for telegram-bot</name>
+            <url>https://raw.github.com/yashino91/emoji-java/json-20160810/</url>
+        </repository>
+    </repositories>
+
     <dependencies>
         <dependency>
             <groupId>org.telegram</groupId>
@@ -25,9 +32,9 @@
             <version>${telegrambots.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.vdurmont</groupId>
+            <groupId>at.chaoticbits</groupId>
             <artifactId>emoji-java</artifactId>
-            <version>4.0.0</version>
+            <version>4.0.1</version>
         </dependency>
         <dependency>
             <groupId>org.json</groupId>
