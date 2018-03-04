@@ -26,6 +26,12 @@ In order to run the bot, you have to set your telegram bot api token as an envir
 $CMBOT_TELEGRAM_TOKEN={YOUR_API_KEY}
 ```
 
+If you also want to receive the result as a rendered image, you have to set your PDF Crowd api key:
+
+```sh
+$PDF_CROWD_API_KEY={YOUR_API_KEY}
+```
+
 [Download](https://github.com/yashino91/cmbot/releases) the latest jar release and run the following command:
 
 ```sh
