@@ -5,11 +5,15 @@
 [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/dwyl/esta/issues)
 
 
-A simple telegram bot for fetching price information about crypto currencies from CoinMarketCap.
+A simple telegram bot for fetching price information about crypto currencies from CoinMarketCap. 
 
-![Alt text](/screenshots/bot-example.png?raw=true "Bot Example")
+![Alt text](/screenshots/bot-example.png?raw=true "Bot Example - Formatted as String")
+![Alt text](/screenshots/bot-example2.png?raw=true "Bot Example - Rendered as Image")
 
 
+As seen above the result can be displayed in 2 different ways:
+1. Formatted as a String with a Link to CoinMarketCap. Use double slash // for the command. I.e. //eth 
+2. Rendered as an Image. Just use a single slash / for the command. I.e. /eth
 
 You can try it out  [here](https://telegram.me/PriceLeechBot).
 
