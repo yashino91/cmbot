@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+    <head>
+        <title>Currency Details</title>
+        <meta charset="utf-8" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous" />
+
+        <style>
+            .head-panel {
+                background-color: #212121;
+                color: white;
+                text-align: center;
+                height: 100px;
+                padding-left: 20px;
+            }
+
+            .head-panel span {
+                font-size: 40px;
+                vertical-align: center;
+                line-height: 90px;
+                font-weight: bolder;
+            }
+
+            .status-container {
+                height: 200px;
+                text-transform: uppercase;
+                color: white;
+                text-align: center;
+                font-weight: bold;
+                box-shadow: 1px 1px 20px #000000;
+                -webkit-box-shadow: 1px 1px 20px #000000;
+            }
+
+            .status-container span {
+                font-size: 50px;
+                line-height: 90px;
+            }
+
+            .blue {
+                background-color: #1565C0;
+            }
+
+            .darkblue {
+                background-color: #0D47A1;
+            }
+        </style>
+
+    </head>
+    <body>
+
+    <div>
+
+        <!--Header-->
+        <div class="head-panel">
+            <div>
+                <span th:text="'#' + ${currencyDetails.getRank()} + ' ' +  ${currencyDetails.getName()} + ' (' + ${currencyDetails.getSymbol()} + ')'"></span>
+            </div>
+        </div>
+
+        <!--Body-->
+        <div>
+
+            <!--Price Information-->
+            <div class="col-md-4 status-container darkblue">
+                <h1>Price USD</h1>
+                <span th:text="${CoinMarketCapService.formatPrice(currencyDetails.getPriceUsd())}"></span>
+            </div>
+
+            <div class="col-md-4 status-container blue">
+                <h1>Price EUR</h1>
+                <span th:text="${CoinMarketCapService.formatPrice(currencyDetails.getPriceEur(), '€')}"></span>
+            </div>
+
+            <div class="col-md-4 status-container darkblue">
+                <h1>Price BTC</h1>
+                <span th:text="${CoinMarketCapService.formatPrice(currencyDetails.getPriceBtc(), ' ')}"></span>
+            </div>
+
+            <!--Change in Percentages-->
+            <div class="col-md-4 status-container" th:style="'background-color:' + ${changeColors.get('change1h')}">
+                <h1>Change 1h</h1>
+                <span th:text="${CoinMarketCapService.formatPercentage(currencyDetails.getChange1h())}"></span>
+            </div>
+
+            <div class="col-md-4 status-container" th:style="'background-color:' + ${changeColors.get('change24h')}">
+                <h1>Change 24h</h1>
+                <span th:text="${CoinMarketCapService.formatPercentage(currencyDetails.getChange24h())}"></span>
+            </div>
+
+            <div class="col-md-4 status-container" th:style="'background-color:' + ${changeColors.get('change7d')}">
+                <h1>Change 7d</h1>
+                <span th:text="${CoinMarketCapService.formatPercentage(currencyDetails.getChange7d())}"></span>
+            </div>
+
+            <!--MarketCap-->
+            <div class="col-md-12 status-container blue">
+                <h1>MarketCap</h1>
+                <span th:text="${CoinMarketCapService.formatPrice(currencyDetails.getMarketCap())}"></span>
+            </div>
+
+            <!--Volume-->
+            <div class="col-md-12 status-container darkblue">
+                <h1>Volume 24h</h1>
+                <span th:text="${CoinMarketCapService.formatPrice(currencyDetails.getVolume24h())}"></span>
+            </div>
+
+        </div>
+    </div>
+
+    </body>
+</html>
