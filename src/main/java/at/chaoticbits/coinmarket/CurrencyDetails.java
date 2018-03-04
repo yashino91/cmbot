@@ -8,9 +8,10 @@ public class CurrencyDetails {
 
     private int rank;
 
-    private boolean isErc20;
-
+    private String name;
     private String symbol;
+
+    private boolean isErc20;
 
     private BigDecimal change1h;
     private BigDecimal change24h;
@@ -25,8 +26,9 @@ public class CurrencyDetails {
     public CurrencyDetails(JSONObject jsonObject) {
 
         this.rank = jsonObject.getInt("rank");
-        this.isErc20 = CoinMarketContainer.erc20Tokens.containsKey(symbol);
+        this.name = jsonObject.getString("name");
         this.symbol = jsonObject.getString("symbol");
+        this.isErc20 = CoinMarketContainer.erc20Tokens.containsKey(symbol);
 
         this.change1h = getValueOrNull("percent_change_1h", jsonObject);
         this.change24h = getValueOrNull("percent_change_24h", jsonObject);
@@ -39,6 +41,21 @@ public class CurrencyDetails {
         this.priceEur = getValueOrNull("price_eur", jsonObject);
         this.priceBtc = getValueOrNull("price_btc", jsonObject);
 
+    }
+
+    public CurrencyDetails(int rank, boolean isErc20, String name, String symbol, BigDecimal change1h, BigDecimal change24h, BigDecimal change7d, BigDecimal volume24h, BigDecimal marketCap, BigDecimal priceUsd, BigDecimal priceEur, BigDecimal priceBtc) {
+        this.rank = rank;
+        this.name = name;
+        this.symbol = symbol;
+        this.isErc20 = isErc20;
+        this.change1h = change1h;
+        this.change24h = change24h;
+        this.change7d = change7d;
+        this.volume24h = volume24h;
+        this.marketCap = marketCap;
+        this.priceUsd = priceUsd;
+        this.priceEur = priceEur;
+        this.priceBtc = priceBtc;
     }
 
     private BigDecimal getValueOrNull(String key, JSONObject jsonObject) {
@@ -131,5 +148,13 @@ public class CurrencyDetails {
 
     public void setPriceBtc(BigDecimal priceBtc) {
         this.priceBtc = priceBtc;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }
