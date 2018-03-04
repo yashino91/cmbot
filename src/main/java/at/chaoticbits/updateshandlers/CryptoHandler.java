@@ -61,9 +61,8 @@ public class CryptoHandler extends TelegramLongPollingBot {
                         try {
 
                             if (command.startsWith("//")) {
-                                BotLogger.info(LOGTAG, "formatting string: " + command);
                                 sendMessageRequest.setText(EmojiParser.parseToUnicode(CoinMarketCapService.getInstance().getFormattedCurrencyDetails(command.substring(2, command.length()))));
-
+                                sendMessage(sendMessageRequest);
                             } else {
 
                                 InputStream imageInputStream = CoinMarketCapService.getInstance().getCurrencyDetailsImage(command.substring(1, command.length()));

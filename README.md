@@ -7,13 +7,7 @@
 
 A simple telegram bot for fetching price information about crypto currencies from CoinMarketCap. 
 
-
-Result formatted as a String with a Link to CoinMarketCap
-![Alt text](/screenshots/bot-example.png?raw=true "Bot Example - Formatted as String")
-
-
-Result rendered as an Image.
-![Alt text](/screenshots/bot-example2.png?raw=true "Bot Example - Rendered as Image")
+![Alt text](/screenshots/example.png?raw=true "Bot Example - Formatted as a String or rendered as an Image")
 
 
 As seen above the result can be displayed in 2 different ways:
@@ -35,7 +29,7 @@ $CMBOT_TELEGRAM_TOKEN={YOUR_API_KEY}
 [Download](https://github.com/yashino91/cmbot/releases) the latest jar release and run the following command:
 
 ```sh
-$ java -jar cmbot-<version>.jar
+java -jar cmbot-<version>.jar
 ```
 
 
@@ -43,9 +37,9 @@ $ java -jar cmbot-<version>.jar
 
 
 ```sh
-$ git clone https://github.com/yashino91/cmbot.git
-$ cd cmbot/
-$ mvn assembly:assembly
+git clone https://github.com/yashino91/cmbot.git
+cd cmbot/
+mvn assembly:assembly
 ```
 
 
@@ -53,12 +47,12 @@ $ mvn assembly:assembly
 ### Run application using Docker
 
 ```sh
-$ docker build -t cmbot .
-$ docker run cmbot
+docker build -t cmbot .
+docker run cmbot
 ```
 
 ### Run application without Docker
 
 ```sh
-$ java -jar target/cmbot-<version>.jar
+java -jar target/cmbot-<version>.jar
 ```
