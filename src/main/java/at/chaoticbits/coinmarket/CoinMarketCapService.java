@@ -98,7 +98,7 @@ public final class CoinMarketCapService {
      * @param currency currency (bitcoin, ethereum, etc..)
      * @return JSONObject including price information
      */
-    private CurrencyDetails fetchCurrency(String currency) throws IllegalStateException{
+    public static CurrencyDetails fetchCurrency(String currency) throws IllegalStateException{
 
         String slug = getCurrencySlug(currency);
 
@@ -130,9 +130,9 @@ public final class CoinMarketCapService {
      * @param currency currency
      * @return slug
      */
-    private String getCurrencySlug(String currency) {
+    public static String getCurrencySlug(String currency) {
 
-        String slug = CoinMarketContainer.symbolSlugs.get(currency.toUpperCase());
+        String slug = CoinMarketContainer.symbolSlugs.get(currency);
 
         if(slug == null)
             return currency;
@@ -147,10 +147,10 @@ public final class CoinMarketCapService {
      * @param currencyDetails containing information about a crypto currency
      * @return formatted currency information
      */
-    private String formatCurrencyResult(CurrencyDetails currencyDetails) {
+    public static String formatCurrencyResult(CurrencyDetails currencyDetails) {
 
 
-        String erc20Token =  CoinMarketContainer.erc20Tokens.containsKey(currencyDetails.getSymbol()) ? "_Erc20_\n\n" : "\n";
+        String erc20Token =  currencyDetails.isErc20() ? "_Erc20_\n\n" : "\n";
 
         return  "[" + currencyDetails.getName() + "](https://coinmarketcap.com/currencies/" + currencyDetails.getName()  + ") (" + currencyDetails.getSymbol() + ")" + "\n" +
                 erc20Token +
@@ -158,28 +158,14 @@ public final class CoinMarketCapService {
                 "*EUR: *" + formatPrice(currencyDetails.getPriceEur(), '€') + "\n" +
                 "*USD: *" + formatPrice(currencyDetails.getPriceUsd()) + "\n" +
                 "*BTC: *" + formatPrice(currencyDetails.getPriceBtc(), ' ') + "\n" +
-                "*1h: *" + getFormattedPercentage(currencyDetails.getChange1h()) + "\n" +
-                "*24h: *" + getFormattedPercentage(currencyDetails.getChange24h()) + "\n" +
-                "*7d: *" + getFormattedPercentage(currencyDetails.getChange7d()) + "\n" +
+                "*1h: *" + formatPercentageWithEmoji(currencyDetails.getChange1h()) + "\n" +
+                "*24h: *" + formatPercentageWithEmoji(currencyDetails.getChange24h()) + "\n" +
+                "*7d: *" + formatPercentageWithEmoji(currencyDetails.getChange7d()) + "\n" +
                 "*Volume24h: *" + formatPrice(currencyDetails.getVolume24h()) + "\n" +
                 "*MarketCap: *" + formatPrice(currencyDetails.getMarketCap());
 
     }
 
-
-    private String getUpOrDownEmoji(BigDecimal price) {
-        if (price.compareTo(BigDecimal.ZERO) > 0)
-            return ":chart_with_upwards_trend:";
-
-        return ":chart_with_downwards_trend:";
-    }
-
-    private String getFormattedPercentage(BigDecimal percentage) {
-        if (percentage == null)
-            return "-";
-
-        return percentage + "% \t" + getUpOrDownEmoji(percentage);
-    }
 
 
     /**
@@ -231,6 +217,22 @@ public final class CoinMarketCapService {
             df = new DecimalFormat("0.00");
 
         return  " " + df.format(percentage) + "%";
+    }
+
+    public static String formatPercentageWithEmoji(BigDecimal percentage) {
+        String formattedPercentage = formatPercentage(percentage);
+
+        if (formattedPercentage.equals("-"))
+            return formattedPercentage;
+
+        return formattedPercentage + "\t" + getUpOrDownEmoji(percentage);
+    }
+
+    public static String getUpOrDownEmoji(BigDecimal price) {
+        if (price.compareTo(BigDecimal.ZERO) > 0)
+            return ":chart_with_upwards_trend:";
+
+        return ":chart_with_downwards_trend:";
     }
 
 }
