@@ -61,6 +61,17 @@
             <artifactId>jsoup</artifactId>
             <version>${jsoup.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.thymeleaf</groupId>
+            <artifactId>thymeleaf</artifactId>
+            <version>3.0.9.RELEASE</version>
+        </dependency>
+        <dependency>
+            <groupId>com.pdfcrowd</groupId>
+            <artifactId>pdfcrowd</artifactId>
+            <version>4.2.1</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 
     <build>
