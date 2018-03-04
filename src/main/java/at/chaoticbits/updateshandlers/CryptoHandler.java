@@ -5,12 +5,14 @@ import at.chaoticbits.config.BotConfig;
 import at.chaoticbits.coinmarket.CoinMarketCapService;
 import com.vdurmont.emoji.EmojiParser;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
+import org.telegram.telegrambots.api.methods.send.SendPhoto;
 import org.telegram.telegrambots.api.objects.Message;
 import org.telegram.telegrambots.api.objects.Update;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
 import org.telegram.telegrambots.logging.BotLogger;
 
+import java.io.InputStream;
 import java.util.Timer;
 
 
@@ -52,14 +54,35 @@ public class CryptoHandler extends TelegramLongPollingBot {
 
                 String command = message.getText();
 
-                if (command.startsWith("/")) {
-                    sendMessageRequest.setText(EmojiParser.parseToUnicode(CoinMarketCapService.getInstance().getFormattedCurrencyDetails(command.substring(1, command.length()))));
+                try {
 
-                    try {
-                        sendMessage(sendMessageRequest);
-                    } catch (TelegramApiException e) {
-                        BotLogger.error(LOGTAG, e);
+                    if (command.startsWith("/")) {
+
+                        try {
+
+                            if (command.startsWith("//")) {
+                                BotLogger.info(LOGTAG, "formatting string: " + command);
+                                sendMessageRequest.setText(EmojiParser.parseToUnicode(CoinMarketCapService.getInstance().getFormattedCurrencyDetails(command.substring(2, command.length()))));
+
+                            } else {
+
+                                InputStream imageInputStream = CoinMarketCapService.getInstance().getCurrencyDetailsImage(command.substring(1, command.length()));
+
+                                SendPhoto photo = new SendPhoto();
+                                photo.setChatId(message.getChatId());
+                                photo.setNewPhoto(command, imageInputStream);
+                                sendPhoto(photo);
+                            }
+
+                        } catch (IllegalStateException e) {
+
+                            sendMessageRequest.setText(e.getMessage());
+                            sendMessage(sendMessageRequest);
+                        }
                     }
+
+                } catch (TelegramApiException e) {
+                    BotLogger.error(LOGTAG, e);
                 }
             }
         }
