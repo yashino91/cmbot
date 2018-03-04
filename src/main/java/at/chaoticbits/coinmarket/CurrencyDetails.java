@@ -66,95 +66,48 @@ public class CurrencyDetails {
         return rank;
     }
 
-    public void setRank(int rank) {
-        this.rank = rank;
-    }
-
     public boolean isErc20() {
         return isErc20;
-    }
-
-    public void setErc20(boolean erc20) {
-        isErc20 = erc20;
     }
 
     public String getSymbol() {
         return symbol;
     }
 
-    public void setSymbol(String symbol) {
-        this.symbol = symbol;
-    }
-
     public BigDecimal getChange1h() {
         return change1h;
-    }
-
-    public void setChange1h(BigDecimal change1h) {
-        this.change1h = change1h;
     }
 
     public BigDecimal getChange24h() {
         return change24h;
     }
 
-    public void setChange24h(BigDecimal change24h) {
-        this.change24h = change24h;
-    }
-
     public BigDecimal getChange7d() {
         return change7d;
-    }
-
-    public void setChange7d(BigDecimal change7d) {
-        this.change7d = change7d;
     }
 
     public BigDecimal getVolume24h() {
         return volume24h;
     }
 
-    public void setVolume24h(BigDecimal volume24h) {
-        this.volume24h = volume24h;
-    }
-
     public BigDecimal getMarketCap() {
         return marketCap;
-    }
-
-    public void setMarketCap(BigDecimal marketCap) {
-        this.marketCap = marketCap;
     }
 
     public BigDecimal getPriceUsd() {
         return priceUsd;
     }
 
-    public void setPriceUsd(BigDecimal priceUsd) {
-        this.priceUsd = priceUsd;
-    }
-
     public BigDecimal getPriceEur() {
         return priceEur;
-    }
-
-    public void setPriceEur(BigDecimal priceEur) {
-        this.priceEur = priceEur;
     }
 
     public BigDecimal getPriceBtc() {
         return priceBtc;
     }
 
-    public void setPriceBtc(BigDecimal priceBtc) {
-        this.priceBtc = priceBtc;
-    }
-
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
 }

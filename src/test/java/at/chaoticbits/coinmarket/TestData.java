@@ -1,6 +1,4 @@
-package at.chaoticbits.dev;
-
-import at.chaoticbits.coinmarket.CurrencyDetails;
+package at.chaoticbits.coinmarket;
 
 import java.math.BigDecimal;
 
