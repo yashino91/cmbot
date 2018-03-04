@@ -7,8 +7,11 @@
 
 A simple telegram bot for fetching price information about crypto currencies from CoinMarketCap. 
 
+
 Result formatted as a String with a Link to CoinMarketCap
 ![Alt text](/screenshots/bot-example.png?raw=true "Bot Example - Formatted as String")
+
+
 Result rendered as an Image.
 ![Alt text](/screenshots/bot-example2.png?raw=true "Bot Example - Rendered as Image")
 
