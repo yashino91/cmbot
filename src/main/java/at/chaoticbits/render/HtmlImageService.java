@@ -79,7 +79,7 @@ public class HtmlImageService {
         try {
 
             // create the API client instance
-            Pdfcrowd.HtmlToImageClient client = new Pdfcrowd.HtmlToImageClient("yashino", "f87ad728dca1d05ad348a431c6bcc249");
+            Pdfcrowd.HtmlToImageClient client = new Pdfcrowd.HtmlToImageClient("yashino", System.getenv("PDF_CROWD_API_KEY"));
 
             // configure the conversion
             client.setOutputFormat("png");
