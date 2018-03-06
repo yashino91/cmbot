@@ -91,9 +91,8 @@ public class HtmlImageService {
         }
         catch(Pdfcrowd.Error e) {
             BotLogger.error("Error converting Html to Image: ", e.getMessage());
+            return null;
         }
-
-        return null;
     }
 
 

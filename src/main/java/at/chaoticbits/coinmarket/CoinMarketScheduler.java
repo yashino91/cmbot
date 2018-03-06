@@ -66,7 +66,7 @@ public class CoinMarketScheduler extends TimerTask {
                     BotLogger.info(LOGTAG, "Successfully updated symbol slugs");
 
                 } catch (FileNotFoundException | UnsupportedEncodingException e) {
-                    e.printStackTrace();
+                    BotLogger.warn(LOGTAG, e.getMessage());
                 }
             } else {
                 BotLogger.warn(LOGTAG, "StatusCode: " + response.getStatus());

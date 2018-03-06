@@ -61,16 +61,10 @@ public final class CoinMarketCapService {
      * @param currency currency
      * @return InputStream containing the image information
      */
-    public InputStream getCurrencyDetailsImage(String currency) throws IllegalStateException {
+    public static InputStream getCurrencyDetailsImage(String currency) throws IllegalStateException {
         CurrencyDetails currencyDetails;
-
-        try {
-            currencyDetails = fetchCurrency(currency);
-            return HtmlImageService.getInstance().generateCryptoDetailsImage(currencyDetails);
-        } catch (IllegalStateException e) {
-            BotLogger.error(LOGTAG,  e.getMessage());
-            throw new IllegalStateException(e.getMessage());
-        }
+        currencyDetails = fetchCurrency(currency);
+        return HtmlImageService.getInstance().generateCryptoDetailsImage(currencyDetails);
     }
 
 
@@ -80,16 +74,10 @@ public final class CoinMarketCapService {
      * @param currency currency
      * @return formatted string with detailed information about the requested currency
      */
-    public String getFormattedCurrencyDetails(String currency) throws IllegalStateException {
+    public static String getFormattedCurrencyDetails(String currency) throws IllegalStateException {
         CurrencyDetails currencyDetails;
-
-        try {
-            currencyDetails = fetchCurrency(currency);
-            return formatCurrencyResult(currencyDetails);
-        } catch (IllegalStateException e) {
-            BotLogger.error(LOGTAG,  e.getMessage());
-            throw new IllegalStateException(e.getMessage());
-        }
+        currencyDetails = fetchCurrency(currency);
+        return formatCurrencyResult(currencyDetails);
     }
 
 
@@ -98,7 +86,7 @@ public final class CoinMarketCapService {
      * @param currency currency (bitcoin, ethereum, etc..)
      * @return JSONObject including price information
      */
-    public static CurrencyDetails fetchCurrency(String currency) throws IllegalStateException{
+    public static CurrencyDetails fetchCurrency(String currency) throws IllegalStateException {
 
         String slug = getCurrencySlug(currency);
 

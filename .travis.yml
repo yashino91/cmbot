@@ -6,3 +6,6 @@ script: mvn clean compile package
 notifications:
   email:
     - s.ploner@gmx.net
+
+after_success:
+  - mvn clean test jacoco:report coveralls:report
