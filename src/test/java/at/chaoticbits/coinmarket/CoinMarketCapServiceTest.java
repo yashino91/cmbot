@@ -1,6 +1,5 @@
 package at.chaoticbits.coinmarket;
 
-import jersey.repackaged.com.google.common.collect.ImmutableMap;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -13,7 +12,7 @@ public class CoinMarketCapServiceTest {
 
     @BeforeClass
     public void setup() {
-        CoinMarketContainer.symbolSlugs = ImmutableMap.of("eth", "ethereum");
+        CoinMarketContainer.symbolSlugs.put("eth", "ethereum");
     }
 
 
@@ -78,5 +77,11 @@ public class CoinMarketCapServiceTest {
     public void testGetFormattedCurrencyDetails() {
         String formattedCurrencyDetails = CoinMarketCapService.getFormattedCurrencyDetails("bat");
         Assert.assertNotNull(formattedCurrencyDetails);
+    }
+
+    @Test
+    public void testGetCurrencyDetailsImage() {
+        InputStream image = CoinMarketCapService.getCurrencyDetailsImage("bat");
+        Assert.assertNotNull(image);
     }
 }
