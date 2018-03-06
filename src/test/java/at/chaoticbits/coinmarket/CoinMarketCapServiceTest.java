@@ -79,10 +79,4 @@ public class CoinMarketCapServiceTest {
         String formattedCurrencyDetails = CoinMarketCapService.getFormattedCurrencyDetails("bat");
         Assert.assertNotNull(formattedCurrencyDetails);
     }
-
-    @Test
-    public void testGetCurrencyDetailsImage() {
-        InputStream currencyDetailsImage = CoinMarketCapService.getCurrencyDetailsImage("bat");
-        Assert.assertNotNull(currencyDetailsImage);
-    }
 }
