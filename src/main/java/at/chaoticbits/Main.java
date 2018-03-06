@@ -18,6 +18,8 @@ public class Main {
 
     private static final String LOGTAG = "MAIN";
 
+    private static CryptoHandler cryptoHandler;
+
 
 
     public static void main(String[] args) {
@@ -35,8 +37,10 @@ public class Main {
             TelegramBotsApi telegramBotsApi = createLongPollingTelegramBotsApi();
             try {
 
+                cryptoHandler = new CryptoHandler();
+
                 // Register long polling bots. They work regardless type of TelegramBotsApi
-                telegramBotsApi.registerBot(new CryptoHandler());
+                telegramBotsApi.registerBot(cryptoHandler);
 
             } catch (TelegramApiException e) {
                 BotLogger.error(LOGTAG, e);
@@ -53,6 +57,10 @@ public class Main {
      */
     private static TelegramBotsApi createLongPollingTelegramBotsApi() {
         return new TelegramBotsApi();
+    }
+
+    public static CryptoHandler getCryptoHandler() {
+        return cryptoHandler;
     }
 
 }
