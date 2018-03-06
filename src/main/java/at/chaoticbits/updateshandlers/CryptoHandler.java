@@ -61,11 +61,11 @@ public class CryptoHandler extends TelegramLongPollingBot {
                         try {
 
                             if (command.startsWith("//")) {
-                                sendMessageRequest.setText(EmojiParser.parseToUnicode(CoinMarketCapService.getInstance().getFormattedCurrencyDetails(command.substring(2, command.length()))));
+                                sendMessageRequest.setText(EmojiParser.parseToUnicode(CoinMarketCapService.getFormattedCurrencyDetails(command.substring(2, command.length()))));
                                 sendMessage(sendMessageRequest);
                             } else {
 
-                                InputStream imageInputStream = CoinMarketCapService.getInstance().getCurrencyDetailsImage(command.substring(1, command.length()));
+                                InputStream imageInputStream = CoinMarketCapService.getCurrencyDetailsImage(command.substring(1, command.length()));
 
                                 if (imageInputStream == null) {
                                     BotLogger.error(LOGTAG, "Error creating image input stream");
@@ -81,14 +81,14 @@ public class CryptoHandler extends TelegramLongPollingBot {
                             }
 
                         } catch (IllegalStateException e) {
-
+                            BotLogger.error(LOGTAG, e.getMessage());
                             sendMessageRequest.setText(e.getMessage());
                             sendMessage(sendMessageRequest);
                         }
                     }
 
                 } catch (TelegramApiException e) {
-                    BotLogger.error(LOGTAG, e);
+                    BotLogger.error(LOGTAG, e.getMessage());
                 }
             }
         }

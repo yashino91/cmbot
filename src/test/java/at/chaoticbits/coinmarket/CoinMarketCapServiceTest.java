@@ -5,6 +5,7 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
+import java.io.InputStream;
 import java.math.BigDecimal;
 
 public class CoinMarketCapServiceTest {
@@ -56,8 +57,8 @@ public class CoinMarketCapServiceTest {
 
 
     @Test(
-            expectedExceptions = IllegalStateException.class,
-            expectedExceptionsMessageRegExp = "Currency not found.*"
+        expectedExceptions = IllegalStateException.class,
+        expectedExceptionsMessageRegExp = "Currency not found.*"
     )
     public void testFetchCurrency() {
         CurrencyDetails currencyDetails = CoinMarketCapService.fetchCurrency("bat");
@@ -73,5 +74,15 @@ public class CoinMarketCapServiceTest {
         Assert.assertNotNull(CoinMarketCapService.getInstance());
     }
 
+    @Test
+    public void testGetFormattedCurrencyDetails() {
+        String formattedCurrencyDetails = CoinMarketCapService.getFormattedCurrencyDetails("bat");
+        Assert.assertNotNull(formattedCurrencyDetails);
+    }
 
+    @Test
+    public void testGetCurrencyDetailsImage() {
+        InputStream currencyDetailsImage = CoinMarketCapService.getCurrencyDetailsImage("bat");
+        Assert.assertNotNull(currencyDetailsImage);
+    }
 }
