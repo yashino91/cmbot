@@ -1,0 +1,85 @@
+btc - Bitcoin
+eth - Ethereum
+xrp - Ripple
+bch - Bitcoin Cash
+ltc - Litecoin
+neo - NEO
+ada - Cardano
+xlm - Stellar
+eos - EOS
+miota - IOTA
+xmr - Monero
+dash - Dash
+xem - NEM
+trx - TRON
+etc - Ethereum Classic
+ven - VeChain
+nano - Nano
+usdt - Tether
+lsk - Lisk
+qtum - Qtum
+omg - OmiseGO
+btg - Bitcoin Gold
+icx - ICON
+zec - Zcash
+bnb - Binance Coin
+dgd - DigixDAO
+ppt - Populous
+xvg - Verge
+bcn - Bytecoin
+steem - Steem
+strat - Stratis
+doge - Dogecoin
+sc - Siacoin
+waves - Waves
+rhoc - RChain
+mkr - Maker
+bts - BitShares
+ae - Aeternity
+dcr - Decred
+snt - Status
+rep - Augur
+zrx - 0x
+etn - Electroneum
+veri - Veritaseum
+wtc - Waltonchain
+hsr - Hshare
+kmd - Komodo
+r - Revain
+gas - Gas
+kcs - KuCoin Shares
+bat - Basic Attention Token
+ardr - Ardor
+ark - Ark
+dgb - DigiByte
+drgn - Dragonchain
+gnt - Golem
+btm - Bytom
+sys - Syscoin
+ethos - Ethos
+zil - Zilliqa
+pivx - PIVX
+mona - MonaCoin
+lrc - Loopring
+cnx - Cryptonex
+aion - Aion
+fct - Factom
+elf - aelf
+nas - Nebulas
+qash - QASH
+fun - FunFair
+gbyte - Byteball Bytes
+poly - Polymath
+rdd - ReddCoin
+knc - Kyber Network
+dent - Dent
+gxs - GXShares
+nxs - Nexus
+btx - Bitcore
+iost - IOStoken
+salt - SALT
+xzc - ZCoin
+dcn - Dentacoin
+link - ChainLink
+part - Particl
+kin - Kin

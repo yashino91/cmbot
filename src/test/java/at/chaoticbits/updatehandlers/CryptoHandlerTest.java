@@ -1,7 +1,6 @@
 package at.chaoticbits.updatehandlers;
 
 import at.chaoticbits.Main;
-import at.chaoticbits.updateshandlers.CryptoHandler;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.telegram.telegrambots.api.objects.Update;
 import org.testng.Assert;
@@ -34,16 +33,36 @@ public class CryptoHandlerTest {
 
     @Test
     public void testOnUpdateReceived() {
-        Update update = getUpdate();
-        Main.getCryptoHandler().onUpdateReceived(update);
-
+        Main.getCryptoHandler().onUpdateReceived(getRequestImageUpdate());
+        Main.getCryptoHandler().onUpdateReceived(getRequestFormattedStringUpdate());
+        Main.getCryptoHandler().onUpdateReceived(getInvalidCurrencyUpdate());
     }
 
 
-    private Update getUpdate() {
+    private Update getRequestImageUpdate() {
         ObjectMapper mapper = new ObjectMapper();
         try {
             return mapper.readValue("{\"update_id\": 10,\"message\": {\"message_id\": 1, \"text\": \"/eth\", \"chat\": {\"id\": 2}}}", Update.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private Update getRequestFormattedStringUpdate() {
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            return mapper.readValue("{\"update_id\": 10,\"message\": {\"message_id\": 1, \"text\": \"//eth\", \"chat\": {\"id\": 2}}}", Update.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private Update getInvalidCurrencyUpdate() {
+        ObjectMapper mapper = new ObjectMapper();
+        try {
+            return mapper.readValue("{\"update_id\": 10,\"message\": {\"message_id\": 1, \"text\": \"/currencynotfound\", \"chat\": {\"id\": 2}}}", Update.class);
         } catch (IOException e) {
             e.printStackTrace();
             return null;
