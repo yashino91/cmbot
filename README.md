@@ -1,6 +1,6 @@
 # cmbot
 
-
+[![Coverage Status](https://coveralls.io/repos/github/yashino91/cmbot/badge.svg?branch=master)](https://coveralls.io/github/yashino91/cmbot?branch=master)
 [![Build Status](https://travis-ci.org/yashino91/cmbot.svg?branch=master)](https://travis-ci.org/yashino91/cmbot)
 [![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/dwyl/esta/issues)
 
