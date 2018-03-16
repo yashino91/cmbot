@@ -80,7 +80,7 @@ public class CryptoHandler extends TelegramLongPollingBot {
                                 }
                             }
 
-                        } catch (IllegalStateException e) {
+                        } catch (Exception e) {
                             BotLogger.error(LOGTAG, e.getMessage());
                             sendMessageRequest.setText(e.getMessage());
                             sendMessage(sendMessageRequest);
