@@ -3,83 +3,83 @@ eth - Ethereum
 xrp - Ripple
 bch - Bitcoin Cash
 ltc - Litecoin
-neo - NEO
 ada - Cardano
+neo - NEO
 xlm - Stellar
 eos - EOS
-miota - IOTA
 xmr - Monero
 dash - Dash
+miota - IOTA
 xem - NEM
-trx - TRON
-etc - Ethereum Classic
-ven - VeChain
-nano - Nano
 usdt - Tether
+trx - TRON
+ven - VeChain
+etc - Ethereum Classic
 lsk - Lisk
-qtum - Qtum
+nano - Nano
 omg - OmiseGO
+qtum - Qtum
 btg - Bitcoin Gold
+bnb - Binance Coin
 icx - ICON
 zec - Zcash
-bnb - Binance Coin
 dgd - DigixDAO
 ppt - Populous
-xvg - Verge
-bcn - Bytecoin
 steem - Steem
-strat - Stratis
-doge - Dogecoin
-sc - Siacoin
 waves - Waves
-rhoc - RChain
+bcn - Bytecoin
+xvg - Verge
+strat - Stratis
 mkr - Maker
+rhoc - RChain
+doge - Dogecoin
+ont - Ontology
 bts - BitShares
-ae - Aeternity
+sc - Siacoin
 dcr - Decred
+ae - Aeternity
 snt - Status
 rep - Augur
-zrx - 0x
-etn - Electroneum
-veri - Veritaseum
-wtc - Waltonchain
-hsr - Hshare
-kmd - Komodo
-r - Revain
-gas - Gas
-kcs - KuCoin Shares
-bat - Basic Attention Token
-ardr - Ardor
-ark - Ark
-dgb - DigiByte
-drgn - Dragonchain
-gnt - Golem
 btm - Bytom
-sys - Syscoin
-ethos - Ethos
+wtc - Waltonchain
+kmd - Komodo
+ardr - Ardor
 zil - Zilliqa
-pivx - PIVX
-mona - MonaCoin
-lrc - Loopring
-cnx - Cryptonex
 aion - Aion
+ark - Ark
+zrx - 0x
+cnx - Cryptonex
+veri - Veritaseum
+hsr - Hshare
+etn - Electroneum
+mona - MonaCoin
+dgb - DigiByte
+pivx - PIVX
+kcs - KuCoin Shares
+ethos - Ethos
+sys - Syscoin
 fct - Factom
-elf - aelf
-nas - Nebulas
+gnt - Golem
+gas - Gas
+bat - Basic Attention Token
 qash - QASH
+drgn - Dragonchain
+r - Revain
+nas - Nebulas
+lrc - Loopring
 fun - FunFair
-gbyte - Byteball Bytes
-poly - Polymath
+elf - aelf
+gxs - GXChain
 rdd - ReddCoin
-knc - Kyber Network
-dent - Dent
-gxs - GXShares
-nxs - Nexus
-btx - Bitcore
+xzc - ZCoin
 iost - IOStoken
 salt - SALT
-xzc - ZCoin
-dcn - Dentacoin
 link - ChainLink
-part - Particl
+knc - Kyber Network
+dcn - Dentacoin
 kin - Kin
+emc - Emercoin
+smart - SmartCash
+powr - Power Ledger
+poly - Polymath
+part - Particl

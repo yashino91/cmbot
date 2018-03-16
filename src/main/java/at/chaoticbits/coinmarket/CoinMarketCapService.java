@@ -120,7 +120,7 @@ public final class CoinMarketCapService {
      */
     public static String getCurrencySlug(String currency) {
 
-        String slug = CoinMarketContainer.symbolSlugs.get(currency);
+        String slug = CoinMarketContainer.symbolSlugs.get(currency.toUpperCase());
 
         if(slug == null)
             return currency;

@@ -43,7 +43,7 @@ public class CoinMarketScheduler extends TimerTask {
 
         try {
 
-            Response response = Api.fetch("https://files.coinmarketcap.com/generated/search/quick_search.json");
+            Response response = Api.fetch("https://s2.coinmarketcap.com/generated/search/quick_search.json");
 
             if (Objects.requireNonNull(response).getStatus() == 200) {
 
