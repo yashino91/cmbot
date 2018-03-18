@@ -58,14 +58,17 @@ public class CryptoHandler extends TelegramLongPollingBot {
 
                     if (command.startsWith("/")) {
 
+                        // determine end of currency slug in command string
+                        int currencyEnd = command.indexOf('@') == - 1 ? command.length() : command.indexOf('@');
+
                         try {
 
                             if (command.startsWith("//")) {
-                                sendMessageRequest.setText(EmojiParser.parseToUnicode(CoinMarketCapService.getFormattedCurrencyDetails(command.substring(2, command.length()))));
+                                sendMessageRequest.setText(EmojiParser.parseToUnicode(CoinMarketCapService.getFormattedCurrencyDetails(command.substring(2, currencyEnd))));
                                 sendMessage(sendMessageRequest);
                             } else {
 
-                                InputStream imageInputStream = CoinMarketCapService.getCurrencyDetailsImage(command.substring(1, command.length()));
+                                InputStream imageInputStream = CoinMarketCapService.getCurrencyDetailsImage(command.substring(1, currencyEnd));
 
                                 if (imageInputStream == null) {
                                     BotLogger.error(LOGTAG, "Error creating image input stream");
