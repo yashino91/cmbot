@@ -106,25 +106,37 @@ public class HtmlImageService {
 
         Map<String, BigDecimal> changesPositive = new HashMap<>();
         Map<String, BigDecimal> changesNegative = new HashMap<>();
+        Map<String, String> colors = new HashMap<>();
 
-        if (currencyDetails.getChange1h().compareTo(BigDecimal.ZERO) > 0)
-            changesPositive.put("change1h", currencyDetails.getChange1h());
-        else
-            changesNegative.put("change1h", currencyDetails.getChange1h());
+        if (currencyDetails.getChange1h() == null)
+            colors.put("change1h", "#757575");
+        else {
+            if (currencyDetails.getChange1h().compareTo(BigDecimal.ZERO) > 0)
+                changesPositive.put("change1h", currencyDetails.getChange1h());
+            else
+                changesNegative.put("change1h", currencyDetails.getChange1h());
+        }
 
-        if (currencyDetails.getChange24h().compareTo(BigDecimal.ZERO) > 0)
-            changesPositive.put("change24h", currencyDetails.getChange24h());
-        else
-            changesNegative.put("change24h", currencyDetails.getChange24h());
+        if (currencyDetails.getChange24h() == null)
+            colors.put("change24h", "#757575");
+        else {
+            if (currencyDetails.getChange24h().compareTo(BigDecimal.ZERO) > 0)
+                changesPositive.put("change24h", currencyDetails.getChange24h());
+            else
+                changesNegative.put("change24h", currencyDetails.getChange24h());
+        }
 
-        if (currencyDetails.getChange7d().compareTo(BigDecimal.ZERO) > 0)
-            changesPositive.put("change7d", currencyDetails.getChange7d());
-        else
-            changesNegative.put("change7d", currencyDetails.getChange7d());
+        if (currencyDetails.getChange7d() == null)
+            colors.put("change7d", "#757575");
+        else {
+            if (currencyDetails.getChange7d().compareTo(BigDecimal.ZERO) > 0)
+                changesPositive.put("change7d", currencyDetails.getChange7d());
+            else
+                changesNegative.put("change7d", currencyDetails.getChange7d());
+        }
 
 
-        Map<String, String> colors = getColors(changesPositive, true);
-
+        colors.putAll(getColors(changesPositive, true));
         colors.putAll(getColors(changesNegative, false));
 
         return colors;
