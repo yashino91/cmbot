@@ -5,13 +5,13 @@ bch - Bitcoin Cash
 ltc - Litecoin
 neo - NEO
 ada - Cardano
-xlm - Stellar
 miota - IOTA
+xlm - Stellar
 eos - EOS
 dash - Dash
 xmr - Monero
-xem - NEM
 usdt - Tether
+xem - NEM
 trx - TRON
 ven - VeChain
 etc - Ethereum Classic
@@ -25,8 +25,8 @@ zec - Zcash
 icx - ICON
 dgd - DigixDAO
 ppt - Populous
-bcn - Bytecoin
 steem - Steem
+bcn - Bytecoin
 waves - Waves
 xvg - Verge
 mkr - Maker
@@ -40,8 +40,8 @@ rep - Augur
 ae - Aeternity
 btm - Bytom
 snt - Status
-ont - Ontology
 wtc - Waltonchain
+ont - Ontology
 zil - Zilliqa
 kmd - Komodo
 cnx - Cryptonex
@@ -55,8 +55,8 @@ mona - MonaCoin
 fct - Factom
 kcs - KuCoin Shares
 dgb - DigiByte
-pivx - PIVX
 etn - Electroneum
+pivx - PIVX
 bat - Basic Attention Token
 r - Revain
 sys - Syscoin
@@ -72,14 +72,14 @@ gxs - GXChain
 xzc - ZCoin
 emc - Emercoin
 iost - IOStoken
-dcn - Dentacoin
 kin - Kin
+dcn - Dentacoin
 elf - aelf
 part - Particl
 rdd - ReddCoin
 knc - Kyber Network
 nxt - Nxt
-salt - SALT
 smart - SmartCash
-maid - MaidSafeCoin
+salt - SALT
 link - ChainLink
+maid - MaidSafeCoin
