@@ -12,7 +12,12 @@ public class CoinMarketCapServiceTest {
 
     @BeforeClass
     public void setup() {
+
         CoinMarketContainer.symbolSlugs.put("eth", "ethereum");
+
+        CoinMarketScheduler coinMarketScheduler = new CoinMarketScheduler();
+
+        coinMarketScheduler.run();
     }
 
 
