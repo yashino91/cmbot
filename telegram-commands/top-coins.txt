@@ -3,83 +3,83 @@ eth - Ethereum
 xrp - Ripple
 bch - Bitcoin Cash
 ltc - Litecoin
-ada - Cardano
 neo - NEO
+ada - Cardano
 xlm - Stellar
-eos - EOS
-xmr - Monero
-dash - Dash
 miota - IOTA
+eos - EOS
+dash - Dash
+xmr - Monero
 xem - NEM
 usdt - Tether
 trx - TRON
 ven - VeChain
 etc - Ethereum Classic
 lsk - Lisk
-nano - Nano
-omg - OmiseGO
-qtum - Qtum
 btg - Bitcoin Gold
+omg - OmiseGO
+nano - Nano
+qtum - Qtum
 bnb - Binance Coin
-icx - ICON
 zec - Zcash
+icx - ICON
 dgd - DigixDAO
 ppt - Populous
+bcn - Bytecoin
 steem - Steem
 waves - Waves
-bcn - Bytecoin
 xvg - Verge
-strat - Stratis
 mkr - Maker
-rhoc - RChain
+strat - Stratis
 doge - Dogecoin
-ont - Ontology
+rhoc - RChain
 bts - BitShares
-sc - Siacoin
 dcr - Decred
-ae - Aeternity
-snt - Status
+sc - Siacoin
 rep - Augur
+ae - Aeternity
 btm - Bytom
+snt - Status
+ont - Ontology
 wtc - Waltonchain
-kmd - Komodo
-ardr - Ardor
 zil - Zilliqa
-aion - Aion
-ark - Ark
-zrx - 0x
+kmd - Komodo
 cnx - Cryptonex
-veri - Veritaseum
+ardr - Ardor
+ark - Ark
+aion - Aion
 hsr - Hshare
-etn - Electroneum
+zrx - 0x
+veri - Veritaseum
 mona - MonaCoin
+fct - Factom
+kcs - KuCoin Shares
 dgb - DigiByte
 pivx - PIVX
-kcs - KuCoin Shares
-ethos - Ethos
+etn - Electroneum
+bat - Basic Attention Token
+r - Revain
 sys - Syscoin
-fct - Factom
 gnt - Golem
 gas - Gas
-bat - Basic Attention Token
 qash - QASH
-drgn - Dragonchain
-r - Revain
-nas - Nebulas
+ethos - Ethos
 lrc - Loopring
 fun - FunFair
-elf - aelf
+nas - Nebulas
+drgn - Dragonchain
 gxs - GXChain
-rdd - ReddCoin
 xzc - ZCoin
+emc - Emercoin
 iost - IOStoken
-salt - SALT
-link - ChainLink
-knc - Kyber Network
 dcn - Dentacoin
 kin - Kin
-emc - Emercoin
-smart - SmartCash
-powr - Power Ledger
-poly - Polymath
+elf - aelf
 part - Particl
+rdd - ReddCoin
+knc - Kyber Network
+nxt - Nxt
+salt - SALT
+smart - SmartCash
+maid - MaidSafeCoin
+link - ChainLink
