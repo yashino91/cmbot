@@ -54,7 +54,7 @@ mvn assembly:assembly
 
 ```sh
 docker build -t cmbot .
-docker run cmbot
+docker run -e "CMBOT_TELEGRAM_TOKEN=YOUR_API_KEY" -e "PDF_CROWD_API_KEY=YOUR_API_KEY" cmbot
 ```
 
 ### Run application without Docker
