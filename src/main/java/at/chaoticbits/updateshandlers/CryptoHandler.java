@@ -85,7 +85,9 @@ public class CryptoHandler extends TelegramLongPollingBot {
 
                         } catch (Exception e) {
                             BotLogger.error(LOGTAG, e.getMessage());
-                            sendMessageRequest.setText(e.getMessage());
+
+                            // replace '_' characters because of telegram markdown
+                            sendMessageRequest.setText(e.getMessage().replaceAll("_", "\\\\_"));
                             sendMessage(sendMessageRequest);
                         }
                     }

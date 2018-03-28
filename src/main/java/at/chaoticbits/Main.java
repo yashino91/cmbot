@@ -31,6 +31,20 @@ public class Main {
             BotLogger.severe(LOGTAG, e);
         }
 
+        // exit if no telegram bot token is specified
+        if (System.getenv("CMBOT_TELEGRAM_TOKEN") == null) {
+            BotLogger.error(LOGTAG, "No Telegram Bot Token specified! Please declare a System Environment Variable with your Telegram API Key. CMBOT_TELEGRAM_TOKEN={YOUR_API_KEY}");
+            return;
+        }
+
+        init();
+    }
+
+
+    /**
+     * Initialize and register Telegram Bot
+     */
+    private static void init() {
         try {
 
             ApiContextInitializer.init();

@@ -62,6 +62,11 @@ public final class CoinMarketCapService {
      * @return InputStream containing the image information
      */
     public static InputStream getCurrencyDetailsImage(String currency) throws IllegalStateException {
+
+        if (System.getenv("PDF_CROWD_API_KEY") == null) {
+            throw new IllegalStateException("No PDF Crowd Api Key specified! Please declare the following System Environment Variable: PDF_CROWD_API_KEY={YOUR_API_KEY}");
+        }
+
         CurrencyDetails currencyDetails;
         currencyDetails = fetchCurrency(currency);
         return HtmlImageService.getInstance().generateCryptoDetailsImage(currencyDetails);
