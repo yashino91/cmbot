@@ -1,13 +1,20 @@
 package at.chaoticbits;
 
+import at.chaoticbits.config.Bot;
+import at.chaoticbits.config.Config;
 import at.chaoticbits.updateshandlers.CryptoHandler;
 import org.telegram.telegrambots.ApiContextInitializer;
 import org.telegram.telegrambots.TelegramBotsApi;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
 import org.telegram.telegrambots.logging.BotLogger;
 import org.telegram.telegrambots.logging.BotsFileHandler;
+import org.yaml.snakeyaml.Yaml;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.Objects;
 import java.util.logging.Level;
 
 
@@ -37,15 +44,18 @@ public class Main {
             return;
         }
 
-        init();
+        initialize();
     }
 
 
     /**
      * Initialize and register Telegram Bot
      */
-    private static void init() {
+    private static void initialize() {
+
         try {
+
+            loadBotConfiguration();
 
             ApiContextInitializer.init();
             TelegramBotsApi telegramBotsApi = createLongPollingTelegramBotsApi();
@@ -61,6 +71,21 @@ public class Main {
             }
         } catch (Exception e) {
             BotLogger.error(LOGTAG, e);
+        }
+    }
+
+    /**
+     * Loads configuration properties from the provided config.yaml file
+     * and populates the Config.class with values.
+     */
+    private static void loadBotConfiguration() {
+        ClassLoader classLoader = Main.class.getClassLoader();
+        try {
+            InputStream configInputStream = Files.newInputStream(Paths.get(Objects.requireNonNull(classLoader.getResource("config.yaml")).getPath()));
+            Yaml yaml = new Yaml();
+            Bot.config = yaml.loadAs(configInputStream, Config.class);
+        } catch (IOException | NullPointerException e) {
+            BotLogger.error(LOGTAG, "Error loading config.yaml! " + e.getMessage());
         }
     }
 

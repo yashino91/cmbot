@@ -1,7 +1,7 @@
 package at.chaoticbits.updateshandlers;
 
 import at.chaoticbits.coinmarket.CoinMarketScheduler;
-import at.chaoticbits.config.BotConfig;
+import at.chaoticbits.config.Bot;
 import at.chaoticbits.coinmarket.CoinMarketCapService;
 import com.vdurmont.emoji.EmojiParser;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
@@ -94,7 +94,7 @@ public class CryptoHandler extends TelegramLongPollingBot {
 
     @Override
     public String getBotUsername() {
-        return BotConfig.PRICE_LEECHER_BOT;
+        return Bot.config.botName;
     }
 
     @Override
