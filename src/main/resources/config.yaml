@@ -1,2 +1,2 @@
 botName: priceLeecherBot
-restrictedCurrencies: []
+forbiddenCurrencySlugs: [] # for example: [ethereum, bitcoin]
