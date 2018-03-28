@@ -67,7 +67,7 @@ public class HtmlImageService {
      * @param currencyDetails holding information about a crypto currency
      * @return InputStream containing information about the rendered image
      */
-    public InputStream generateCryptoDetailsImage(CurrencyDetails currencyDetails) {
+    public InputStream generateCryptoDetailsImage(CurrencyDetails currencyDetails) throws IllegalStateException{
         Context context = new Context(Locale.forLanguageTag("de-AT"));
 
         context.setVariable("currencyDetails", currencyDetails);
@@ -90,8 +90,7 @@ public class HtmlImageService {
             return new ByteArrayInputStream(image);
         }
         catch(Pdfcrowd.Error e) {
-            BotLogger.error("Error converting Html to Image: ", e.getMessage());
-            return null;
+            throw new IllegalStateException("Error converting Html to Image: " + e.getMessage());
         }
     }
 

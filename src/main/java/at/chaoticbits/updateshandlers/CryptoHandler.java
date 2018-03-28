@@ -70,17 +70,10 @@ public class CryptoHandler extends TelegramLongPollingBot {
 
                                 InputStream imageInputStream = CoinMarketCapService.getCurrencyDetailsImage(command.substring(1, currencyEnd));
 
-                                if (imageInputStream == null) {
-                                    BotLogger.error(LOGTAG, "Error creating image input stream");
-                                    sendMessageRequest.setText("Error creating image input stream");
-                                    sendMessage(sendMessageRequest);
-                                } else {
-
-                                    SendPhoto photo = new SendPhoto();
-                                    photo.setChatId(message.getChatId());
-                                    photo.setNewPhoto(command, imageInputStream);
-                                    sendPhoto(photo);
-                                }
+                                SendPhoto photo = new SendPhoto();
+                                photo.setChatId(message.getChatId());
+                                photo.setNewPhoto(command, imageInputStream);
+                                sendPhoto(photo);
                             }
 
                         } catch (Exception e) {
