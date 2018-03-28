@@ -126,7 +126,9 @@ public final class CoinMarketCapService {
      * @return true/false
      */
     private static boolean slugAllowed(String slug) {
-        return !Bot.config.forbiddenCurrencySlugs.contains(slug);
+        return Bot.config.allowedCurrencySlugs.isEmpty() ||
+                Bot.config.allowedCurrencySlugs.contains(slug);
+
     }
 
 

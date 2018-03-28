@@ -11,5 +11,5 @@ import java.util.List;
 public class Config {
 
     public String botName;
-    public List<String> forbiddenCurrencySlugs = new ArrayList<>();
+    public List<String> allowedCurrencySlugs = new ArrayList<>();
 }
