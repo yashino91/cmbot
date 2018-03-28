@@ -6,5 +6,5 @@ package at.chaoticbits.config;
  */
 public class Bot {
 
-    public static Config config;
+    public static Config config = new Config();
 }
