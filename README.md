@@ -17,6 +17,14 @@ As seen above the result can be displayed in 2 different ways:
 You can try it out  [here](https://telegram.me/PriceLeechBot).
 
 
+## Configuration
+The configuration is done in the config.yaml file, located in the resource directory.
+
+| Key 			            | Value 								                |
+| ----------------------    |-------------------------------------------------------|
+| botName 	                | Name of your Telegram Bot				                |
+| forbiddenCurrencySlugs    | Array of currency slugs that are forbidden to request |
+
 ## Installation
 
 In order to run the bot, you have to set your telegram bot api token as an environment variable:
