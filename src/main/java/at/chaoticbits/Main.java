@@ -79,12 +79,11 @@ public class Main {
      * and populates the Config.class with values.
      */
     private static void loadBotConfiguration() {
-        ClassLoader classLoader = Main.class.getClassLoader();
         try {
-            InputStream configInputStream = Files.newInputStream(Paths.get(Objects.requireNonNull(classLoader.getResource("config.yaml")).getPath()));
+            InputStream configInputStream = Objects.requireNonNull(Main.class.getClassLoader().getResourceAsStream("config.yaml"));
             Yaml yaml = new Yaml();
             Bot.config = yaml.loadAs(configInputStream, Config.class);
-        } catch (IOException | NullPointerException e) {
+        } catch (NullPointerException e) {
             BotLogger.error(LOGTAG, "Error loading config.yaml! " + e.getMessage());
         }
     }
