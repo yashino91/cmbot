@@ -2,9 +2,9 @@ package at.chaoticbits.coinmarket;
 
 import at.chaoticbits.api.Api;
 import at.chaoticbits.api.Response;
+import at.chaoticbits.config.Bot;
 import at.chaoticbits.render.HtmlImageService;
 import org.json.JSONArray;
-import org.telegram.telegrambots.logging.BotLogger;
 
 import java.io.*;
 import java.math.BigDecimal;
@@ -95,6 +95,9 @@ public final class CoinMarketCapService {
 
         String slug = getCurrencySlug(currency);
 
+        if (!slugAllowed(slug))
+            throw new IllegalStateException("Currency not found: *" + currency + "*");
+
         // Prefer basic attention token (bat is ambiguous)
         if (currency.toLowerCase().equals("bat"))
             slug = "basic-attention-token";
@@ -115,6 +118,15 @@ public final class CoinMarketCapService {
         else
             throw new IllegalStateException("Error! StatusCode: " + response.getStatus());
 
+    }
+
+    /**
+     * Checks if the given currency slug is allowed
+     * @param slug currency slug
+     * @return true/false
+     */
+    private static boolean slugAllowed(String slug) {
+        return !Bot.config.restrictedCurrencies.contains(slug);
     }
 
 
