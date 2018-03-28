@@ -37,7 +37,7 @@ public class CoinMarketScheduler extends TimerTask {
     /**
      * Fetch CMC coin information and populate map with symbols related to their slug,
      * in order to support searching via symbols (btc, eth,...)
-     * CoinNarketCap API currently only supports search by slug (itcoin, ethereum,...)
+     * CoinMarketCap API currently only supports search by slug (bitcoin, ethereum,...)
      */
     private void updateSymbolSlugs() {
 
@@ -50,7 +50,7 @@ public class CoinMarketScheduler extends TimerTask {
                 JSONArray jsonArray = new JSONArray(response.getBody());
 
 
-                try (PrintWriter writer = new PrintWriter("./telegram-commands/top-coins.txt", "UTF-8")) {
+                try (PrintWriter writer = new PrintWriter("telegram-commands.txt", "UTF-8")) {
 
                     for (int i = 0; i < jsonArray.length(); i++) {
 
@@ -69,7 +69,7 @@ public class CoinMarketScheduler extends TimerTask {
                     BotLogger.warn(LOGTAG, e.getMessage());
                 }
             } else {
-                BotLogger.warn(LOGTAG, "StatusCode: " + response.getStatus());
+                BotLogger.warn(LOGTAG, "Error fetching symbol slugs! StatusCode: " + response.getStatus());
 
             }
         } catch (Exception e) {
@@ -98,7 +98,7 @@ public class CoinMarketScheduler extends TimerTask {
             BotLogger.info(LOGTAG, "Successfully updated erc20 tokens");
 
         } else {
-            BotLogger.warn(LOGTAG, "StatusCode: " + response.getStatus());
+            BotLogger.warn(LOGTAG, "Error updating Erc20 Tokens! StatusCode: " + response.getStatus());
 
         }
     }

@@ -15,5 +15,5 @@ copyright/
 
 ### misc
 /scripts/
-*.log
-/telegram-commands/favourite-coins.txt
+*.log*
+telegram-commands.txt
