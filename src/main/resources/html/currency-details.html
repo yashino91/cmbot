@@ -64,45 +64,45 @@
             <!--Price Information-->
             <div class="col-md-4 status-container darkblue">
                 <h1>Price USD</h1>
-                <span th:text="${CoinMarketCapService.formatPrice(currencyDetails.getPriceUsd())}"></span>
+                <span th:text="${DecimalFormatter.formatPrice(currencyDetails.getPriceUsd())}"></span>
             </div>
 
             <div class="col-md-4 status-container blue">
                 <h1>Price EUR</h1>
-                <span th:text="${CoinMarketCapService.formatPrice(currencyDetails.getPriceEur(), '€')}"></span>
+                <span th:text="${DecimalFormatter.formatPrice(currencyDetails.getPriceEur(), '€')}"></span>
             </div>
 
             <div class="col-md-4 status-container darkblue">
                 <h1>Price BTC</h1>
-                <span th:text="${CoinMarketCapService.formatPrice(currencyDetails.getPriceBtc(), ' ')}"></span>
+                <span th:text="${DecimalFormatter.formatPrice(currencyDetails.getPriceBtc(), ' ')}"></span>
             </div>
 
             <!--Change in Percentages-->
             <div class="col-md-4 status-container" th:style="'background-color:' + ${changeColors.get('change1h')}">
                 <h1>Change 1h</h1>
-                <span th:text="${CoinMarketCapService.formatPercentage(currencyDetails.getChange1h())}"></span>
+                <span th:text="${DecimalFormatter.formatPercentage(currencyDetails.getChange1h())}"></span>
             </div>
 
             <div class="col-md-4 status-container" th:style="'background-color:' + ${changeColors.get('change24h')}">
                 <h1>Change 24h</h1>
-                <span th:text="${CoinMarketCapService.formatPercentage(currencyDetails.getChange24h())}"></span>
+                <span th:text="${DecimalFormatter.formatPercentage(currencyDetails.getChange24h())}"></span>
             </div>
 
             <div class="col-md-4 status-container" th:style="'background-color:' + ${changeColors.get('change7d')}">
                 <h1>Change 7d</h1>
-                <span th:text="${CoinMarketCapService.formatPercentage(currencyDetails.getChange7d())}"></span>
+                <span th:text="${DecimalFormatter.formatPercentage(currencyDetails.getChange7d())}"></span>
             </div>
 
             <!--MarketCap-->
             <div class="col-md-12 status-container blue">
                 <h1>MarketCap</h1>
-                <span th:text="${CoinMarketCapService.formatPrice(currencyDetails.getMarketCap())}"></span>
+                <span th:text="${DecimalFormatter.formatPrice(currencyDetails.getMarketCap())}"></span>
             </div>
 
             <!--Volume-->
             <div class="col-md-12 status-container darkblue">
                 <h1>Volume 24h</h1>
-                <span th:text="${CoinMarketCapService.formatPrice(currencyDetails.getVolume24h())}"></span>
+                <span th:text="${DecimalFormatter.formatPrice(currencyDetails.getVolume24h())}"></span>
             </div>
 
         </div>

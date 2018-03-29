@@ -3,14 +3,17 @@ package at.chaoticbits.coinmarket;
 import at.chaoticbits.api.Api;
 import at.chaoticbits.api.Response;
 import at.chaoticbits.config.Bot;
+import at.chaoticbits.config.DecimalFormatter;
 import at.chaoticbits.render.HtmlImageService;
 import org.json.JSONArray;
 
 import java.io.*;
 import java.math.BigDecimal;
 import java.net.URLEncoder;
-import java.text.DecimalFormat;
 import java.util.Objects;
+
+import static at.chaoticbits.config.DecimalFormatter.formatPercentage;
+import static at.chaoticbits.config.DecimalFormatter.formatPrice;
 
 
 /**
@@ -25,10 +28,13 @@ public final class CoinMarketCapService {
 
 
 
+
     /**
      * Constructor (private due to singleton pattern)
      */
-    private CoinMarketCapService() { }
+    private CoinMarketCapService() {
+        DecimalFormatter.getInstance();
+    }
 
 
     /**
@@ -171,59 +177,6 @@ public final class CoinMarketCapService {
                 "*Volume24h: *" + formatPrice(currencyDetails.getVolume24h()) + "\n" +
                 "*MarketCap: *" + formatPrice(currencyDetails.getMarketCap());
 
-    }
-
-
-
-    /**
-     * Format price according to decimal dimension in USD
-     * @param price price as BigDecimal
-     * @return formatted string price
-     */
-    public static String formatPrice(BigDecimal price) {
-        return formatPrice(price, '$');
-    }
-
-
-    /**
-     * Format price according to decimal dimension in the given symbol
-     * @param price price as BigDecimal
-     * @param symbol currency symbol (EUR, USD,..)
-     * @return formatted string price
-     */
-    public static String formatPrice(BigDecimal price, Character symbol) {
-
-        if(price == null)
-            return "-";
-
-        DecimalFormat df;
-
-        if (price.multiply(new BigDecimal("1")).compareTo(BigDecimal.ONE) > 0)
-            df = new DecimalFormat("#,###.00");
-        else
-            df = new DecimalFormat("0.00000000");
-
-        return " " + symbol + df.format(price);
-    }
-
-
-    /**
-     * Format percentages according to decimal dimension
-     * @param percentage percentage as BigDecimal
-     * @return formatted string percentages
-     */
-    public static String formatPercentage(BigDecimal percentage) {
-        if(percentage == null)
-            return "-";
-
-        DecimalFormat df;
-
-        if (percentage.multiply(new BigDecimal("1")).compareTo(BigDecimal.ONE) > 0)
-            df = new DecimalFormat("#,###.00");
-        else
-            df = new DecimalFormat("0.00");
-
-        return  " " + df.format(percentage) + "%";
     }
 
     public static String formatPercentageWithEmoji(BigDecimal percentage) {
