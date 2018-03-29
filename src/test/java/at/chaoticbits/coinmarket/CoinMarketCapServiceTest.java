@@ -1,5 +1,6 @@
 package at.chaoticbits.coinmarket;
 
+import at.chaoticbits.config.DecimalFormatter;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -23,9 +24,9 @@ public class CoinMarketCapServiceTest {
 
     @Test
     public void testFormatPrice() {
-        Assert.assertEquals(CoinMarketCapService.formatPrice(null), "-");
-        Assert.assertEquals(CoinMarketCapService.formatPrice(new BigDecimal("10.5"), '€'), " €10.50");
-        Assert.assertEquals(CoinMarketCapService.formatPrice(new BigDecimal("0.12345678"), '€'), " €0.12345678");
+        Assert.assertEquals(DecimalFormatter.formatPrice(null), "-");
+        Assert.assertEquals(DecimalFormatter.formatPrice(new BigDecimal("10.5"), '€'), " €10.50");
+        Assert.assertEquals(DecimalFormatter.formatPrice(new BigDecimal("0.12345678"), '€'), " €0.12345678");
     }
 
     @Test
@@ -36,9 +37,9 @@ public class CoinMarketCapServiceTest {
 
     @Test
     public void testFormatPercentage() {
-        Assert.assertEquals(CoinMarketCapService.formatPercentage(null), "-");
-        Assert.assertEquals(CoinMarketCapService.formatPercentage(new BigDecimal("10.5")), " 10.50%");
-        Assert.assertEquals(CoinMarketCapService.formatPercentage(new BigDecimal("0.53")), " 0.53%");
+        Assert.assertEquals(DecimalFormatter.formatPercentage(null), "-");
+        Assert.assertEquals(DecimalFormatter.formatPercentage(new BigDecimal("10.5")), " 10.50%");
+        Assert.assertEquals(DecimalFormatter.formatPercentage(new BigDecimal("0.53")), " 0.53%");
     }
 
     @Test

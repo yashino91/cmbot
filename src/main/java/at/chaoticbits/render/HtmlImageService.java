@@ -1,9 +1,8 @@
 package at.chaoticbits.render;
 
-import at.chaoticbits.coinmarket.CoinMarketCapService;
 import at.chaoticbits.coinmarket.CurrencyDetails;
+import at.chaoticbits.config.DecimalFormatter;
 import com.pdfcrowd.Pdfcrowd;
-import org.telegram.telegrambots.logging.BotLogger;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
@@ -71,7 +70,7 @@ public class HtmlImageService {
         Context context = new Context(Locale.forLanguageTag("de-AT"));
 
         context.setVariable("currencyDetails", currencyDetails);
-        context.setVariable("CoinMarketCapService", CoinMarketCapService.getInstance());
+        context.setVariable("DecimalFormatter", DecimalFormatter.getInstance());
         context.setVariable("changeColors", getChangePercentageColor(currencyDetails));
 
         String html = templateEngine.process("html/currency-details.html", context);
