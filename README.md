@@ -57,13 +57,19 @@ cd cmbot/
 mvn assembly:assembly
 ```
 
+Keep in mind that if you didn't specify a PDF Crowd Username and API Key, some tests will fail. To build the jar file anyway, just run:
+
+```sh
+mvn install -DskipTests
+```
+
 
 
 ### Run application using Docker
 
 ```sh
 docker build -t cmbot .
-docker run -e "CMBOT_TELEGRAM_TOKEN=YOUR_API_KEY" -e "PDF_CROWD_API_KEY=YOUR_API_KEY" cmbot
+docker run -e "CMBOT_TELEGRAM_TOKEN=YOUR_API_KEY" -e "PDF_CROWD_API_KEY=YOUR_API_KEY" -e "PDF_CROWD_USERNAME=YOUR_USERNAME" cmbot
 ```
 
 ### Run application without Docker
