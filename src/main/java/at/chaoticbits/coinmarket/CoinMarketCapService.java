@@ -69,9 +69,10 @@ public final class CoinMarketCapService {
      */
     public static InputStream getCurrencyDetailsImage(String currency) throws IllegalStateException {
 
-        if (System.getenv("PDF_CROWD_API_KEY") == null) {
+        if (System.getenv("PDF_CROWD_API_KEY") == null)
             throw new IllegalStateException("No PDF Crowd Api Key specified! Please declare the following System Environment Variable: PDF_CROWD_API_KEY={YOUR_API_KEY}");
-        }
+        if (System.getenv("PDF_CROWD_USERNAME") == null)
+            throw new IllegalStateException("No PDF Crowd Username specified! Please declare the following System Environment Variable: PDF_CROWD_USERNAME={YOUR_USERNAME}");
 
         CurrencyDetails currencyDetails;
         currencyDetails = fetchCurrency(currency);
