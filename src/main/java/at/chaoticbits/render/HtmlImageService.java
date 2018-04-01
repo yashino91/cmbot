@@ -2,14 +2,27 @@ package at.chaoticbits.render;
 
 import at.chaoticbits.coinmarket.CurrencyDetails;
 import at.chaoticbits.config.DecimalFormatter;
-import com.pdfcrowd.Pdfcrowd;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
+import org.w3c.dom.Document;
+import org.xhtmlrenderer.swing.Java2DRenderer;
+import org.xml.sax.SAXException;
 
-import java.io.*;
+import javax.imageio.ImageIO;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigDecimal;
-import java.util.*;
+import java.nio.charset.StandardCharsets;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
 
 import static org.thymeleaf.templatemode.TemplateMode.HTML;
 
@@ -77,19 +90,23 @@ public class HtmlImageService {
 
         try {
 
-            // create the API client instance
-            Pdfcrowd.HtmlToImageClient client = new Pdfcrowd.HtmlToImageClient(System.getenv("PDF_CROWD_USERNAME"), System.getenv("PDF_CROWD_API_KEY"));
+            InputStream htmlInputStream = new ByteArrayInputStream(html.getBytes(StandardCharsets.UTF_8));
 
-            // configure the conversion
-            client.setOutputFormat("png");
+            // create a w3c document of the generated html input stream
+            DocumentBuilderFactory b = DocumentBuilderFactory.newInstance();
+            b.setNamespaceAware(false);
+            DocumentBuilder db = b.newDocumentBuilder();
+            Document doc = db.parse(htmlInputStream);
 
-            // run the conversion and store the result into an image variable
-            byte[] image = client.convertString(html);
+            // write image into output stream
+            Java2DRenderer render = new Java2DRenderer(doc, 1800);
+            BufferedImage image = render.getImage();
+            ByteArrayOutputStream os = new ByteArrayOutputStream();
+            ImageIO.write(image, "png", os );
 
-            return new ByteArrayInputStream(image);
-        }
-        catch(Pdfcrowd.Error e) {
-            throw new IllegalStateException("Error converting Html to Image: " + e.getMessage());
+            return new ByteArrayInputStream(os.toByteArray());
+        } catch (IOException | ParserConfigurationException | SAXException e) {
+            throw new IllegalStateException("Error writing Image: " + e.getMessage());
         }
     }
 
