@@ -10,6 +10,23 @@ import java.util.List;
  */
 public class Config {
 
+    /**
+     * Name of Telegram Bot
+     */
     public String botName;
+
+    /**
+     * Command to request currency details as a rendered image
+     */
+    public String imageCommand;
+
+    /**
+     * Command to request currency details as a formatted string
+     */
+    public String stringCommand;
+
+    /**
+     * List of allowed currency slugs, that can be requested by coin market cap.
+     */
     public List<String> allowedCurrencySlugs = new ArrayList<>();
 }

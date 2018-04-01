@@ -24,6 +24,9 @@ The configuration is done in the config.yaml file, located in the resource direc
 | ----------------------    |-------------------------------------------------------|
 | botName 	                | Name of your Telegram Bot				                |
 | allowedCurrencySlugs      | Array of currency slugs that are allowed to request. If empty every currency is allowed |
+| stringCommand             | Command to request currency details as a formatted string |
+| imageCommand              | Command to request currency details as a rendered image |
+
 
 ## Installation
 

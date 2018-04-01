@@ -3,6 +3,7 @@ package at.chaoticbits.updateshandlers;
 import at.chaoticbits.coinmarket.CoinMarketScheduler;
 import at.chaoticbits.config.Bot;
 import at.chaoticbits.coinmarket.CoinMarketCapService;
+import com.google.common.base.Strings;
 import com.vdurmont.emoji.EmojiParser;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.methods.send.SendPhoto;
@@ -56,40 +57,52 @@ public class CryptoHandler extends TelegramLongPollingBot {
 
                 try {
 
-                    if (command.startsWith("/")) {
+                    // request currency details as a formatted string
+                    if (!Strings.isNullOrEmpty(Bot.config.stringCommand) && command.startsWith(Bot.config.stringCommand)) {
 
-                        // determine end of currency slug in command string
-                        int currencyEnd = command.indexOf('@') == - 1 ? command.length() : command.indexOf('@');
+                        sendMessageRequest.setText(
+                                EmojiParser.parseToUnicode(
+                                        CoinMarketCapService.getFormattedCurrencyDetails(
+                                                command.substring(Bot.config.stringCommand.length(), getCurrencyEnd(command))))
+                        );
+                        sendMessage(sendMessageRequest);
 
-                        try {
+                    // request currency details as a rendered image
+                    } else if (!Strings.isNullOrEmpty(Bot.config.imageCommand) && command.startsWith(Bot.config.imageCommand)) {
 
-                            if (command.startsWith("//")) {
-                                sendMessageRequest.setText(EmojiParser.parseToUnicode(CoinMarketCapService.getFormattedCurrencyDetails(command.substring(2, currencyEnd))));
-                                sendMessage(sendMessageRequest);
-                            } else {
+                        InputStream imageInputStream = CoinMarketCapService.getCurrencyDetailsImage(
+                                command.substring(Bot.config.imageCommand.length(), getCurrencyEnd(command)));
 
-                                InputStream imageInputStream = CoinMarketCapService.getCurrencyDetailsImage(command.substring(1, currencyEnd));
-
-                                SendPhoto photo = new SendPhoto();
-                                photo.setChatId(message.getChatId());
-                                photo.setNewPhoto(command, imageInputStream);
-                                sendPhoto(photo);
-                            }
-
-                        } catch (Exception e) {
-                            BotLogger.error(LOGTAG, e.getMessage());
-
-                            // replace '_' characters because of telegram markdown
-                            sendMessageRequest.setText(e.getMessage().replaceAll("_", "\\\\_"));
-                            sendMessage(sendMessageRequest);
-                        }
+                        SendPhoto photo = new SendPhoto();
+                        photo.setChatId(message.getChatId());
+                        photo.setNewPhoto(command, imageInputStream);
+                        sendPhoto(photo);
                     }
 
-                } catch (TelegramApiException e) {
+                } catch (Exception e) {
                     BotLogger.error(LOGTAG, e.getMessage());
+
+                    // replace '_' characters because of telegram markdown
+                    sendMessageRequest.setText(e.getMessage().replaceAll("_", "\\\\_"));
+
+                    try {
+                        sendMessage(sendMessageRequest);
+                    } catch (TelegramApiException te) {
+                        BotLogger.error(LOGTAG, te.getMessage());
+                    }
                 }
             }
         }
+    }
+
+
+    /**
+     * Determine the end index of the provided currency slug
+     * @param command currency
+     * @return index of currency end
+     */
+    private int getCurrencyEnd(String command) {
+        return command.indexOf('@') == - 1 ? command.length() : command.indexOf('@');
     }
 
     @Override

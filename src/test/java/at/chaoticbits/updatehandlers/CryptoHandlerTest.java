@@ -1,6 +1,7 @@
 package at.chaoticbits.updatehandlers;
 
 import at.chaoticbits.Main;
+import at.chaoticbits.config.Bot;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.telegram.telegrambots.api.objects.Update;
 import org.testng.Assert;
@@ -22,7 +23,7 @@ public class CryptoHandlerTest {
     public void testGetBotUsername() {
         String botUsername = Main.getCryptoHandler().getBotUsername();
         Assert.assertNotNull(botUsername);
-        Assert.assertEquals(botUsername, "priceLeecherBot");
+        Assert.assertEquals(botUsername, Bot.config.botName);
     }
 
     @Test
@@ -42,7 +43,7 @@ public class CryptoHandlerTest {
     private Update getRequestImageUpdate() {
         ObjectMapper mapper = new ObjectMapper();
         try {
-            return mapper.readValue("{\"update_id\": 10,\"message\": {\"message_id\": 1, \"text\": \"/eth\", \"chat\": {\"id\": 2}}}", Update.class);
+            return mapper.readValue("{\"update_id\": 10,\"message\": {\"message_id\": 1, \"text\": \"" + Bot.config.imageCommand + "eth\", \"chat\": {\"id\": 2}}}", Update.class);
         } catch (IOException e) {
             e.printStackTrace();
             return null;
@@ -52,7 +53,7 @@ public class CryptoHandlerTest {
     private Update getRequestFormattedStringUpdate() {
         ObjectMapper mapper = new ObjectMapper();
         try {
-            return mapper.readValue("{\"update_id\": 10,\"message\": {\"message_id\": 1, \"text\": \"//eth\", \"chat\": {\"id\": 2}}}", Update.class);
+            return mapper.readValue("{\"update_id\": 10,\"message\": {\"message_id\": 1, \"text\": \"" + Bot.config.stringCommand + "eth\", \"chat\": {\"id\": 2}}}", Update.class);
         } catch (IOException e) {
             e.printStackTrace();
             return null;
@@ -62,7 +63,7 @@ public class CryptoHandlerTest {
     private Update getInvalidCurrencyUpdate() {
         ObjectMapper mapper = new ObjectMapper();
         try {
-            return mapper.readValue("{\"update_id\": 10,\"message\": {\"message_id\": 1, \"text\": \"/currencynotfound\", \"chat\": {\"id\": 2}}}", Update.class);
+            return mapper.readValue("{\"update_id\": 10,\"message\": {\"message_id\": 1, \"text\": \"" + Bot.config.stringCommand + "currencynotfound\", \"chat\": {\"id\": 2}}}", Update.class);
         } catch (IOException e) {
             e.printStackTrace();
             return null;
