@@ -11,8 +11,8 @@ A simple telegram bot for fetching price information about crypto currencies fro
 
 
 As seen above the result can be displayed in 2 different ways:
-1. Formatted as a String with a Link to CoinMarketCap. Use double slash // for the command. I.e. //eth 
-2. Rendered as an Image. Just use a single slash / for the command. I.e. /eth
+1. Rendered as an Image. Just use a single slash / for the command. I.e. /eth
+2. Formatted as a String with a Link to CoinMarketCap. Use double slash // for the command. I.e. //eth 
 
 You can try it out  [here](https://telegram.me/PriceLeechBot).
 
@@ -37,13 +37,6 @@ In order to run the bot, you have to set your telegram bot api token as an envir
 $CMBOT_TELEGRAM_TOKEN={YOUR_API_KEY}
 ```
 
-If you also want to receive the result as a rendered image, you have to set your [PDF Crowd](https://pdfcrowd.com) api key and username:
-
-```sh
-$PDF_CROWD_API_KEY={YOUR_API_KEY}
-$PDF_CROWD_USERNAME={YOUR_USERNAME}
-```
-
 [Download](https://github.com/yashino91/cmbot/releases) the latest jar release and run the following command:
 
 ```sh
@@ -60,19 +53,13 @@ cd cmbot/
 mvn assembly:assembly
 ```
 
-Keep in mind that if you didn't specify a PDF Crowd Username and API Key, some tests will fail. To build the jar file anyway, just run:
-
-```sh
-mvn install -DskipTests
-```
-
 
 
 ### Run application using Docker
 
 ```sh
 docker build -t cmbot .
-docker run -e "CMBOT_TELEGRAM_TOKEN=YOUR_API_KEY" -e "PDF_CROWD_API_KEY=YOUR_API_KEY" -e "PDF_CROWD_USERNAME=YOUR_USERNAME" cmbot
+docker run -e "CMBOT_TELEGRAM_TOKEN=YOUR_API_KEY" cmbot
 ```
 
 ### Run application without Docker
