@@ -1,11 +1,11 @@
-package at.chaoticbits.coinmarket;
+package at.chaoticbits.coinmarket
 
-import java.math.BigDecimal;
+import java.math.BigDecimal
 
-public class TestData {
 
-    public static CurrencyDetails currencyDetails() {
-        return new CurrencyDetails(
+object TestData {
+
+    fun currencyDetails(): CurrencyDetails = CurrencyDetails (
                 134,
                 true,
                 "Golem Network Token",
@@ -18,6 +18,6 @@ public class TestData {
                 BigDecimal.valueOf(0.63),
                 BigDecimal.valueOf(0.48),
                 BigDecimal.valueOf(0.00000234)
-        );
-    }
+    )
+
 }
