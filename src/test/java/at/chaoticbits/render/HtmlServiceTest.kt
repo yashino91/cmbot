@@ -11,8 +11,12 @@ class HtmlServiceTest {
 
     @Test
     fun testGenerateCryptoDetailsImage() {
-        val image = HtmlImageService.generateCryptoDetailsImage(TestData.currencyDetails())
-        Assert.assertNotNull(image)
+
+        TestData.currencyDetails().forEach {
+            val image = HtmlImageService.generateCryptoDetailsImage(it)
+            Assert.assertNotNull(image)
+        }
+
     }
 
 

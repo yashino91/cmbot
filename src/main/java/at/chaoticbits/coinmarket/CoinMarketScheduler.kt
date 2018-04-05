@@ -28,7 +28,6 @@ class CoinMarketScheduler : TimerTask() {
 
 
     override fun run() {
-
         updateErc20TokenList()
         updateSymbolSlugs()
     }
@@ -45,10 +44,8 @@ class CoinMarketScheduler : TimerTask() {
 
             val response = Api.fetch("https://s2.coinmarketcap.com/generated/search/quick_search.json")
 
-            if (Objects.requireNonNull<Response>(response).status == 200) {
-
-                val jsonArray = JSONArray(response!!.body)
-
+            if (response.status == 200) {
+                val jsonArray = JSONArray(response.body)
 
                 try {
                     PrintWriter("telegram-commands.txt", "UTF-8").use { writer ->
@@ -74,7 +71,7 @@ class CoinMarketScheduler : TimerTask() {
                 }
 
             } else {
-                BotLogger.warn(LOG_TAG, "Error fetching symbol slugs! StatusCode: " + response!!.status)
+                BotLogger.warn(LOG_TAG, "Error fetching symbol slugs! StatusCode: ${response.status}")
 
             }
         } catch (e: Exception) {
@@ -91,9 +88,8 @@ class CoinMarketScheduler : TimerTask() {
 
         val response = Api.fetch("https://raw.githubusercontent.com/kvhnuke/etherwallet/mercury/app/scripts/tokens/ethTokens.json")
 
-        if (Objects.requireNonNull<Response>(response).status == 200) {
-
-            val jsonArray = JSONArray(response!!.body)
+        if (response.status == 200) {
+            val jsonArray = JSONArray(response.body)
 
             for (i in 0 until jsonArray.length()) {
                 val erc20Symbol = jsonArray.getJSONObject(i).getString("symbol")
@@ -104,7 +100,7 @@ class CoinMarketScheduler : TimerTask() {
             BotLogger.info(LOG_TAG, "Successfully updated erc20 tokens")
 
         } else {
-            BotLogger.warn(LOG_TAG, "Error updating Erc20 Tokens! StatusCode: " + response!!.status)
+            BotLogger.warn(LOG_TAG, "Error updating Erc20 Tokens! StatusCode: ${response.status}")
 
         }
     }
