@@ -17,11 +17,11 @@ class ApiTests {
         val response = Api.fetch(urlOK)
 
         Assert.assertNotNull(response)
-        Assert.assertEquals(response!!.status, 200)
+        Assert.assertEquals(response.status, 200)
         Assert.assertNotNull(response.body)
     }
 
-    @Test
+    @Test(expectedExceptions = [(IllegalStateException::class)], expectedExceptionsMessageRegExp = "Error fetching url.*")
     fun testFetchFail() {
         val response = Api.fetch(urlFail)
 

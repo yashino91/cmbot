@@ -50,7 +50,10 @@ class CoinMarketCapServiceTest {
 
     @Test
     fun testFormatCurrencyResult() {
-        Assert.assertNotNull(CoinMarketCapService.formatCurrencyResult(TestData.currencyDetails()))
+        TestData.currencyDetails().forEach {
+            Assert.assertNotNull(CoinMarketCapService.formatCurrencyResult(it))
+        }
+
     }
 
     @Test
@@ -60,11 +63,11 @@ class CoinMarketCapServiceTest {
     }
 
 
-    @Test(expectedExceptions = arrayOf(IllegalStateException::class), expectedExceptionsMessageRegExp = "Currency not found.*")
+    @Test(expectedExceptions = [(IllegalStateException::class)], expectedExceptionsMessageRegExp = "Currency not found.*")
     fun testFetchCurrency() {
-        val (_, name) = CoinMarketCapService.fetchCurrency("bat")
+        val currencyDetails= CoinMarketCapService.fetchCurrency("bat")
 
-        Assert.assertEquals(name, "Basic Attention Token")
+        Assert.assertEquals(currencyDetails.name, "Basic Attention Token")
 
         CoinMarketCapService.fetchCurrency("currencynotfound")
     }

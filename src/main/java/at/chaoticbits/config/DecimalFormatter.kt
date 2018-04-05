@@ -52,7 +52,7 @@ object DecimalFormatter {
 
         df.decimalFormatSymbols = decimalFormatSymbols
 
-        return  " $symbol ${df.format(price)}"
+        return  " $symbol${df.format(price)}"
     }
 
 

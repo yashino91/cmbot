@@ -7,13 +7,11 @@ import com.google.common.base.Strings
 import com.vdurmont.emoji.EmojiParser
 import org.telegram.telegrambots.api.methods.send.SendMessage
 import org.telegram.telegrambots.api.methods.send.SendPhoto
-import org.telegram.telegrambots.api.objects.Message
 import org.telegram.telegrambots.api.objects.Update
 import org.telegram.telegrambots.bots.TelegramLongPollingBot
 import org.telegram.telegrambots.exceptions.TelegramApiException
 import org.telegram.telegrambots.logging.BotLogger
 
-import java.io.InputStream
 import java.util.Timer
 
 
@@ -21,6 +19,13 @@ import java.util.Timer
  * Crypto Polling Bot, that processes currency requests
  */
 class CryptoHandler : TelegramLongPollingBot() {
+
+    companion object {
+
+        private const val LOG_TAG = "CryptoHandler"
+    }
+
+
     /**
      * Instantiate CryptoHandler and start coin market scheduler
      */
@@ -74,7 +79,7 @@ class CryptoHandler : TelegramLongPollingBot() {
 
                 } catch (e: Exception) {
                     val errorMessage = e.message
-                    BotLogger.error(LOGTAG, errorMessage)
+                    BotLogger.error(LOG_TAG, errorMessage)
 
                     // replace '_' characters because of telegram markdown
                     sendMessageRequest.text = errorMessage?.replace("_".toRegex(), "\\\\_")
@@ -82,13 +87,21 @@ class CryptoHandler : TelegramLongPollingBot() {
                     try {
                         sendMessage(sendMessageRequest)
                     } catch (te: TelegramApiException) {
-                        BotLogger.error(LOGTAG, te.message)
+                        BotLogger.error(LOG_TAG, te.message)
                     }
 
                 }
 
             }
         }
+    }
+
+    override fun getBotUsername(): String? {
+        return Bot.config.botName
+    }
+
+    override fun getBotToken(): String {
+        return System.getenv("CMBOT_TELEGRAM_TOKEN")
     }
 
 
@@ -101,16 +114,5 @@ class CryptoHandler : TelegramLongPollingBot() {
         return if (command.indexOf('@') == -1) command.length else command.indexOf('@')
     }
 
-    override fun getBotUsername(): String? {
-        return Bot.config.botName
-    }
 
-    override fun getBotToken(): String {
-        return System.getenv("CMBOT_TELEGRAM_TOKEN")
-    }
-
-    companion object {
-
-        private val LOGTAG = "CryptoHandler"
-    }
 }

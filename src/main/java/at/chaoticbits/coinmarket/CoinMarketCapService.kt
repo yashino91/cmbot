@@ -55,7 +55,7 @@ object CoinMarketCapService {
      * @param currency currency (bitcoin, ethereum, etc..)
      * @return JSONObject including price information
      */
-    @Throws(IllegalStateException::class)
+    @Throws(IllegalStateException::class, UnsupportedEncodingException::class)
     fun fetchCurrency(currency: String): CurrencyDetails {
 
         var slug = getCurrencySlug(currency)
@@ -68,20 +68,14 @@ object CoinMarketCapService {
             slug = "basic-attention-token"
 
 
-        val response: Response?
-        try {
-            response = Api.fetch(API_URL + URLEncoder.encode(slug, "UTF-8") + "/?convert=EUR")
-        } catch (e: UnsupportedEncodingException) {
-            throw IllegalStateException("Error encoding currency string: " + e.message)
-        }
+        val response: Response = Api.fetch(API_URL + URLEncoder.encode(slug, "UTF-8") + "/?convert=EUR")
 
-        if (Objects.requireNonNull<Response>(response).status == 200)
-            return CurrencyDetails(JSONArray(response!!.body).getJSONObject(0))
-        else if (Objects.requireNonNull<Response>(response).status == 404)
+        if (response.status == 200 && response.body != null)
+            return CurrencyDetails(JSONArray(response.body).getJSONObject(0))
+        else if (response.status == 404)
             throw IllegalStateException("Currency not found: *$currency*")
         else
-            throw IllegalStateException("Error! StatusCode: " + response!!.status)
-
+            throw IllegalStateException("Error! StatusCode: " + response.status)
     }
 
     /**
@@ -101,7 +95,6 @@ object CoinMarketCapService {
      * @return slug
      */
     fun getCurrencySlug(currency: String): String {
-
         return CoinMarketContainer.symbolSlugs[currency.toUpperCase()] ?: return currency
     }
 
@@ -139,7 +132,7 @@ object CoinMarketCapService {
     }
 
     fun getUpOrDownEmoji(price: BigDecimal): String {
-        return if (price.compareTo(BigDecimal.ZERO) > 0) ":chart_with_upwards_trend:" else ":chart_with_downwards_trend:"
+        return if (price > BigDecimal.ZERO) ":chart_with_upwards_trend:" else ":chart_with_downwards_trend:"
 
     }
 

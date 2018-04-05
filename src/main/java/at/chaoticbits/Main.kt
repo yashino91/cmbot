@@ -23,7 +23,7 @@ import java.util.logging.Level
  */
 object Main {
 
-    private val LOGTAG = "MAIN"
+    private val LOG_TAG = "MAIN"
 
     var cryptoHandler: CryptoHandler? = null
         private set
@@ -36,12 +36,12 @@ object Main {
         try {
             BotLogger.registerLogger(BotsFileHandler("./TelegramBots%g.%u.log"))
         } catch (e: IOException) {
-            BotLogger.severe(LOGTAG, e)
+            BotLogger.severe(LOG_TAG, e)
         }
 
         // exit if no telegram bot token is specified
         if (System.getenv("CMBOT_TELEGRAM_TOKEN") == null) {
-            BotLogger.error(LOGTAG, "No Telegram Bot Token specified! Please declare a System Environment Variable with your Telegram API Key. CMBOT_TELEGRAM_TOKEN={YOUR_API_KEY}")
+            BotLogger.error(LOG_TAG, "No Telegram Bot Token specified! Please declare a System Environment Variable with your Telegram API Key. CMBOT_TELEGRAM_TOKEN={YOUR_API_KEY}")
             return
         }
 
@@ -68,11 +68,11 @@ object Main {
                 telegramBotsApi.registerBot(cryptoHandler!!)
 
             } catch (e: TelegramApiException) {
-                BotLogger.error(LOGTAG, e)
+                BotLogger.error(LOG_TAG, e)
             }
 
         } catch (e: Exception) {
-            BotLogger.error(LOGTAG, e)
+            BotLogger.error(LOG_TAG, e)
         }
 
     }
@@ -83,11 +83,9 @@ object Main {
      */
     private fun loadBotConfiguration() {
         try {
-            val configInputStream = Objects.requireNonNull<InputStream>(Main::class.java!!.getClassLoader().getResourceAsStream("config.yaml"))
-            val yaml = Yaml()
-            Bot.config = yaml.loadAs(configInputStream, Config::class.java)
+            Bot.config = Yaml().loadAs(Main::class.java.classLoader.getResourceAsStream("config.yaml"), Config::class.java)
         } catch (e: NullPointerException) {
-            BotLogger.error(LOGTAG, "Error loading config.yaml! " + e.message)
+            BotLogger.error(LOG_TAG, "Error loading config.yaml! " + e.message)
         }
 
     }

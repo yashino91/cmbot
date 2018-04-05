@@ -72,17 +72,11 @@ object HtmlImageService {
             val doc = db.parse(htmlInputStream)
 
             // write image into output stream
-            val render = Java2DRenderer(doc, 1800)
-            val image = render.image
             val os = ByteArrayOutputStream()
-            ImageIO.write(image, "png", os)
-
+            ImageIO.write(Java2DRenderer(doc, 1800).image, "png", os)
             return ByteArrayInputStream(os.toByteArray())
-        } catch (e: IOException) {
-            throw IllegalStateException("Error writing Image: " + e.message)
-        } catch (e: ParserConfigurationException) {
-            throw IllegalStateException("Error writing Image: " + e.message)
-        } catch (e: SAXException) {
+
+        } catch (e: Exception) {
             throw IllegalStateException("Error writing Image: " + e.message)
         }
 
@@ -136,6 +130,7 @@ object HtmlImageService {
         return colors
     }
 
+
     /**
      * Populates a Map with red or green colors
      * depending on the positive flag and the containing values in the map
@@ -147,25 +142,15 @@ object HtmlImageService {
 
         val colors = HashMap<String, String>()
 
-        val min: String? = getMinValue(map)
-        val middle: String? = getMinValue(map)
-        val max: String? = getMinValue(map)
-
-        if (min == null)
-            return colors
-
+        val min: String = getMinValue(map) ?: return colors
         colors[min] = if (positive) "#4CAF50" else "#BF360C"
         map.remove(min)
 
-        if (middle == null)
-            return colors
-
+        val middle: String = getMinValue(map) ?: return colors
         colors[middle] = if (positive) "#388E3C" else "#E64A19"
         map.remove(middle)
 
-        if (max == null)
-            return colors
-
+        val max: String = getMinValue(map) ?: return colors
         colors[max] = if (positive) "#2E7D32" else "#FF7043"
         return colors
     }
@@ -179,7 +164,6 @@ object HtmlImageService {
     private fun getMinValue(map: Map<String, BigDecimal>): String? {
 
         val min = map.minBy { entry -> entry.value }
-
         return when (min) {
             null -> null
             else -> min.key
