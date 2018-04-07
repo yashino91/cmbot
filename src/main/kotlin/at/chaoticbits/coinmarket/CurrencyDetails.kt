@@ -4,10 +4,9 @@ import org.json.JSONObject
 import java.math.BigDecimal
 
 
-fun getValueOrNull(key: String, jsonObject: JSONObject): BigDecimal? {
-    return if (jsonObject.isNull(key)) null else jsonObject.getBigDecimal(key)
-}
-
+/**
+ * Illustrates a class, holding all available information about a currency
+ */
 data class CurrencyDetails(
         val rank: Int = 0,
         val isErc20: Boolean,
@@ -40,4 +39,9 @@ data class CurrencyDetails(
                 getValueOrNull("price_eur", jsonObject),
                 getValueOrNull("price_btc", jsonObject)
     )
+}
+
+
+private fun getValueOrNull(key: String, jsonObject: JSONObject): BigDecimal? {
+    return if (jsonObject.isNull(key)) null else jsonObject.getBigDecimal(key)
 }

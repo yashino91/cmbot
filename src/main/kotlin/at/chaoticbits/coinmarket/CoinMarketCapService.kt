@@ -21,13 +21,15 @@ object CoinMarketCapService {
 
     private const val API_URL = "https://api.coinmarketcap.com/v1/ticker/"
 
+
     /**
      * Fetch all details about the given currency at CoinMarketCap
      * and generates a styled image containing all information about the requested currency
+     *
      * @param currency currency
      * @return InputStream containing the image information
      */
-    @Throws(IllegalStateException::class)
+    @Throws(IllegalStateException::class, UnsupportedEncodingException::class)
     fun getCurrencyDetailsImage(currency: String): InputStream {
         val currencyDetails: CurrencyDetails = fetchCurrency(currency)
         return HtmlImageService.generateCryptoDetailsImage(currencyDetails)
@@ -37,10 +39,11 @@ object CoinMarketCapService {
     /**
      * Fetch all details about the given currency at CoinMarketCap
      * and formats the result as a string
+     *
      * @param currency currency
      * @return formatted string with detailed information about the requested currency
      */
-    @Throws(IllegalStateException::class)
+    @Throws(IllegalStateException::class, UnsupportedEncodingException::class)
     fun getFormattedCurrencyDetails(currency: String): String {
         val currencyDetails: CurrencyDetails = fetchCurrency(currency)
         return formatCurrencyResult(currencyDetails)
@@ -49,6 +52,7 @@ object CoinMarketCapService {
 
     /**
      * Fetch the information of the given currency
+     *
      * @param currency currency (bitcoin, ethereum, etc..)
      * @return JSONObject including price information
      */
@@ -75,18 +79,10 @@ object CoinMarketCapService {
             throw IllegalStateException("Error! StatusCode: " + response.status)
     }
 
-    /**
-     * Checks if the given currency slug is allowed
-     * @param slug currency slug
-     * @return true/false
-     */
-    private fun slugAllowed(slug: String): Boolean {
-        return Bot.config.allowedCurrencySlugs.isEmpty() || Bot.config.allowedCurrencySlugs.contains(slug)
-    }
-
 
     /**
      * Maps the requested currency to the appropriate slug for later price fetching
+     *
      * @param currency currency
      * @return slug
      */
@@ -98,6 +94,7 @@ object CoinMarketCapService {
     /**
      * Format the given json object containing currency information
      * to a readable string
+     *
      * @param currencyDetails containing information about a crypto currency
      * @return formatted currency information
      */
@@ -120,17 +117,34 @@ object CoinMarketCapService {
 
     }
 
+
+    /**
+     * Formats the given percentage with an upwards or downwards trend emoji,
+     * depending if the value is negative or positive
+     *
+     * @param percentage percentage as BigDecimal
+     * @return formatted percentage with appropriate emoji
+     */
     fun formatPercentageWithEmoji(percentage: BigDecimal?): String {
-        val formattedPercentage = formatPercentage(percentage)
+        return if (percentage == null) "-" else formatPercentage(percentage) + "\t" + getUpOrDownEmoji(percentage)
+    }
 
-        return if (formattedPercentage == "-") formattedPercentage else formattedPercentage + "\t" + getUpOrDownEmoji(percentage!!)
+
+    /**
+     * Creates an upwards or downwards trend emoji
+     * depending on a negative or positive value
+     *
+     * @param value value as BigDecimal
+     * @return string representation of matching emoji
+     */
+    fun getUpOrDownEmoji(value: BigDecimal): String {
+        return if (value > BigDecimal.ZERO) ":chart_with_upwards_trend:" else ":chart_with_downwards_trend:"
 
     }
 
-    fun getUpOrDownEmoji(price: BigDecimal): String {
-        return if (price > BigDecimal.ZERO) ":chart_with_upwards_trend:" else ":chart_with_downwards_trend:"
 
+    private fun slugAllowed(slug: String): Boolean {
+        return Bot.config.allowedCurrencySlugs.isEmpty() || Bot.config.allowedCurrencySlugs.contains(slug)
     }
-
 
 }

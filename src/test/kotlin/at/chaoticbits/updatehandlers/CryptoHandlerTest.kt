@@ -1,7 +1,7 @@
 package at.chaoticbits.updatehandlers
 
-import at.chaoticbits.Main
 import at.chaoticbits.config.Bot
+import at.chaoticbits.main
 import at.chaoticbits.updateshandlers.CryptoHandler
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.telegram.telegrambots.api.objects.Update
@@ -11,32 +11,36 @@ import org.testng.annotations.Test
 
 import java.io.IOException
 
+
+/**
+ * Test Telegram Bot Update Handlers
+ */
 class CryptoHandlerTest {
 
-    lateinit var cryptoHandler: CryptoHandler
+    private lateinit var cryptoHandler: CryptoHandler
 
     @BeforeClass
-    fun setup() {
-        Main.main(arrayOf())
+    private fun setup() {
+        main(arrayOf())
         cryptoHandler = CryptoHandler()
     }
 
 
     @Test
-    fun testGetBotUsername() {
+    private fun testGetBotUsername() {
         val botUsername = cryptoHandler.botUsername
         Assert.assertNotNull(botUsername)
         Assert.assertEquals(botUsername, Bot.config.botName)
     }
 
     @Test
-    fun testGetBotToken() {
+    private fun testGetBotToken() {
         val botUsername = cryptoHandler.botToken
         Assert.assertNotNull(botUsername)
     }
 
     @Test
-    fun testOnUpdateReceived() {
+    private fun testOnUpdateReceived() {
         cryptoHandler.onUpdateReceived(requestImageUpdate!!)
         cryptoHandler.onUpdateReceived(requestFormattedStringUpdate!!)
         cryptoHandler.onUpdateReceived(invalidCurrencyUpdate!!)

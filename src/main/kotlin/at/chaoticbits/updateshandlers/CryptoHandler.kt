@@ -10,6 +10,7 @@ import org.telegram.telegrambots.api.objects.Update
 import org.telegram.telegrambots.bots.TelegramLongPollingBot
 import org.telegram.telegrambots.exceptions.TelegramApiException
 import org.telegram.telegrambots.logging.BotLogger
+import java.io.UnsupportedEncodingException
 
 import java.util.Timer
 
@@ -71,26 +72,18 @@ class CryptoHandler : TelegramLongPollingBot() {
                                 command.substring(Bot.config.imageCommand.length, getCurrencyEnd(command)))
 
                         val photo = SendPhoto()
-                        photo.setChatId(message.chatId!!)
+                        photo.setChatId(message.chatId)
                         photo.setNewPhoto(command, imageInputStream)
                         sendPhoto(photo)
                     }
 
-                } catch (e: Exception) {
-                    val errorMessage = e.message
-                    BotLogger.error(LOG_TAG, errorMessage)
-
-                    // replace '_' characters because of telegram markdown
-                    sendMessageRequest.text = errorMessage?.replace("_".toRegex(), "\\\\_")
-
-                    try {
-                        sendMessage(sendMessageRequest)
-                    } catch (te: TelegramApiException) {
-                        BotLogger.error(LOG_TAG, te.message)
-                    }
-
+                } catch (e: TelegramApiException) {
+                    BotLogger.error(LOG_TAG, e.message)
+                } catch (e: IllegalStateException) {
+                    sendError(sendMessageRequest, e)
+                } catch (e: UnsupportedEncodingException) {
+                    sendError(sendMessageRequest, e)
                 }
-
             }
         }
     }
@@ -104,14 +97,23 @@ class CryptoHandler : TelegramLongPollingBot() {
     }
 
 
-    /**
-     * Determine the end index of the provided currency slug
-     * @param command currency
-     * @return index of currency end
-     */
     private fun getCurrencyEnd(command: String): Int {
         return if (command.indexOf('@') == -1) command.length else command.indexOf('@')
     }
 
+    private fun sendError(sendMessageRequest: SendMessage, e: Exception) {
+
+        val errorMessage = e.message
+        BotLogger.error(LOG_TAG, errorMessage)
+
+        // replace '_' characters because of telegram markdown
+        sendMessageRequest.text = errorMessage?.replace("_".toRegex(), "\\\\_")
+
+        try {
+            sendMessage(sendMessageRequest)
+        } catch (te: TelegramApiException) {
+            BotLogger.error(LOG_TAG, te.message)
+        }
+    }
 
 }
