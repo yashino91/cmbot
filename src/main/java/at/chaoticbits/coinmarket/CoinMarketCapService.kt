@@ -4,16 +4,13 @@ import at.chaoticbits.api.Api
 import at.chaoticbits.api.Response
 import at.chaoticbits.config.Bot
 import at.chaoticbits.config.DecimalFormatter
+import at.chaoticbits.config.DecimalFormatter.formatPercentage
 import at.chaoticbits.render.HtmlImageService
 import org.json.JSONArray
-
-import java.io.*
+import java.io.InputStream
+import java.io.UnsupportedEncodingException
 import java.math.BigDecimal
 import java.net.URLEncoder
-import java.util.Objects
-
-import at.chaoticbits.config.DecimalFormatter.formatPercentage
-import at.chaoticbits.config.DecimalFormatter.formatPrice
 
 
 /**
@@ -85,7 +82,6 @@ object CoinMarketCapService {
      */
     private fun slugAllowed(slug: String): Boolean {
         return Bot.config.allowedCurrencySlugs.isEmpty() || Bot.config.allowedCurrencySlugs.contains(slug)
-
     }
 
 

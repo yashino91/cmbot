@@ -3,7 +3,6 @@ package at.chaoticbits.updateshandlers
 import at.chaoticbits.coinmarket.CoinMarketScheduler
 import at.chaoticbits.config.Bot
 import at.chaoticbits.coinmarket.CoinMarketCapService
-import com.google.common.base.Strings
 import com.vdurmont.emoji.EmojiParser
 import org.telegram.telegrambots.api.methods.send.SendMessage
 import org.telegram.telegrambots.api.methods.send.SendPhoto
@@ -58,18 +57,18 @@ class CryptoHandler : TelegramLongPollingBot() {
                 try {
 
                     // request currency details as a formatted string
-                    if (!Strings.isNullOrEmpty(Bot.config.stringCommand) && command.startsWith(Bot.config.stringCommand!!)) {
+                    if (!Bot.config.stringCommand.isEmpty() && command.startsWith(Bot.config.stringCommand)) {
 
                         sendMessageRequest.text = EmojiParser.parseToUnicode(
                                 CoinMarketCapService.getFormattedCurrencyDetails(
-                                        command.substring(Bot.config.stringCommand!!.length, getCurrencyEnd(command))))
+                                        command.substring(Bot.config.stringCommand.length, getCurrencyEnd(command))))
                         sendMessage(sendMessageRequest)
 
                         // request currency details as a rendered image
-                    } else if (!Strings.isNullOrEmpty(Bot.config.imageCommand) && command.startsWith(Bot.config.imageCommand!!)) {
+                    } else if (!Bot.config.imageCommand.isEmpty() && command.startsWith(Bot.config.imageCommand)) {
 
                         val imageInputStream = CoinMarketCapService.getCurrencyDetailsImage(
-                                command.substring(Bot.config.imageCommand!!.length, getCurrencyEnd(command)))
+                                command.substring(Bot.config.imageCommand.length, getCurrencyEnd(command)))
 
                         val photo = SendPhoto()
                         photo.setChatId(message.chatId!!)

@@ -1,4 +1,4 @@
 botName: !!str "priceLeecherBot"  # Name of your Telegram Bot
 allowedCurrencySlugs: []          # For example: [ethereum, bitcoin]. If empty, every currency is allowed to request
-imageCommand: !!str "/"           # Command to request currency details as a rendered image (null or empty for disabling)
-stringCommand: !!str "//"         # Command to request currency details as a formatted string (null or empty for disabling)
+imageCommand: !!str "/"           # Command to request currency details as a rendered image (empty for disabling)
+stringCommand: !!str "//"         # Command to request currency details as a formatted string (empty for disabling)

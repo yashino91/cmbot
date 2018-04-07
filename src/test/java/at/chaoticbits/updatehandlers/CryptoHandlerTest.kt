@@ -2,6 +2,7 @@ package at.chaoticbits.updatehandlers
 
 import at.chaoticbits.Main
 import at.chaoticbits.config.Bot
+import at.chaoticbits.updateshandlers.CryptoHandler
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.telegram.telegrambots.api.objects.Update
 import org.testng.Assert
@@ -12,30 +13,33 @@ import java.io.IOException
 
 class CryptoHandlerTest {
 
+    lateinit var cryptoHandler: CryptoHandler
+
     @BeforeClass
     fun setup() {
         Main.main(arrayOf())
+        cryptoHandler = CryptoHandler()
     }
 
 
     @Test
     fun testGetBotUsername() {
-        val botUsername = Main.cryptoHandler!!.botUsername
+        val botUsername = cryptoHandler.botUsername
         Assert.assertNotNull(botUsername)
         Assert.assertEquals(botUsername, Bot.config.botName)
     }
 
     @Test
     fun testGetBotToken() {
-        val botUsername = Main.cryptoHandler!!.botToken
+        val botUsername = cryptoHandler.botToken
         Assert.assertNotNull(botUsername)
     }
 
     @Test
     fun testOnUpdateReceived() {
-        Main.cryptoHandler!!.onUpdateReceived(requestImageUpdate!!)
-        Main.cryptoHandler!!.onUpdateReceived(requestFormattedStringUpdate!!)
-        Main.cryptoHandler!!.onUpdateReceived(invalidCurrencyUpdate!!)
+        cryptoHandler.onUpdateReceived(requestImageUpdate!!)
+        cryptoHandler.onUpdateReceived(requestFormattedStringUpdate!!)
+        cryptoHandler.onUpdateReceived(invalidCurrencyUpdate!!)
     }
 
 

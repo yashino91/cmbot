@@ -1,16 +1,13 @@
 package at.chaoticbits.coinmarket
 
 import at.chaoticbits.api.Api
-import at.chaoticbits.api.Response
 import org.json.JSONArray
 import org.json.JSONObject
 import org.telegram.telegrambots.logging.BotLogger
-
 import java.io.FileNotFoundException
 import java.io.PrintWriter
 import java.io.UnsupportedEncodingException
-import java.util.Objects
-import java.util.TimerTask
+import java.util.*
 
 /**
  * Update symbol slug list periodically
