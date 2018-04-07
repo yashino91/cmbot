@@ -4,25 +4,17 @@ import at.chaoticbits.coinmarket.CurrencyDetails
 import at.chaoticbits.config.DecimalFormatter
 import org.thymeleaf.TemplateEngine
 import org.thymeleaf.context.Context
+import org.thymeleaf.templatemode.TemplateMode.HTML
 import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver
 import org.xhtmlrenderer.swing.Java2DRenderer
-import org.xml.sax.SAXException
-
-import javax.imageio.ImageIO
-import javax.xml.parsers.DocumentBuilderFactory
-import javax.xml.parsers.ParserConfigurationException
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
-import java.io.IOException
 import java.io.InputStream
 import java.math.BigDecimal
 import java.nio.charset.StandardCharsets
-import java.util.HashMap
-import java.util.Locale
-
-import org.thymeleaf.templatemode.TemplateMode.HTML
-
-
+import java.util.*
+import javax.imageio.ImageIO
+import javax.xml.parsers.DocumentBuilderFactory
 
 
 object HtmlImageService {

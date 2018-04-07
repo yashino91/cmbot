@@ -20,6 +20,10 @@
 
     <repositories>
         <repository>
+            <id>jcenter</id>
+            <url>https://jcenter.bintray.com/</url>
+        </repository>
+        <repository>
             <id>emoji-repo</id>
             <name>Custom Emoji Repo with appropriate org.json dependency for telegram-bot</name>
             <url>https://raw.github.com/yashino91/emoji-java/json-20160810/</url>
@@ -27,6 +31,24 @@
     </repositories>
 
     <dependencies>
+
+        <dependency>
+            <groupId>com.jdiazcano.cfg4k</groupId>
+            <artifactId>cfg4k-core</artifactId>
+            <version>0.8.5</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.jdiazcano.cfg4k</groupId>
+            <artifactId>cfg4k-yaml</artifactId>
+            <version>0.8.5</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.jdiazcano.cfg4k</groupId>
+            <artifactId>cfg4k-bytebuddy</artifactId>
+            <version>0.8.5</version>
+        </dependency>
 
         <dependency>
             <groupId>org.xhtmlrenderer</groupId>
@@ -78,11 +100,6 @@
             <artifactId>pdfcrowd</artifactId>
             <version>4.2.1</version>
             <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.yaml</groupId>
-            <artifactId>snakeyaml</artifactId>
-            <version>1.20</version>
         </dependency>
 
 
