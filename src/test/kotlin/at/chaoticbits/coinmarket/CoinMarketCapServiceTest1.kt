@@ -4,8 +4,6 @@ import at.chaoticbits.config.DecimalFormatter
 import org.testng.Assert
 import org.testng.annotations.BeforeClass
 import org.testng.annotations.Test
-
-import java.io.InputStream
 import java.math.BigDecimal
 
 class CoinMarketCapServiceTest {

@@ -4,7 +4,6 @@ import at.chaoticbits.coinmarket.TestData
 import org.testng.Assert
 import org.testng.annotations.Test
 
-import java.io.InputStream
 
 class HtmlServiceTest {
 
