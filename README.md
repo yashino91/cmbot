@@ -1,11 +1,11 @@
 # cmbot
 
-[![Coverage Status](https://coveralls.io/repos/github/yashino91/cmbot/badge.svg?branch=master)](https://coveralls.io/github/yashino91/cmbot?branch=master)
+
 [![Build Status](https://travis-ci.org/yashino91/cmbot.svg?branch=master)](https://travis-ci.org/yashino91/cmbot)
-[![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat)](https://github.com/dwyl/esta/issues)
+[![codecov](https://codecov.io/gh/yashino91/cmbot/branch/master/graph/badge.svg)](https://codecov.io/gh/yashino91/cmbot)
 
 
-A simple telegram bot for fetching price information about crypto currencies from CoinMarketCap. 
+A simple telegram bot written in Kotlin, for fetching price information about crypto currencies from CoinMarketCap. 
 
 ![Alt text](/screenshots/example.png?raw=true "Bot Example - Formatted as a String or rendered as an Image")
 
@@ -23,7 +23,7 @@ In order to run the bot on your own machine, you have to set your telegram bot a
 
 
 ```sh
-$CMBOT_TELEGRAM_TOKEN={YOUR_API_KEY}
+$CMBOT_TELEGRAM_TOKEN=YOUR_API_KEY
 ```
 
 [Download](https://github.com/yashino91/cmbot/releases) the latest jar release and run the following command:
