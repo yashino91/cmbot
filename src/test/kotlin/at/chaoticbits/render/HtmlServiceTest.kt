@@ -5,11 +5,14 @@ import org.testng.Assert
 import org.testng.annotations.Test
 
 
+/**
+ * Test Image rendering of currency details
+ */
 class HtmlServiceTest {
 
 
     @Test
-    fun testGenerateCryptoDetailsImage() {
+    private fun testGenerateCryptoDetailsImage() {
 
         TestData.currencyDetails().forEach {
             val image = HtmlImageService.generateCryptoDetailsImage(it)

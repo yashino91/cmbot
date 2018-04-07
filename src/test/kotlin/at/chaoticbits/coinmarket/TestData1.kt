@@ -3,8 +3,15 @@ package at.chaoticbits.coinmarket
 import java.math.BigDecimal
 
 
+/**
+ * Holding data for test cases
+ */
 object TestData {
 
+
+    /**
+     * Returns an array of CurrencyDetails test data
+     */
     fun currencyDetails(): Array<CurrencyDetails> = arrayOf(
             CurrencyDetails(
                 134,
@@ -40,11 +47,11 @@ object TestData {
                     null,
                    null,
                     null,
-                    BigDecimal.valueOf(848575.2),
-                    BigDecimal.valueOf(4585934.9),
-                    BigDecimal.valueOf(0.63),
-                    BigDecimal.valueOf(0.48),
-                    BigDecimal.valueOf(0.00000234))
+                    null,
+                    null,
+                    null,
+                    null,
+                    null)
 
     )
 
