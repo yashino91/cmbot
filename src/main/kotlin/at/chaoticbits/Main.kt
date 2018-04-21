@@ -8,6 +8,7 @@ import org.telegram.telegrambots.logging.BotLogger
 import org.telegram.telegrambots.logging.BotsFileHandler
 
 import java.io.IOException
+import java.time.LocalDateTime
 import java.util.logging.Level
 
 
@@ -21,7 +22,7 @@ class Main {
         fun main(args: Array<String>) {
             BotLogger.setLevel(Level.ALL)
             try {
-                BotLogger.registerLogger(BotsFileHandler("./TelegramBots%g.%u.log"))
+                BotLogger.registerLogger(BotsFileHandler("./logs/TelegramBots${LocalDateTime.now()}.log"))
             } catch (e: IOException) {
                 BotLogger.severe(LOG_TAG, e)
             }
