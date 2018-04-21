@@ -6,6 +6,7 @@ import at.chaoticbits.coinmarket.CoinMarketCapService
 import com.vdurmont.emoji.EmojiParser
 import org.telegram.telegrambots.api.methods.send.SendMessage
 import org.telegram.telegrambots.api.methods.send.SendPhoto
+import org.telegram.telegrambots.api.objects.Message
 import org.telegram.telegrambots.api.objects.Update
 import org.telegram.telegrambots.bots.TelegramLongPollingBot
 import org.telegram.telegrambots.exceptions.TelegramApiException
@@ -43,7 +44,7 @@ class CryptoHandler : TelegramLongPollingBot() {
 
         //check if the update has a message
         if (update.hasMessage()) {
-            val message = update.message
+            val message: Message = update.message
 
             //check if the message has text. it could also  contain for example a location ( message.hasLocation() )
             if (message.hasText()) {
@@ -60,16 +61,22 @@ class CryptoHandler : TelegramLongPollingBot() {
                     // request currency details as a formatted string
                     if (!Bot.config.stringCommand.isEmpty() && command.startsWith(Bot.config.stringCommand)) {
 
+                        val currency = command.substring(Bot.config.stringCommand.length, getCurrencyEnd(command))
+
+                        logCurrencyRequest(message, currency, "string")
+
                         sendMessageRequest.text = EmojiParser.parseToUnicode(
-                                CoinMarketCapService.getFormattedCurrencyDetails(
-                                        command.substring(Bot.config.stringCommand.length, getCurrencyEnd(command))))
+                                CoinMarketCapService.getFormattedCurrencyDetails(currency))
                         sendMessage(sendMessageRequest)
 
                         // request currency details as a rendered image
                     } else if (!Bot.config.imageCommand.isEmpty() && command.startsWith(Bot.config.imageCommand)) {
 
-                        val imageInputStream = CoinMarketCapService.getCurrencyDetailsImage(
-                                command.substring(Bot.config.imageCommand.length, getCurrencyEnd(command)))
+                        val currency = command.substring(Bot.config.imageCommand.length, getCurrencyEnd(command))
+
+                        logCurrencyRequest(message, currency, "image")
+
+                        val imageInputStream = CoinMarketCapService.getCurrencyDetailsImage(currency)
 
                         val photo = SendPhoto()
                         photo.setChatId(message.chatId)
@@ -88,18 +95,20 @@ class CryptoHandler : TelegramLongPollingBot() {
         }
     }
 
-    override fun getBotUsername(): String? {
-        return Bot.config.botName
-    }
-
-    override fun getBotToken(): String {
-        return System.getenv("CMBOT_TELEGRAM_TOKEN")
-    }
+    override fun getBotUsername(): String? =
+            Bot.config.botName
 
 
-    private fun getCurrencyEnd(command: String): Int {
-        return if (command.indexOf('@') == -1) command.length else command.indexOf('@')
-    }
+    override fun getBotToken(): String =
+            System.getenv("CMBOT_TELEGRAM_TOKEN")
+
+    private fun logCurrencyRequest(message: Message, currency: String, type: String) =
+            BotLogger.info(LOG_TAG, "${message.from} from ${message.chat} requested Currency{name='$currency', type='$type'}")
+
+
+    private fun getCurrencyEnd(command: String): Int =
+            if (command.indexOf('@') == -1) command.length else command.indexOf('@')
+
 
     private fun sendError(sendMessageRequest: SendMessage, e: Exception) {
 
