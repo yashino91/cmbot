@@ -13,26 +13,28 @@ import java.util.logging.Level
 
 private const val LOG_TAG = "MAIN"
 
+class Main {
 
-/**
- *  Application entry point. Initializes Telegram Bot and BotLogger
- */
-fun main(args: Array<String>) {
+    companion object {
 
-    BotLogger.setLevel(Level.ALL)
-    try {
-        BotLogger.registerLogger(BotsFileHandler("./TelegramBots%g.%u.log"))
-    } catch (e: IOException) {
-        BotLogger.severe(LOG_TAG, e)
+        @JvmStatic
+        fun main(args: Array<String>) {
+            BotLogger.setLevel(Level.ALL)
+            try {
+                BotLogger.registerLogger(BotsFileHandler("./TelegramBots%g.%u.log"))
+            } catch (e: IOException) {
+                BotLogger.severe(LOG_TAG, e)
+            }
+
+            // Exit if no Telegram Bot Token is specified
+            if (System.getenv("CMBOT_TELEGRAM_TOKEN") == null) {
+                BotLogger.error(LOG_TAG, "No Telegram Bot Token specified! Please declare a System Environment Variable with your Telegram API Key. CMBOT_TELEGRAM_TOKEN={YOUR_API_KEY}")
+                return
+            }
+
+            initTelegramBot()
+        }
     }
-
-    // Exit if no Telegram Bot Token is specified
-    if (System.getenv("CMBOT_TELEGRAM_TOKEN") == null) {
-        BotLogger.error(LOG_TAG, "No Telegram Bot Token specified! Please declare a System Environment Variable with your Telegram API Key. CMBOT_TELEGRAM_TOKEN={YOUR_API_KEY}")
-        return
-    }
-
-    initTelegramBot()
 }
 
 

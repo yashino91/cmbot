@@ -1,7 +1,7 @@
 package at.chaoticbits.updatehandlers
 
+import at.chaoticbits.Main.Companion.main
 import at.chaoticbits.config.Bot
-import at.chaoticbits.main
 import at.chaoticbits.updateshandlers.CryptoHandler
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.telegram.telegrambots.api.objects.Update
