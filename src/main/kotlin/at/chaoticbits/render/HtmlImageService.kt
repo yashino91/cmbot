@@ -92,7 +92,7 @@ object HtmlImageService {
             colors["change1h"] = "#757575"
         else {
             if (currencyDetails.change1h > BigDecimal.ZERO)
-                changesPositive.put("change1h", currencyDetails.change1h)
+                changesPositive["change1h"] = currencyDetails.change1h
             else
                 changesNegative["change1h"] = currencyDetails.change1h
         }
