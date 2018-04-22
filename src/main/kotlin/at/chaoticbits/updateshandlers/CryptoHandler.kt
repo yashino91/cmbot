@@ -5,6 +5,7 @@ import at.chaoticbits.config.Bot
 import at.chaoticbits.coinmarket.CoinMarketCapService
 import com.vdurmont.emoji.EmojiParser
 import mu.KotlinLogging
+import net.logstash.logback.marker.Markers.appendEntries
 import org.telegram.telegrambots.api.methods.send.SendMessage
 import org.telegram.telegrambots.api.methods.send.SendPhoto
 import org.telegram.telegrambots.api.objects.Message
@@ -98,8 +99,15 @@ class CryptoHandler : TelegramLongPollingBot() {
     override fun getBotToken(): String =
             System.getenv("CMBOT_TELEGRAM_TOKEN")
 
-    private fun logCurrencyRequest(message: Message, currency: String, type: String) =
-            log.info { "${message.from} from ${message.chat} requested Currency{name='$currency', type='$type'}" }
+    private fun logCurrencyRequest(message: Message, currency: String, type: String) {
+        val loggingObjects = mapOf(
+                "from" to message.from,
+                "chat" to message.chat,
+                "currency" to currency,
+                "requestType" to type)
+
+        log.info(appendEntries(loggingObjects), "${message.from} from ${message.chat} requested Currency{name='$currency', type='$type'}")
+    }
 
 
     private fun getCurrencyEnd(command: String): Int =

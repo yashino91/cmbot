@@ -20,7 +20,7 @@
             <fileNamePattern>logs/cmbot.%d{yyyy-MM-dd}.log</fileNamePattern>
             <maxHistory>2000</maxHistory>
         </rollingPolicy>
-        <encoder class="net.logstash.logback.encoder.LogstashEncoder"/>
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder" />
     </appender>
 
     <root level="INFO">
