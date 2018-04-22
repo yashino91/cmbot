@@ -4,13 +4,13 @@ import at.chaoticbits.coinmarket.CoinMarketScheduler
 import at.chaoticbits.config.Bot
 import at.chaoticbits.coinmarket.CoinMarketCapService
 import com.vdurmont.emoji.EmojiParser
+import mu.KotlinLogging
 import org.telegram.telegrambots.api.methods.send.SendMessage
 import org.telegram.telegrambots.api.methods.send.SendPhoto
 import org.telegram.telegrambots.api.objects.Message
 import org.telegram.telegrambots.api.objects.Update
 import org.telegram.telegrambots.bots.TelegramLongPollingBot
 import org.telegram.telegrambots.exceptions.TelegramApiException
-import org.telegram.telegrambots.logging.BotLogger
 import java.io.UnsupportedEncodingException
 
 import java.util.Timer
@@ -19,12 +19,8 @@ import java.util.Timer
 /**
  * Crypto Polling Bot, that processes currency requests
  */
+private val log = KotlinLogging.logger {}
 class CryptoHandler : TelegramLongPollingBot() {
-
-    companion object {
-
-        private const val LOG_TAG = "CryptoHandler"
-    }
 
 
     /**
@@ -85,7 +81,7 @@ class CryptoHandler : TelegramLongPollingBot() {
                     }
 
                 } catch (e: TelegramApiException) {
-                    BotLogger.error(LOG_TAG, e.message)
+                    log.error { e.message }
                 } catch (e: IllegalStateException) {
                     sendError(sendMessageRequest, e)
                 } catch (e: UnsupportedEncodingException) {
@@ -103,7 +99,7 @@ class CryptoHandler : TelegramLongPollingBot() {
             System.getenv("CMBOT_TELEGRAM_TOKEN")
 
     private fun logCurrencyRequest(message: Message, currency: String, type: String) =
-            BotLogger.info(LOG_TAG, "${message.from} from ${message.chat} requested Currency{name='$currency', type='$type'}")
+            log.info { "${message.from} from ${message.chat} requested Currency{name='$currency', type='$type'}" }
 
 
     private fun getCurrencyEnd(command: String): Int =
@@ -113,15 +109,16 @@ class CryptoHandler : TelegramLongPollingBot() {
     private fun sendError(sendMessageRequest: SendMessage, e: Exception) {
 
         val errorMessage = e.message
-        BotLogger.error(LOG_TAG, errorMessage)
+
+        log.error { errorMessage }
 
         // replace '_' characters because of telegram markdown
         sendMessageRequest.text = errorMessage?.replace("_".toRegex(), "\\\\_")
 
         try {
             sendMessage(sendMessageRequest)
-        } catch (te: TelegramApiException) {
-            BotLogger.error(LOG_TAG, te.message)
+        } catch (e: TelegramApiException) {
+            log.error { e.message }
         }
     }
 

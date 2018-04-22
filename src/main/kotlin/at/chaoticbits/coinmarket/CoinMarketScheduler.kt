@@ -1,9 +1,9 @@
 package at.chaoticbits.coinmarket
 
 import at.chaoticbits.api.Api
+import mu.KotlinLogging
 import org.json.JSONArray
 import org.json.JSONObject
-import org.telegram.telegrambots.logging.BotLogger
 import java.io.FileNotFoundException
 import java.io.PrintWriter
 import java.io.UnsupportedEncodingException
@@ -12,16 +12,8 @@ import java.util.*
 /**
  * Update symbol slug list periodically
  */
+private val log = KotlinLogging.logger {}
 class CoinMarketScheduler : TimerTask() {
-
-    companion object {
-        private const val LOG_TAG = "CoinMarketScheduler"
-    }
-
-
-    init {
-        BotLogger.info(LOG_TAG, "Initialize")
-    }
 
 
     override fun run() {
@@ -58,21 +50,21 @@ class CoinMarketScheduler : TimerTask() {
                             CoinMarketContainer.symbolSlugs[jsonObject.getString("symbol")] = jsonObject.getString("slug")
                         }
 
-                        BotLogger.info(LOG_TAG, "Successfully updated symbol slugs")
+                        log.info { "Successfully updated symbol slugs" }
 
                     }
                 } catch (e: FileNotFoundException) {
-                    BotLogger.warn(LOG_TAG, e.message)
+                    log.error {  e.message }
                 } catch (e: UnsupportedEncodingException) {
-                    BotLogger.warn(LOG_TAG, e.message)
+                    log.error {  e.message }
                 }
 
             } else {
-                BotLogger.warn(LOG_TAG, "Error fetching symbol slugs! StatusCode: ${response.status}")
+                log.error { "Error fetching symbol slugs! StatusCode: ${response.status}" }
 
             }
         } catch (e: Exception) {
-            BotLogger.error(LOG_TAG, "Error parsing new symbol slug list: $e")
+            log.error { "Error parsing new symbol slug list: ${e.message}" }
         }
 
     }
@@ -93,19 +85,14 @@ class CoinMarketScheduler : TimerTask() {
                 val erc20Address = jsonArray.getJSONObject(i).getString("address")
                 CoinMarketContainer.erc20Tokens[erc20Symbol] = erc20Address
             }
+            log.info { "Successfully updated erc20 tokens" }
 
-            BotLogger.info(LOG_TAG, "Successfully updated erc20 tokens")
-
-        } else {
-            BotLogger.warn(LOG_TAG, "Error updating Erc20 Tokens! StatusCode: ${response.status}")
-
-        }
+        } else
+            log.error { "Error updating Erc20 Tokens! StatusCode: ${response.status}" }
     }
 
 
-    private fun updateBotCommands(writer: PrintWriter, jsonObject: JSONObject) {
+    private fun updateBotCommands(writer: PrintWriter, jsonObject: JSONObject) =
         writer.println(jsonObject.getString("symbol").toLowerCase() + " - " + jsonObject.getString("name"))
-
-    }
 
 }
