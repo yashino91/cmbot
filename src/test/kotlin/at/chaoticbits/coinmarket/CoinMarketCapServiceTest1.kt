@@ -71,16 +71,4 @@ class CoinMarketCapServiceTest {
 
         CoinMarketCapService.fetchCurrency("currencynotfound")
     }
-
-    @Test
-    private fun testGetFormattedCurrencyDetails() {
-        val formattedCurrencyDetails = CoinMarketCapService.getFormattedCurrencyDetails("bat")
-        Assert.assertNotNull(formattedCurrencyDetails)
-    }
-
-    @Test
-    private fun testGetCurrencyDetailsImage() {
-        val image = CoinMarketCapService.getCurrencyDetailsImage("bat")
-        Assert.assertNotNull(image)
-    }
 }

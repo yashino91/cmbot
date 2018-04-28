@@ -3,9 +3,11 @@ package at.chaoticbits.updateshandlers
 import at.chaoticbits.coinmarket.CoinMarketScheduler
 import at.chaoticbits.config.Bot
 import at.chaoticbits.coinmarket.CoinMarketCapService
+import at.chaoticbits.coinmarket.CurrencyDetails
+import at.chaoticbits.render.HtmlImageService
 import com.vdurmont.emoji.EmojiParser
 import mu.KotlinLogging
-import net.logstash.logback.marker.Markers.appendEntries
+import net.logstash.logback.marker.Markers
 import org.telegram.telegrambots.api.methods.send.SendMessage
 import org.telegram.telegrambots.api.methods.send.SendPhoto
 import org.telegram.telegrambots.api.objects.Message
@@ -58,26 +60,27 @@ class CryptoHandler : TelegramLongPollingBot() {
                     // request currency details as a formatted string
                     if (!Bot.config.stringCommand.isEmpty() && command.startsWith(Bot.config.stringCommand)) {
 
-                        val currency = command.substring(Bot.config.stringCommand.length, getCurrencyEnd(command))
+                        val currencyDetails: CurrencyDetails = CoinMarketCapService.fetchCurrency(
+                                command.substring(Bot.config.stringCommand.length, getCurrencyEnd(command)))
 
-                        logCurrencyRequest(message, currency, "string")
+                        logCurrencyRequest(message, currencyDetails, "string")
 
                         sendMessageRequest.text = EmojiParser.parseToUnicode(
-                                CoinMarketCapService.getFormattedCurrencyDetails(currency))
+                                CoinMarketCapService.formatCurrencyResult(currencyDetails))
                         sendMessage(sendMessageRequest)
 
                         // request currency details as a rendered image
                     } else if (!Bot.config.imageCommand.isEmpty() && command.startsWith(Bot.config.imageCommand)) {
 
-                        val currency = command.substring(Bot.config.imageCommand.length, getCurrencyEnd(command))
+                        val currencyDetails: CurrencyDetails = CoinMarketCapService.fetchCurrency(command.substring(
+                                Bot.config.imageCommand.length, getCurrencyEnd(command)))
 
-                        logCurrencyRequest(message, currency, "image")
 
-                        val imageInputStream = CoinMarketCapService.getCurrencyDetailsImage(currency)
+                        logCurrencyRequest(message, currencyDetails, "image")
 
                         val photo = SendPhoto()
                         photo.setChatId(message.chatId)
-                        photo.setNewPhoto(command, imageInputStream)
+                        photo.setNewPhoto(command, HtmlImageService.generateCryptoDetailsImage(currencyDetails))
                         sendPhoto(photo)
                     }
 
@@ -99,15 +102,6 @@ class CryptoHandler : TelegramLongPollingBot() {
     override fun getBotToken(): String =
             System.getenv("CMBOT_TELEGRAM_TOKEN")
 
-    private fun logCurrencyRequest(message: Message, currency: String, type: String) {
-        val loggingObjects = mapOf(
-                "from" to message.from,
-                "chat" to message.chat,
-                "currency" to currency,
-                "requestType" to type)
-
-        log.info(appendEntries(loggingObjects), "${message.from} from ${message.chat} requested Currency{name='$currency', type='$type'}")
-    }
 
 
     private fun getCurrencyEnd(command: String): Int =
@@ -128,6 +122,16 @@ class CryptoHandler : TelegramLongPollingBot() {
         } catch (e: TelegramApiException) {
             log.error { e.message }
         }
+    }
+
+    private fun logCurrencyRequest(message: Message, currencyDetails: CurrencyDetails, type: String) {
+        val loggingObjects = mapOf(
+                "from" to message.from,
+                "chat" to message.chat,
+                "currency" to currencyDetails,
+                "requestType" to type)
+
+        log.info(Markers.appendEntries(loggingObjects), "${message.from} from ${message.chat} requested $currencyDetails, type='$type'}")
     }
 
 }

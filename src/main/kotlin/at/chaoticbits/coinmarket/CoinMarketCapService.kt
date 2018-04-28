@@ -5,9 +5,7 @@ import at.chaoticbits.api.Response
 import at.chaoticbits.config.Bot
 import at.chaoticbits.config.DecimalFormatter
 import at.chaoticbits.config.DecimalFormatter.formatPercentage
-import at.chaoticbits.render.HtmlImageService
 import org.json.JSONArray
-import java.io.InputStream
 import java.io.UnsupportedEncodingException
 import java.math.BigDecimal
 import java.net.URLEncoder
@@ -20,34 +18,6 @@ object CoinMarketCapService {
 
 
     private const val API_URL = "https://api.coinmarketcap.com/v1/ticker/"
-
-
-    /**
-     * Fetch all details about the given currency at CoinMarketCap
-     * and generates a styled image containing all information about the requested currency
-     *
-     * @param currency currency
-     * @return InputStream containing the image information
-     */
-    @Throws(IllegalStateException::class, UnsupportedEncodingException::class)
-    fun getCurrencyDetailsImage(currency: String): InputStream {
-        val currencyDetails: CurrencyDetails = fetchCurrency(currency)
-        return HtmlImageService.generateCryptoDetailsImage(currencyDetails)
-    }
-
-
-    /**
-     * Fetch all details about the given currency at CoinMarketCap
-     * and formats the result as a string
-     *
-     * @param currency currency
-     * @return formatted string with detailed information about the requested currency
-     */
-    @Throws(IllegalStateException::class, UnsupportedEncodingException::class)
-    fun getFormattedCurrencyDetails(currency: String): String {
-        val currencyDetails: CurrencyDetails = fetchCurrency(currency)
-        return formatCurrencyResult(currencyDetails)
-    }
 
 
     /**
