@@ -63,7 +63,7 @@ class CoinMarketCapServiceTest {
         Assert.assertEquals(CoinMarketCapService.getCurrencySlug("eth"), "ethereum")
     }
 
-    @Test(expectedExceptions = [(IllegalStateException::class)], expectedExceptionsMessageRegExp = "Currency not found.*")
+    @Test(expectedExceptions = [(CurrencyNotFoundException::class)], expectedExceptionsMessageRegExp = "Currency not found.*")
     private fun testFetchCurrency() {
         val currencyDetails= CoinMarketCapService.fetchCurrency("bat")
 
