@@ -4,6 +4,7 @@ import at.chaoticbits.coinmarket.CoinMarketScheduler
 import at.chaoticbits.config.Bot
 import at.chaoticbits.coinmarket.CoinMarketCapService
 import at.chaoticbits.coinmarket.CurrencyDetails
+import at.chaoticbits.coinmarket.CurrencyNotFoundException
 import at.chaoticbits.render.HtmlImageService
 import com.vdurmont.emoji.EmojiParser
 import mu.KotlinLogging
@@ -87,9 +88,11 @@ class CryptoHandler : TelegramLongPollingBot() {
                 } catch (e: TelegramApiException) {
                     log.error { e.message }
                 } catch (e: IllegalStateException) {
-                    sendError(sendMessageRequest, e)
+                    sendFailure(sendMessageRequest, e, LogType.ERROR)
                 } catch (e: UnsupportedEncodingException) {
-                    sendError(sendMessageRequest, e)
+                    sendFailure(sendMessageRequest, e, LogType.ERROR)
+                } catch (e: CurrencyNotFoundException) {
+                    sendFailure(sendMessageRequest, e, LogType.WARN)
                 }
             }
         }
@@ -108,11 +111,14 @@ class CryptoHandler : TelegramLongPollingBot() {
             if (command.indexOf('@') == -1) command.length else command.indexOf('@')
 
 
-    private fun sendError(sendMessageRequest: SendMessage, e: Exception) {
+    private fun sendFailure(sendMessageRequest: SendMessage, e: Exception, type: LogType) {
 
         val errorMessage = e.message
 
-        log.error { errorMessage }
+        when(type) {
+            LogType.WARN -> log.warn { errorMessage }
+            LogType.ERROR -> log.error { errorMessage }
+        }
 
         // replace '_' characters because of telegram markdown
         sendMessageRequest.text = errorMessage?.replace("_".toRegex(), "\\\\_")
@@ -134,4 +140,9 @@ class CryptoHandler : TelegramLongPollingBot() {
         log.info(Markers.appendEntries(loggingObjects), "${message.from} from ${message.chat} requested $currencyDetails, type='$type'}")
     }
 
+}
+
+enum class LogType {
+    WARN,
+    ERROR
 }

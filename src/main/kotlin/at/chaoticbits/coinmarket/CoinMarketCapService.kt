@@ -44,7 +44,7 @@ object CoinMarketCapService {
         if (response.status == 200 && response.body != null)
             return CurrencyDetails(JSONArray(response.body).getJSONObject(0))
         else if (response.status == 404)
-            throw IllegalStateException("Currency not found: *$currency*")
+            throw CurrencyNotFoundException("Currency not found: *$currency*")
         else
             throw IllegalStateException("Error! StatusCode: " + response.status)
     }
