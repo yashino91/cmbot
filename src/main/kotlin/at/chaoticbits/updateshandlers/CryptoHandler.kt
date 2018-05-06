@@ -50,18 +50,14 @@ class CryptoHandler : TelegramLongPollingBot() {
 
     private fun handleInlineQuery(update: Update) {
 
-        val coinsOfInterest = CoinMarketContainer.coinListings
-                .filter { it -> it.symbol.startsWith(update.inlineQuery.query.toUpperCase()) }
-
         val answerQuery = AnswerInlineQuery()
-        answerQuery.cacheTime = 300
+        answerQuery.cacheTime = 3
         answerQuery.inlineQueryId = update.inlineQuery.id
 
-        log.info { coinsOfInterest.size }
-
+        val coinsOfInterest = CoinMarketContainer.findCoins(update.inlineQuery.query)
         if (coinsOfInterest.isNotEmpty()) {
 
-            val inlineQueryResults: List<InlineQueryResult> = coinsOfInterest.take(40).map { it ->
+            val inlineQueryResults: List<InlineQueryResult> = coinsOfInterest.take(50).map { it ->
 
                 val inlineQueryResult = InlineQueryResultArticle()
                 inlineQueryResult.id = UUID.randomUUID().toString()
