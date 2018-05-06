@@ -56,9 +56,8 @@ object CoinMarketCapService {
      * @param currency currency
      * @return slug
      */
-    fun getCurrencySlug(currency: String): String {
-        return CoinMarketContainer.symbolSlugs[currency.toUpperCase()] ?: return currency
-    }
+    fun getCurrencySlug(currency: String): String =
+        CoinMarketContainer.coinListings[currency.toUpperCase()]?.slug ?: currency
 
 
     /**
