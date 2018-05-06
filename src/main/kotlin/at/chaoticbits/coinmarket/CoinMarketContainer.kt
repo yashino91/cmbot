@@ -6,7 +6,7 @@ package at.chaoticbits.coinmarket
  */
 object CoinMarketContainer {
 
-    val coinListings: MutableMap<String, Coin> = mutableMapOf()
+    val coinListings: MutableList<Coin> = mutableListOf()
 
     val erc20Tokens: MutableMap<String, String> = mutableMapOf()
 }

@@ -30,11 +30,11 @@ class CoinMarketScheduler : TimerTask() {
     private fun updateSymbolSlugs() {
 
 
-        val response = Api.fetch("https://api.coinmarketcap.com/v2/listings/")
+        val response = Api.fetch("https://s2.coinmarketcap.com/generated/search/quick_search.json")
 
         if (response.status == 200) {
 
-            val jsonArray = JSONObject(response.body).getJSONArray("data")
+            val jsonArray = JSONArray(response.body)
 
             CoinMarketContainer.coinListings.clear()
 
@@ -49,7 +49,8 @@ class CoinMarketScheduler : TimerTask() {
                         if (i < 85)
                             updateBotCommands(writer, jsonObject)
 
-                        CoinMarketContainer.coinListings[jsonObject.getString("symbol")] = Coin(jsonObject)
+                        CoinMarketContainer.coinListings.add(Coin(jsonObject))
+                        CoinMarketContainer.coinListings.sortBy { it.rank }
                     }
 
                     log.info { "Successfully updated coin listings" }
