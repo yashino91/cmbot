@@ -8,6 +8,7 @@ import org.json.JSONObject
  */
 data class Coin(
         val id: Int,
+        val rank: Int,
         val name: String,
         val symbol: String,
         val slug: String
@@ -15,8 +16,9 @@ data class Coin(
 
     constructor(jsonObject: JSONObject): this (
                 jsonObject.getInt("id"),
+                jsonObject.getInt("rank"),
                 jsonObject.getString("name"),
                 jsonObject.getString("symbol"),
-                jsonObject.getString("website_slug")
+                jsonObject.getString("slug")
     )
 }

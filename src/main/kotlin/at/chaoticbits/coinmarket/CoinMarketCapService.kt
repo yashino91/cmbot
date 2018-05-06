@@ -29,14 +29,10 @@ object CoinMarketCapService {
     @Throws(IllegalStateException::class, UnsupportedEncodingException::class)
     fun fetchCurrency(currency: String): CurrencyDetails {
 
-        var slug = getCurrencySlug(currency)
+        val slug = getCurrencySlug(currency)
 
         if (!slugAllowed(slug))
-            throw IllegalStateException("Currency not found: *$currency*")
-
-        // Prefer basic attention token (bat is ambiguous)
-        if (currency.toLowerCase() == "bat")
-            slug = "basic-attention-token"
+            throw IllegalStateException("Currency not found: *$slug*")
 
 
         val response: Response = Api.fetch(API_URL + URLEncoder.encode(slug, "UTF-8") + "/?convert=EUR")
@@ -44,7 +40,7 @@ object CoinMarketCapService {
         if (response.status == 200 && response.body != null)
             return CurrencyDetails(JSONArray(response.body).getJSONObject(0))
         else if (response.status == 404)
-            throw CurrencyNotFoundException("Currency not found: *$currency*")
+            throw CurrencyNotFoundException("Currency not found: *$slug*")
         else
             throw IllegalStateException("Error! StatusCode: " + response.status)
     }
@@ -56,9 +52,11 @@ object CoinMarketCapService {
      * @param currency currency
      * @return slug
      */
-    fun getCurrencySlug(currency: String): String =
-        CoinMarketContainer.coinListings[currency.toUpperCase()]?.slug ?: currency
+    private fun getCurrencySlug(currency: String): String {
+        val coin = CoinMarketContainer.coinListings.find { it -> it.symbol == currency.toUpperCase() }
 
+        return coin?.slug ?: currency
+    }
 
     /**
      * Format the given json object containing currency information
