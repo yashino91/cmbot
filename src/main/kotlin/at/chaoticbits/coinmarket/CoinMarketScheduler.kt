@@ -29,44 +29,41 @@ class CoinMarketScheduler : TimerTask() {
      */
     private fun updateSymbolSlugs() {
 
-        try {
 
-            val response = Api.fetch("https://s2.coinmarketcap.com/generated/search/quick_search.json")
+        val response = Api.fetch("https://api.coinmarketcap.com/v2/listings/")
 
-            if (response.status == 200) {
-                val jsonArray = JSONArray(response.body)
+        if (response.status == 200) {
 
-                try {
-                    PrintWriter("telegram-commands.txt", "UTF-8").use { writer ->
+            val jsonArray = JSONObject(response.body).getJSONArray("data")
 
-                        for (i in 0 until jsonArray.length()) {
+            CoinMarketContainer.coinListings.clear()
 
-                            val jsonObject = jsonArray.getJSONObject(i)
+            try {
+                PrintWriter("telegram-commands.txt", "UTF-8").use { writer ->
 
-                            // populate top 85 coins in telegram commands
-                            if (i < 85)
-                                updateBotCommands(writer, jsonObject)
+                    for (i in 0 until jsonArray.length()) {
 
-                            CoinMarketContainer.symbolSlugs[jsonObject.getString("symbol")] = jsonObject.getString("slug")
-                        }
+                        val jsonObject = jsonArray.getJSONObject(i)
 
-                        log.info { "Successfully updated symbol slugs" }
+                        // populate top 85 coins in telegram commands
+                        if (i < 85)
+                            updateBotCommands(writer, jsonObject)
 
+                        CoinMarketContainer.coinListings[jsonObject.getString("symbol")] = Coin(jsonObject)
                     }
-                } catch (e: FileNotFoundException) {
-                    log.error {  e.message }
-                } catch (e: UnsupportedEncodingException) {
-                    log.error {  e.message }
+
+                    log.info { "Successfully updated coin listings" }
+
                 }
-
-            } else {
-                log.error { "Error fetching symbol slugs! StatusCode: ${response.status}" }
-
+            } catch (e: FileNotFoundException) {
+                log.error {  e.message }
+            } catch (e: UnsupportedEncodingException) {
+                log.error {  e.message }
             }
-        } catch (e: Exception) {
-            log.error { "Error parsing new symbol slug list: ${e.message}" }
-        }
 
+        } else {
+            log.error { "Error fetching coin listings! StatusCode: ${response.status}" }
+        }
     }
 
 

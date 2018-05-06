@@ -16,7 +16,7 @@ class CoinMarketCapServiceTest {
     @BeforeClass
     private fun setup() {
 
-        CoinMarketContainer.symbolSlugs["eth"] = "ethereum"
+        CoinMarketContainer.coinListings["eth"] = Coin(1, "Ethereum", "ETH", "ethereum")
 
         val coinMarketScheduler = CoinMarketScheduler()
 

@@ -1,10 +1,10 @@
 package at.chaoticbits.updateshandlers
 
-import at.chaoticbits.coinmarket.CoinMarketScheduler
-import at.chaoticbits.config.Bot
 import at.chaoticbits.coinmarket.CoinMarketCapService
+import at.chaoticbits.coinmarket.CoinMarketScheduler
 import at.chaoticbits.coinmarket.CurrencyDetails
 import at.chaoticbits.coinmarket.CurrencyNotFoundException
+import at.chaoticbits.config.Bot
 import at.chaoticbits.render.HtmlImageService
 import com.vdurmont.emoji.EmojiParser
 import mu.KotlinLogging
@@ -16,8 +16,7 @@ import org.telegram.telegrambots.api.objects.Update
 import org.telegram.telegrambots.bots.TelegramLongPollingBot
 import org.telegram.telegrambots.exceptions.TelegramApiException
 import java.io.UnsupportedEncodingException
-
-import java.util.Timer
+import java.util.*
 
 
 /**
