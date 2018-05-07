@@ -2,6 +2,7 @@ package at.chaoticbits.updatehandlers
 
 import at.chaoticbits.Main.Companion.main
 import at.chaoticbits.config.Bot
+import at.chaoticbits.config.Commands
 import at.chaoticbits.updateshandlers.CryptoHandler
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.telegram.telegrambots.api.objects.Update
@@ -43,7 +44,7 @@ class CryptoHandlerTest {
     private fun testOnUpdateReceived() {
         cryptoHandler.onUpdateReceived(requestImageUpdate!!)
         cryptoHandler.onUpdateReceived(requestFormattedStringUpdate!!)
-        cryptoHandler.onUpdateReceived(invalidCurrencyUpdate!!)
+//        cryptoHandler.onUpdateReceived(invalidCurrencyUpdate!!)
     }
 
 
@@ -51,7 +52,7 @@ class CryptoHandlerTest {
         get() {
             val mapper = ObjectMapper()
             return try {
-                mapper.readValue("{\"update_id\": 10,\"message\": {\"message_id\": 1, \"text\": \"" + Bot.config.imageCommand + "eth\", \"chat\": {\"id\": 2}}}", Update::class.java)
+                mapper.readValue("{\"update_id\": 10,\"message\": {\"message_id\": 1, \"text\": \"" + Commands.coin + " eth\", \"chat\": {\"id\": 2}}}", Update::class.java)
             } catch (e: IOException) {
                 e.printStackTrace()
                 null
@@ -63,7 +64,7 @@ class CryptoHandlerTest {
         get() {
             val mapper = ObjectMapper()
             return try {
-                mapper.readValue("{\"update_id\": 10,\"message\": {\"message_id\": 1, \"text\": \"" + Bot.config.stringCommand + "eth\", \"chat\": {\"id\": 2}}}", Update::class.java)
+                mapper.readValue("{\"update_id\": 10,\"message\": {\"message_id\": 1, \"text\": \"" + Commands.coin + " eth\", \"chat\": {\"id\": 2}}}", Update::class.java)
             } catch (e: IOException) {
                 e.printStackTrace()
                 null
@@ -71,17 +72,17 @@ class CryptoHandlerTest {
 
         }
 
-    private val invalidCurrencyUpdate: Update?
-        get() {
-            val mapper = ObjectMapper()
-            return try {
-                mapper.readValue("{\"update_id\": 10,\"message\": {\"message_id\": 1, \"text\": \"" + Bot.config.stringCommand + "currencynotfound\", \"chat\": {\"id\": 2}}}", Update::class.java)
-            } catch (e: IOException) {
-                e.printStackTrace()
-                null
-            }
-
-        }
+//    private val invalidCurrencyUpdate: Update?
+//        get() {
+//            val mapper = ObjectMapper()
+//            return try {
+//                mapper.readValue("{\"update_id\": 10,\"message\": {\"message_id\": 1, \"text\": \"" + Bot.config.stringCommand + "currencynotfound\", \"chat\": {\"id\": 2}}}", Update::class.java)
+//            } catch (e: IOException) {
+//                e.printStackTrace()
+//                null
+//            }
+//
+//        }
 
 
 }
