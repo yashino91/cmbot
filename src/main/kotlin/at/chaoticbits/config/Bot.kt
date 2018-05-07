@@ -41,7 +41,7 @@ object Bot {
  * Supported Commands
  */
 object Commands {
-    val start = "/start"
-    val help = "/help"
-    val coin = "/coin "
+    const val start = "/start"
+    const val help = "/help"
+    const val coin = "/coin "
 }

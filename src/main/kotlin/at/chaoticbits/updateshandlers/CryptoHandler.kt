@@ -57,6 +57,9 @@ class CryptoHandler : TelegramLongPollingBot() {
     }
 
 
+    /**
+     * Handle Inline Queries by sending coin suggestions to the chat
+     */
     private fun handleInlineQuery(update: Update) {
 
         val answerQuery = AnswerInlineQuery()
@@ -91,6 +94,9 @@ class CryptoHandler : TelegramLongPollingBot() {
         execute(answerQuery)
     }
 
+    /**
+     * Handle user messages with appropriate response
+     */
     private fun handleReceivedMessage(update: Update) {
         val message: Message = update.message
 
@@ -159,10 +165,10 @@ class CryptoHandler : TelegramLongPollingBot() {
         sendMessageRequest.text = "You can control me by sending these commands:\n\n" +
                                   "*Commands*\n" +
                                   "/coin currency *-* Request a coin from CoinMarketCap. *(i.e. /coin eth)*\n" +
-                                  "/help *-* Displays the current help\n\n" +
+                                  "/help *-* Display the current help\n\n" +
                                   "*Inline Queries*\n" +
                                   "This is the recommended way to request price information. " +
-                                  "Use @${this.botUsername} to search through all coins on CoinMarketCap."
+                                  "Just use @${this.botUsername} to search through all coins on CoinMarketCap."
 
         execute(sendMessageRequest)
     }
@@ -173,7 +179,9 @@ class CryptoHandler : TelegramLongPollingBot() {
      */
     @Throws(TelegramApiException::class)
     private fun handleStartRequest(sendMessageRequest: SendMessage) {
-        sendMessageRequest.text = "'Welcome to cmbot"
+        sendMessageRequest.text = "*Welcome to cmbot!*\n\n" +
+                                  "I am programmed to give you the newest price information of all crypto currencies from CoinMarketCap.\n\n" +
+                                  "Use /help to see a list of my supported commands"
         execute(sendMessageRequest)
     }
 
