@@ -2,8 +2,8 @@ package at.chaoticbits.updateshandlers
 
 import at.chaoticbits.coinmarket.*
 import at.chaoticbits.config.Bot
+import at.chaoticbits.config.Commands
 import at.chaoticbits.render.HtmlImageService
-import com.vdurmont.emoji.EmojiParser
 import mu.KotlinLogging
 import net.logstash.logback.marker.Markers
 import org.telegram.telegrambots.api.methods.AnswerInlineQuery
@@ -39,6 +39,15 @@ class CryptoHandler : TelegramLongPollingBot() {
         Timer().schedule(cmScheduler, initialDelay.toLong(), fixedRate.toLong())
     }
 
+
+    override fun getBotUsername(): String? =
+            Bot.config.botName
+
+
+    override fun getBotToken(): String =
+            System.getenv("CMBOT_TELEGRAM_TOKEN")
+
+
     override fun onUpdateReceived(update: Update) {
 
         if (update.hasInlineQuery())
@@ -51,7 +60,7 @@ class CryptoHandler : TelegramLongPollingBot() {
     private fun handleInlineQuery(update: Update) {
 
         val answerQuery = AnswerInlineQuery()
-        answerQuery.cacheTime = 3
+        answerQuery.cacheTime = 300
         answerQuery.inlineQueryId = update.inlineQuery.id
 
         val coinsOfInterest = CoinMarketContainer.findCoins(update.inlineQuery.query)
@@ -66,7 +75,7 @@ class CryptoHandler : TelegramLongPollingBot() {
 
                 inlineQueryResult.description = "Rank: ${it.rank}"
                 val inputTextMessage = InputTextMessageContent()
-                inputTextMessage.messageText = "/${it.slug}"
+                inputTextMessage.messageText = "/coin ${it.slug}"
 
                 inlineQueryResult.inputMessageContent = inputTextMessage
 
@@ -86,67 +95,98 @@ class CryptoHandler : TelegramLongPollingBot() {
         val message: Message = update.message
 
         //check if the message has text. it could also  contain for example a location ( message.hasLocation() )
-        if (message.hasText()) {
+        if (message.hasText() && message.text.startsWith("/")) {
 
             //create a object that contains the information to send back the message
             val sendMessageRequest = SendMessage()
             sendMessageRequest.enableMarkdown(true)
-            sendMessageRequest.setChatId(message.chatId!!)
+            sendMessageRequest.setChatId(message.chatId)
 
             val command = message.text
 
             try {
 
-                // request currency details as a formatted string
-                if (!Bot.config.stringCommand.isEmpty() && command.startsWith(Bot.config.stringCommand)) {
-
-                    val currencyDetails: CurrencyDetails = CoinMarketCapService.fetchCurrency(
-                            command.substring(Bot.config.stringCommand.length, getCurrencyEnd(command)))
-
-                    logCurrencyRequest(message, currencyDetails, "string")
-
-                    sendMessageRequest.text = EmojiParser.parseToUnicode(
-                            CoinMarketCapService.formatCurrencyResult(currencyDetails))
-
-                    execute(sendMessageRequest)
-
-
-                    // request currency details as a rendered image
-                } else if (!Bot.config.imageCommand.isEmpty() && command.startsWith(Bot.config.imageCommand)) {
-
-                    val currencyDetails: CurrencyDetails = CoinMarketCapService.fetchCurrency(command.substring(
-                            Bot.config.imageCommand.length, getCurrencyEnd(command)))
-
-
-                    logCurrencyRequest(message, currencyDetails, "image")
-
-                    val photo = SendPhoto()
-                    photo.setChatId(message.chatId)
-                    photo.setNewPhoto(command, HtmlImageService.generateCryptoDetailsImage(currencyDetails))
-                    sendPhoto(photo)
+                when {
+                    command.startsWith(Commands.coin) ->
+                        this.handleCoinRequest(sendMessageRequest, message, command.substring(Commands.coin.length, getCurrencyEnd(command)))
+                    command.substring(0, getCurrencyEnd(command)) == Commands.start ->
+                        this.handleStartRequest(sendMessageRequest)
+                    command.substring(0, getCurrencyEnd(command)) == Commands.help ->
+                        this.handleHelpRequest(sendMessageRequest)
+                    else ->
+                        this.handleCommandNotFound(sendMessageRequest, command)
                 }
 
             } catch (e: TelegramApiException) {
                 log.error { e.message }
-            } catch (e: IllegalStateException) {
-                sendFailure(sendMessageRequest, e, LogType.ERROR)
-            } catch (e: UnsupportedEncodingException) {
-                sendFailure(sendMessageRequest, e, LogType.ERROR)
-            } catch (e: CurrencyNotFoundException) {
-                sendFailure(sendMessageRequest, e, LogType.WARN)
             }
         }
     }
 
 
+    /**
+     * Queries the given currency from CoinMarketCap and sends the result as a rendered image
+     */
+    @Throws(TelegramApiException::class)
+    private fun handleCoinRequest(sendMessageRequest: SendMessage, message: Message, currency: String) {
 
-    override fun getBotUsername(): String? =
-            Bot.config.botName
+        try {
+
+            val currencyDetails: CurrencyDetails = CoinMarketCapService.fetchCurrency(currency)
+
+            logCurrencyRequest(message, currencyDetails, "image")
+
+            val photo = SendPhoto()
+            photo.setChatId(message.chatId)
+            photo.setNewPhoto(currency, HtmlImageService.generateCryptoDetailsImage(currencyDetails))
+            sendPhoto(photo)
+
+        } catch (e: IllegalStateException) {
+            sendFailure(sendMessageRequest, e, LogType.ERROR)
+        } catch (e: UnsupportedEncodingException) {
+            sendFailure(sendMessageRequest, e, LogType.ERROR)
+        } catch (e: CurrencyNotFoundException) {
+            sendFailure(sendMessageRequest, e, LogType.WARN)
+        }
+    }
 
 
-    override fun getBotToken(): String =
-            System.getenv("CMBOT_TELEGRAM_TOKEN")
+    /**
+     * Sends the help command
+     */
+    @Throws(TelegramApiException::class)
+    private fun handleHelpRequest(sendMessageRequest: SendMessage) {
+        sendMessageRequest.text = "You can control me by sending these commands:\n\n" +
+                                  "*Commands*\n" +
+                                  "/coin currency *-* Request a coin from CoinMarketCap. *(i.e. /coin eth)*\n" +
+                                  "/help *-* Displays the current help\n\n" +
+                                  "*Inline Queries*\n" +
+                                  "This is the recommended way to request price information. " +
+                                  "Use @${this.botUsername} to search through all coins on CoinMarketCap."
 
+        execute(sendMessageRequest)
+    }
+
+
+    /**
+     * Sends the welcome message for first time bot users
+     */
+    @Throws(TelegramApiException::class)
+    private fun handleStartRequest(sendMessageRequest: SendMessage) {
+        sendMessageRequest.text = "'Welcome to cmbot"
+        execute(sendMessageRequest)
+    }
+
+
+    /**
+     * Send a command not found message
+     */
+    @Throws(TelegramApiException::class)
+    private fun handleCommandNotFound(sendMessageRequest: SendMessage, command: String) {
+        sendMessageRequest.text = "Command not found: *$command*"
+        execute(sendMessageRequest)
+
+    }
 
 
     private fun getCurrencyEnd(command: String): Int =
