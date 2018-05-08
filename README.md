@@ -23,13 +23,13 @@ In order to run the bot on your own machine, you have to set your telegram bot a
 
 
 ```sh
-$CMBOT_TELEGRAM_TOKEN=YOUR_API_KEY
+$ export CMBOT_TELEGRAM_TOKEN=YOUR_API_KEY
 ```
 
 [Download](https://github.com/yashino91/cmbot/releases) the latest jar release and run the following command:
 
 ```sh
-java -jar cmbot-<version>.jar
+$ java -jar cmbot-<version>.jar
 ```
 
 
@@ -37,9 +37,9 @@ java -jar cmbot-<version>.jar
 
 
 ```sh
-git clone https://github.com/yashino91/cmbot.git
-cd cmbot/
-mvn assembly:assembly
+$ git clone https://github.com/yashino91/cmbot.git
+$ cd cmbot/
+$ mvn assembly:assembly
 ```
 
 
@@ -47,22 +47,24 @@ mvn assembly:assembly
 ### Run application using Docker
 
 ```sh
-docker build -t cmbot .
-docker run -e "CMBOT_TELEGRAM_TOKEN=YOUR_API_KEY" cmbot
+$ docker build -t cmbot .
+$ docker run -e "CMBOT_TELEGRAM_TOKEN=YOUR_API_KEY" cmbot
 ```
 
 ### Run application without Docker
 
 ```sh
-java -jar target/cmbot-<version>.jar
+$ java -jar target/cmbot-<version>.jar
 ```
 
 ## Configuration
 The configuration is done in the config.yaml file, located in the resource directory.
 
-| Key 			            | Value 								                |
-| ----------------------    |-------------------------------------------------------|
-| botName 	                | Name of your Telegram Bot				                |
-| allowedCurrencySlugs      | Array of currency slugs that are allowed to request. If empty every currency is allowed |
-| stringCommand             | Command to request currency details as a formatted string |
-| imageCommand              | Command to request currency details as a rendered image |
+| Key 			               | Value 								                |
+| -----------------------------|-------------------------------------------------------|
+| botName 	                   | Name of your Telegram Bot				                |
+| allowedCurrencySlugs         | Array of currency slugs that are allowed to request. If empty every currency is allowed |
+| stringCommand                | Command to request currency details as a formatted string |
+| imageCommand                 | Command to request currency details as a rendered image |
+| autoclearMessages            | Deletes sent photo messages automatically if enabled |
+| autoclearMessagesDurationSec | Number in seconds after sent photo messages should be deleted |
