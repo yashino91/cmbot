@@ -45,7 +45,7 @@ open class CryptoHandler : TelegramLongPollingBot() {
 
         Timer().schedule(cmScheduler, initialDelay.toLong(), fixedRate.toLong())
         if (Bot.config.autoclearMessages) {
-            Timer().scheduleAtFixedRate(0, 1000) { clearOldPhotoMessages() }
+            Timer().scheduleAtFixedRate(0, 10 * 1000) { clearOldPhotoMessages() }
         }
     }
 
