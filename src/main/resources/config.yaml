@@ -1,2 +1,5 @@
-botName: !!str "PriceLeechBot"  # Name of your Telegram Bot
-allowedCurrencySlugs: []          # For example: [ethereum, bitcoin]. If empty, every currency is allowed to request
+botName: !!str "PriceLeechBot"      # Name of your Telegram Bot
+allowedCurrencySlugs: []            # For example: [ethereum, bitcoin]. If empty, every currency is allowed to request
+autoclearMessages: true             # Deletes sent photo messages automatically
+                                    # after the given `autoclearMessagesDurationSec` if set to `true`.
+autoclearMessagesDurationSec: 600   # Number in seconds after sent photo messages should be deleted
