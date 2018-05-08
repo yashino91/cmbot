@@ -23,6 +23,18 @@ interface Config {
      * List of allowed currency slugs, that can be requested by coin market cap.
      */
     val allowedCurrencySlugs: List<String>
+
+    /**
+     * Indicates if sent telegram messages should be deleted after a given time
+     * to keep the chat history clean.
+     */
+    val autoclearMessages: Boolean
+
+    /**
+     * Duration after which sent messages should be deleted from chat.
+     * This is only respected if `autoclearMessages` is true.
+     */
+    val autoclearMessagesDurationSec: Int
 }
 
 
