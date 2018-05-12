@@ -26,13 +26,13 @@ object CoinMarketCapService {
      * @param currency currency (bitcoin, ethereum, etc..)
      * @return JSONObject including price information
      */
-    @Throws(IllegalStateException::class, UnsupportedEncodingException::class)
+    @Throws(IllegalStateException::class, UnsupportedEncodingException::class, CurrencyNotFoundException::class)
     fun fetchCurrency(currency: String): CurrencyDetails {
 
         val slug = getCurrencySlug(currency)
 
         if (!slugAllowed(slug))
-            throw IllegalStateException("Currency not found: *$slug*")
+            throw CurrencyNotFoundException("Currency not found: *$slug*")
 
 
         val response: Response = Api.fetch(API_URL + URLEncoder.encode(slug, "UTF-8") + "/?convert=EUR")
