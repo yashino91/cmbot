@@ -1,9 +1,9 @@
 package at.chaoticbits.coinmarket
 
 import at.chaoticbits.config.DecimalFormatter
-import org.testng.Assert
-import org.testng.annotations.BeforeClass
-import org.testng.annotations.Test
+import at.chaoticbits.testdata.TestData
+import org.junit.Assert
+import org.junit.Test
 import java.math.BigDecimal
 
 
@@ -12,62 +12,45 @@ import java.math.BigDecimal
  */
 class CoinMarketCapServiceTest {
 
-
-    @BeforeClass
-    private fun setup() {
-
-        CoinMarketContainer.coinListings.add(Coin(1, 2, "Ethereum", "ETH", "ethereum"))
-
-        val coinMarketScheduler = CoinMarketScheduler()
-
-        coinMarketScheduler.run()
-    }
-
     @Test
-    private fun testFormatPrice() {
+    fun testFormatPrice() {
         Assert.assertEquals(DecimalFormatter.formatPrice(null), "-")
         Assert.assertEquals(DecimalFormatter.formatPrice(BigDecimal("10.5"), '€'), " €10.50")
         Assert.assertEquals(DecimalFormatter.formatPrice(BigDecimal("0.12345678"), '€'), " €0.12345678")
     }
 
     @Test
-    private fun testGetUpOrDownEmoji() {
+    fun testGetUpOrDownEmoji() {
         Assert.assertEquals(CoinMarketCapService.getUpOrDownEmoji(BigDecimal("1")), ":chart_with_upwards_trend:")
         Assert.assertEquals(CoinMarketCapService.getUpOrDownEmoji(BigDecimal("-1")), ":chart_with_downwards_trend:")
     }
 
     @Test
-    private fun testFormatPercentage() {
+    fun testFormatPercentage() {
         Assert.assertEquals(DecimalFormatter.formatPercentage(null), "-")
         Assert.assertEquals(DecimalFormatter.formatPercentage(BigDecimal("10.5")), " 10.50%")
         Assert.assertEquals(DecimalFormatter.formatPercentage(BigDecimal("0.53")), " 0.53%")
     }
 
     @Test
-    private fun testFormatPercentageWithEmoji() {
+    fun testFormatPercentageWithEmoji() {
         Assert.assertEquals(CoinMarketCapService.formatPercentageWithEmoji(null), "-")
         Assert.assertEquals(CoinMarketCapService.formatPercentageWithEmoji(BigDecimal("10.5")), " 10.50%\t:chart_with_upwards_trend:")
     }
 
     @Test
-    private fun testFormatCurrencyResult() {
+    fun testFormatCurrencyResult() {
         TestData.currencyDetails().forEach {
             Assert.assertNotNull(CoinMarketCapService.formatCurrencyResult(it))
         }
 
     }
 
-//    @Test
-//    private fun testGetCurrencySlug() {
-//        Assert.assertEquals(CoinMarketCapService.getCurrencySlug("slugnotfound"), "slugnotfound")
-//        Assert.assertEquals(CoinMarketCapService.getCurrencySlug("eth"), "ethereum")
-//    }
+    @Test(expected = CurrencyNotFoundException::class)
+    fun testFetchCurrency() {
+        val currencyDetails= CoinMarketCapService.fetchCurrency("ethereum")
 
-    @Test(expectedExceptions = [(CurrencyNotFoundException::class)], expectedExceptionsMessageRegExp = "Currency not found.*")
-    private fun testFetchCurrency() {
-        val currencyDetails= CoinMarketCapService.fetchCurrency("bat")
-
-        Assert.assertEquals(currencyDetails.name, "Basic Attention Token")
+        Assert.assertEquals(currencyDetails.name, "Ethereum")
 
         CoinMarketCapService.fetchCurrency("currencynotfound")
     }

@@ -1,7 +1,7 @@
 package at.chaoticbits.coinmarket
 
-import org.testng.Assert
-import org.testng.annotations.Test
+import org.junit.Assert
+import org.junit.Test
 
 
 /**
@@ -10,7 +10,8 @@ import org.testng.annotations.Test
 class CoinMarketSchedulerTest {
 
     @Test
-    private fun testRun() {
+    fun testRun() {
+
         val coinMarketScheduler = CoinMarketScheduler()
 
         coinMarketScheduler.run()
