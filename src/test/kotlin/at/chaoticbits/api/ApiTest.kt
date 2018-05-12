@@ -1,15 +1,14 @@
 package at.chaoticbits.api
 
 
-import org.testng.Assert
-import org.testng.annotations.Test
+import org.junit.Assert
+import org.junit.Test
 
 
 /**
  * Test API Calls
  */
-class ApiTests {
-
+class ApiTest {
 
     companion object {
         private const val urlOK = "http://ip.jsontest.com/"
@@ -17,7 +16,7 @@ class ApiTests {
     }
 
     @Test
-    private fun testFetch() {
+    fun testFetch() {
         val response = Api.fetch(urlOK)
 
         Assert.assertNotNull(response)
@@ -25,10 +24,9 @@ class ApiTests {
         Assert.assertNotNull(response.body)
     }
 
-    @Test(expectedExceptions = [(IllegalStateException::class)], expectedExceptionsMessageRegExp = "Error fetching url.*")
-    private fun testFetchFail() {
+    @Test(expected = IllegalStateException::class)
+    fun testFetchFail() {
         val response = Api.fetch(urlFail)
-
         Assert.assertNull(response)
     }
 }

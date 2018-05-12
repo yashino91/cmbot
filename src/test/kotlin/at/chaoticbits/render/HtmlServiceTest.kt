@@ -1,8 +1,8 @@
 package at.chaoticbits.render
 
-import at.chaoticbits.coinmarket.TestData
-import org.testng.Assert
-import org.testng.annotations.Test
+import at.chaoticbits.testdata.TestData
+import org.junit.Assert
+import org.junit.Test
 
 
 /**
@@ -12,14 +12,12 @@ class HtmlServiceTest {
 
 
     @Test
-    private fun testGenerateCryptoDetailsImage() {
+    fun testGenerateCryptoDetailsImage() {
 
         TestData.currencyDetails().forEach {
             val image = HtmlImageService.generateCryptoDetailsImage(it)
             Assert.assertNotNull(image)
         }
-
     }
-
 
 }
