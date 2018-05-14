@@ -38,10 +38,12 @@ fun helpCommand(botUsername: String): String =
         "You can control me by sending the following commands:\n\n" +
                 "*Commands*\n" +
                 "/coin currency *-* Request a coin from CoinMarketCap. *(i.e. /coin eth)*\n" +
-                "/help *-* Display the current help\n\n" +
+                "/help *-* Display the current help\n" +
+                "/start *-* Display the welcome message\n\n" +
                 "*Inline Queries*\n" +
                 "This is the recommended way to request price information. " +
-                "Just use @$botUsername to search through all coins on CoinMarketCap."
+                "Just use @$botUsername to search through all coins on CoinMarketCap.\n\n" +
+                "For more information visit [cmbot](https://github.com/yashino91/cmbot/)"
 
 
 
