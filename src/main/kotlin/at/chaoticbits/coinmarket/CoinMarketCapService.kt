@@ -53,9 +53,11 @@ object CoinMarketCapService {
      * @return [String] slug
      */
     private fun getCurrencySlug(currency: String): String {
-        val coin = CoinMarketContainer.coinListings.find { it -> it.symbol == currency.toUpperCase() }
+        synchronized(CoinMarketContainer.coinListings) {
+            val coin = CoinMarketContainer.coinListings.find { it -> it.symbol == currency.toUpperCase() }
 
-        return coin?.slug ?: currency
+            return coin?.slug ?: currency
+        }
     }
 
     /**
