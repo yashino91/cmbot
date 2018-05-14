@@ -19,12 +19,16 @@ class MainTest {
     @Test
     fun testSuccessInitTelegramBot() {
         environmentVariables.set("CMBOT_TELEGRAM_TOKEN", Config.testBotToken)
-        Assert.assertEquals(initTelegramBot(), true)
+        val botSession = initTelegramBot()
+
+        Assert.assertNotNull(botSession)
+
+        botSession?.stop()
     }
 
     @Test
     fun testFailureInitTelegramBot() {
         environmentVariables.set("CMBOT_TELEGRAM_TOKEN", null)
-        Assert.assertEquals(initTelegramBot(), false)
+        Assert.assertNull(initTelegramBot())
     }
 }
