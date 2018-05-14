@@ -6,6 +6,7 @@ import at.chaoticbits.config.Commands
 import mu.KotlinLogging
 import org.telegram.telegrambots.api.methods.AnswerInlineQuery
 import org.telegram.telegrambots.api.methods.send.SendMessage
+import org.telegram.telegrambots.api.methods.updatingmessages.DeleteMessage
 import org.telegram.telegrambots.api.objects.Message
 import org.telegram.telegrambots.api.objects.Update
 import org.telegram.telegrambots.api.objects.inlinequery.InlineQuery
@@ -16,6 +17,8 @@ import org.telegram.telegrambots.bots.TelegramLongPollingBot
 import org.telegram.telegrambots.exceptions.TelegramApiException
 import java.io.UnsupportedEncodingException
 import java.util.*
+import java.util.Collections.synchronizedSet
+import kotlin.concurrent.scheduleAtFixedRate
 
 
 
@@ -25,6 +28,9 @@ import java.util.*
 private val log = KotlinLogging.logger {}
 open class CryptoHandler : TelegramLongPollingBot() {
 
+    // Holds a Triple(chatId, MessageId, date) of each sent photo message until they are deleted
+    // Only used if autoclearMessages is set to true.
+    private val sentPhotoMessages: MutableSet<Triple<Long, Int, Int>> = synchronizedSet(HashSet())
 
     /**
      * Instantiate CryptoHandler and start coin market scheduler
@@ -35,7 +41,11 @@ open class CryptoHandler : TelegramLongPollingBot() {
 
         val initialDelay = 100
         val fixedRate = 60 * 60 * 1000 // every hour
+
         Timer().schedule(cmScheduler, initialDelay.toLong(), fixedRate.toLong())
+        if (Bot.config.autoclearMessages) {
+            Timer().scheduleAtFixedRate(0, 10 * 1000) { clearOldPhotoMessages() }
+        }
     }
 
 
@@ -73,10 +83,14 @@ open class CryptoHandler : TelegramLongPollingBot() {
 
                     try {
 
-                        if (command.startsWith(Commands.coin))
-                            sendPhoto(coinCommand(message, command.substring(Commands.coin.length, indexOfCommandEnd(command))))
-                        else
+                        if (command.startsWith(Commands.coin)) {
+                            val msg = sendPhoto(coinCommand(message, command.substring(Commands.coin.length, indexOfCommandEnd(command))))
+                            if (Bot.config.autoclearMessages)
+                                this.sentPhotoMessages.add(Triple(msg.chatId, msg.messageId, msg.date))
+
+                        } else {
                             sendMessageRequest.text = textRequest(command)
+                        }
 
                     } catch (e: IllegalStateException) {
                         log.error { e.message }
@@ -170,6 +184,26 @@ open class CryptoHandler : TelegramLongPollingBot() {
             else ->
                 commandNotFound(command)
         }
+    }
+
+    /**
+     * Takes care of clearing old sent photo messages
+     */
+    private fun clearOldPhotoMessages() {
+        val unixTime = System.currentTimeMillis() / 1000L
+
+        // filter for outdated messages and call DeleteMessage API for each of them
+        val toBeCleared = this.sentPhotoMessages.filter {
+            unixTime > it.third + Bot.config.autoclearMessagesDurationSec
+        }
+        if (toBeCleared.isEmpty())
+            return
+
+        log.debug { "Clearing ${toBeCleared.size} sent photo messages from history"}
+        toBeCleared.forEach { execute(DeleteMessage(it.first, it.second)) }
+
+        // remove all deleted messages from set
+        this.sentPhotoMessages.removeAll(toBeCleared)
     }
 
 

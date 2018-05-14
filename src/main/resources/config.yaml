@@ -4,3 +4,10 @@ botName: !!str "PriceLeechBot"
 # For a full list of all slug names see: https://api.coinmarketcap.com/v2/listings/
 # Example: [ethereum, bitcoin]. If empty, every currency is allowed to request.
 allowedCurrencySlugs: []
+
+# Deletes sent photo messages automatically
+# after the given `autoclearMessagesDurationSec` if set to `true`.
+autoclearMessages: true
+
+# Number in seconds after sent photo messages should be deleted
+autoclearMessagesDurationSec: 600
