@@ -50,6 +50,8 @@ open class CryptoHandler : TelegramLongPollingBot() {
 
     /**
      * Listens on received client updates
+     *
+     * @param update [Update] Represents an incoming update
      */
     override fun onUpdateReceived(update: Update) {
 
@@ -78,11 +80,14 @@ open class CryptoHandler : TelegramLongPollingBot() {
                             sendMessageRequest.text = textRequest(command)
 
                     } catch (e: IllegalStateException) {
-                        sendMessageRequest.text = failure(e, Level.ERROR)
+                        log.error { e.message }
+                        sendMessageRequest.text = escapeMessage(e.message)
                     } catch (e: UnsupportedEncodingException) {
-                        sendMessageRequest.text = failure(e, Level.ERROR)
+                        log.error { e.message }
+                        sendMessageRequest.text = escapeMessage(e.message)
                     } catch (e: CurrencyNotFoundException) {
-                        sendMessageRequest.text = failure(e, Level.WARN)
+                        log.warn { e.message }
+                        sendMessageRequest.text = escapeMessage(e.message)
                     }
 
                     if (sendMessageRequest.text != null)
@@ -94,6 +99,12 @@ open class CryptoHandler : TelegramLongPollingBot() {
         }
     }
 
+    /**
+     * Initializes a SendMessage object with the given chatId
+     *
+     * @param chatId [Long] Users chat id
+     * @return [SendMessage] Initialized SendMessage object
+     */
     fun initSendMessageRequest(chatId: Long): SendMessage {
         val sendMessageRequest = SendMessage()
 
@@ -106,6 +117,9 @@ open class CryptoHandler : TelegramLongPollingBot() {
 
     /**
      * Generates a AnswerInlineQuery for the given update (containing the client inline query)
+     *
+     * @param inlineQuery [InlineQuery] The incoming inline query
+     * @return [AnswerInlineQuery] Contains a list of found coins on CoinMarketCap
      */
     fun answerInlineQuery(inlineQuery: InlineQuery): AnswerInlineQuery {
 
@@ -142,7 +156,10 @@ open class CryptoHandler : TelegramLongPollingBot() {
     }
 
     /**
-     * Handle user messages with appropriate response
+     * Pocceses user commands that except a String as a response
+     *
+     * @param command [String] User command
+     * @return [String] Contains the response according to the requested command
      */
     fun textRequest(command: String): String {
 
@@ -159,27 +176,19 @@ open class CryptoHandler : TelegramLongPollingBot() {
 
     /**
      * Determines the end of a bot command
+     *
+     * @param command [String] Bot command
+     * @return [Int] Index of command end
      */
     fun indexOfCommandEnd(command: String): Int =
             if (command.indexOf('@') == -1) command.length else command.indexOf('@')
 
 
     /**
-     * Logs an exception with the given log level.
-     * In addition this function returns the message escaped for telegram
+     * Escapes the given string for sending it back to the telegram user
+     *
+     * @param message [String] Message
+     * @return [String] Escaped message (For sending messages back to telegram user)
      */
-    fun failure(e: Exception, logLevel: Level): String? {
-
-        val errorMessage = e.message
-
-        when(logLevel) {
-            Level.WARN -> log.warn { errorMessage }
-            Level.ERROR -> log.error { errorMessage }
-        }
-
-        // replace '_' characters because of telegram markdown
-        return errorMessage?.replace("_".toRegex(), "\\\\_")
-    }
-
-
+    fun escapeMessage(message: String?): String = message!!.replace("_".toRegex(), "\\\\_")
 }

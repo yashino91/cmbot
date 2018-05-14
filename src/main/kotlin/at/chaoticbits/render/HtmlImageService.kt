@@ -40,8 +40,9 @@ object HtmlImageService {
     /**
      * Generates the rendered HTML with the given currency details
      * and converts it into an image InputStream
-     * @param currencyDetails holding information about a crypto currency
-     * @return InputStream containing information about the rendered image
+     *
+     * @param currencyDetails [CurrencyDetails] Holding information about a crypto currency
+     * @return [InputStream] Containing information about the rendered image
      */
     @Throws(IllegalStateException::class)
     fun generateCryptoDetailsImage(currencyDetails: CurrencyDetails): InputStream {
@@ -77,8 +78,9 @@ object HtmlImageService {
 
     /**
      * Populates a Map of colors according to negative and positive percentages
-     * @param currencyDetails holding information about a crypto currency
-     * @return Map where the key is the name of the percentage and the value the color code.
+     *
+     * @param currencyDetails Holding information about a crypto currency
+     * @return [Map] Where the key is the name of the percentage and the value the color code.
      */
     private fun getChangePercentageColor(currencyDetails: CurrencyDetails): Map<String, String> {
 
@@ -126,9 +128,10 @@ object HtmlImageService {
     /**
      * Populates a Map with red or green colors
      * depending on the positive flag and the containing values in the map
-     * @param map containing percentage values
-     * @param positive determines if the values in the map are positive or negative
-     * @return Map where the key is the name of the percentage and the value the color code.
+     *
+     * @param map [Map] Containing percentage values
+     * @param positive [Boolean] Determines if the values in the map are positive or negative
+     * @return [Map] Where the key is the name of the percentage and the value the color code.
      */
     private fun getColors(map: MutableMap<String, BigDecimal>, positive: Boolean): Map<String, String> {
 
@@ -150,8 +153,9 @@ object HtmlImageService {
 
     /**
      * Determines the minimum value in the given Map
-     * @param map containing percentage values
-     * @return name of the minimum value in the given map
+     *
+     * @param map [Map] Containing percentage values
+     * @return [String] Name of the minimum value in the given map
      */
     private fun getMinValue(map: Map<String, BigDecimal>): String? {
 

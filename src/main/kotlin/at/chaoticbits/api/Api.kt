@@ -19,8 +19,9 @@ object Api {
 
     /**
      * Request a resource from the given url
-     * @param url url
-     * @return [Response] containing the body and status code
+     *
+     * @param url [String] Endpoint
+     * @return [Response] Containing the body and status code
      */
     fun fetch(url: String): Response {
 

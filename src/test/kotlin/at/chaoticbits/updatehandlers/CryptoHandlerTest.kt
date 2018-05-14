@@ -25,7 +25,7 @@ open class CryptoHandlerTest {
 
     companion object {
 
-        val mockedCryptoHandler = CryptoHandler()
+        val cryptoHandler = CryptoHandler()
 
         @ClassRule
         @JvmField
@@ -42,26 +42,26 @@ open class CryptoHandlerTest {
 
     @Test
     fun testGetBotUsername() {
-        val botUsername = mockedCryptoHandler.botUsername
+        val botUsername = cryptoHandler.botUsername
         Assert.assertNotNull(botUsername)
         Assert.assertEquals(botUsername, Bot.config.botName)
     }
 
     @Test
     fun testGetBotToken() {
-        val botToken = mockedCryptoHandler.botToken
+        val botToken = cryptoHandler.botToken
         Assert.assertEquals(botToken, Config.testBotToken)
     }
 
     @Test
     fun testInitSendMessage() {
-        val sendMessageRequest = mockedCryptoHandler.initSendMessageRequest(Config.chatId)
+        val sendMessageRequest = cryptoHandler.initSendMessageRequest(Config.chatId)
         Assert.assertEquals(sendMessageRequest.chatId, Config.chatId.toString())
     }
 
     @Test
     fun testValidAnswerInlineQuery() {
-        val answerInlineQuery = mockedCryptoHandler.answerInlineQuery(TestData.validInlineQuery()!!)
+        val answerInlineQuery = cryptoHandler.answerInlineQuery(TestData.validInlineQuery()!!)
         val inlineQueryResults = answerInlineQuery.results
 
         Assert.assertNotNull(answerInlineQuery)
@@ -77,7 +77,7 @@ open class CryptoHandlerTest {
 
     @Test
     fun testAnswerInlineQueryNotFound() {
-        val answerInlineQuery = mockedCryptoHandler.answerInlineQuery(TestData.inlineQueryNotFound()!!)
+        val answerInlineQuery = cryptoHandler.answerInlineQuery(TestData.inlineQueryNotFound()!!)
         val inlineQueryResults = answerInlineQuery.results
 
         Assert.assertNotNull(answerInlineQuery)
@@ -87,30 +87,27 @@ open class CryptoHandlerTest {
 
     @Test
     fun testTextRequest() {
-        var replyMessage = mockedCryptoHandler.textRequest(Commands.start)
+        var replyMessage = cryptoHandler.textRequest(Commands.start)
         Assert.assertThat(replyMessage, containsString("Welcome"))
 
-        replyMessage = mockedCryptoHandler.textRequest(Commands.help)
+        replyMessage = cryptoHandler.textRequest(Commands.help)
         Assert.assertThat(replyMessage, containsString("You can control me"))
 
-        replyMessage = mockedCryptoHandler.textRequest("/commandnotfound")
+        replyMessage = cryptoHandler.textRequest("/commandnotfound")
         Assert.assertThat(replyMessage, containsString("Command not found"))
     }
 
 
     @Test
-    fun testFailure() {
-        var message = mockedCryptoHandler.failure(CurrencyNotFoundException("Currency not found _"), Level.WARN)
-        Assert.assertEquals(message, "Currency not found \\_")
-
-        message = mockedCryptoHandler.failure(IllegalStateException("Error! StatusCode: 500"), Level.ERROR)
-        Assert.assertEquals(message, "Error! StatusCode: 500")
+    fun testEscapeMessage() {
+        val message = cryptoHandler.escapeMessage("Currency not found _bla_")
+        Assert.assertEquals(message, "Currency not found \\_bla\\_")
     }
 
     @Test
     fun testOnUpdateReceived() {
-        mockedCryptoHandler.onUpdateReceived(TestData.requestImageUpdate()!!)
-        mockedCryptoHandler.onUpdateReceived(TestData.invalidCurrencyUpdate()!!)
+        cryptoHandler.onUpdateReceived(TestData.requestImageUpdate()!!)
+        cryptoHandler.onUpdateReceived(TestData.invalidCurrencyUpdate()!!)
     }
 
     @Test
@@ -119,5 +116,11 @@ open class CryptoHandlerTest {
         val photo   = coinCommand(update!!.message, "ethereum")
 
         Assert.assertNotNull(photo)
+    }
+
+    @Test
+    fun testIndexOfCommandEnd() {
+        val index = cryptoHandler.indexOfCommandEnd("/coin ethereum@BotName")
+        Assert.assertEquals(index, 14)
     }
 }

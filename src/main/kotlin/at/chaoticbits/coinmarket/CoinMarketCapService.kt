@@ -21,10 +21,10 @@ object CoinMarketCapService {
 
 
     /**
-     * Fetch the information of the given currency
+     * Fetch the given currency from CoinMarketCap and populate a [CurrencyDetails] object
      *
-     * @param currency currency (bitcoin, ethereum, etc..)
-     * @return JSONObject including price information
+     * @param currency [String] Currency (Bitcoin, Ethereum, etc..)
+     * @return [CurrencyDetails] Including price information
      */
     @Throws(IllegalStateException::class, UnsupportedEncodingException::class, CurrencyNotFoundException::class)
     fun fetchCurrency(currency: String): CurrencyDetails {
@@ -49,8 +49,8 @@ object CoinMarketCapService {
     /**
      * Maps the requested currency to the appropriate slug for later price fetching
      *
-     * @param currency currency
-     * @return slug
+     * @param currency [String] Currency
+     * @return [String] slug
      */
     private fun getCurrencySlug(currency: String): String {
         val coin = CoinMarketContainer.coinListings.find { it -> it.symbol == currency.toUpperCase() }
@@ -59,11 +59,10 @@ object CoinMarketCapService {
     }
 
     /**
-     * Format the given json object containing currency information
-     * to a readable string
+     * Format the given currency details to a readable string for telegram chat
      *
-     * @param currencyDetails containing information about a crypto currency
-     * @return formatted currency information
+     * @param currencyDetails [CurrencyDetails] Containing information about a crypto currency
+     * @return [String] Formatted currency information
      */
     fun formatCurrencyResult(currencyDetails: CurrencyDetails): String {
 
@@ -89,8 +88,8 @@ object CoinMarketCapService {
      * Formats the given percentage with an upwards or downwards trend emoji,
      * depending if the value is negative or positive
      *
-     * @param percentage percentage as BigDecimal
-     * @return formatted percentage with appropriate emoji
+     * @param percentage [BigDecimal] Percentage
+     * @return [String] Formatted percentage with appropriate emoji
      */
     fun formatPercentageWithEmoji(percentage: BigDecimal?): String {
         return if (percentage == null) "-" else formatPercentage(percentage) + "\t" + getUpOrDownEmoji(percentage)
@@ -101,8 +100,8 @@ object CoinMarketCapService {
      * Creates an upwards or downwards trend emoji
      * depending on a negative or positive value
      *
-     * @param value value as BigDecimal
-     * @return string representation of matching emoji
+     * @param value [BigDecimal]
+     * @return [String] Up or Down Emoji
      */
     fun getUpOrDownEmoji(value: BigDecimal): String {
         return if (value > BigDecimal.ZERO) ":chart_with_upwards_trend:" else ":chart_with_downwards_trend:"
@@ -110,6 +109,12 @@ object CoinMarketCapService {
     }
 
 
+    /**
+     * Determines if the given slug is allowed or not
+     *
+     * @param slug [String] CMC slug (ethereum, bitcoin, etc)
+     * @return [Boolean] True if allowed
+     */
     private fun slugAllowed(slug: String): Boolean {
         return Bot.config.allowedCurrencySlugs.isEmpty() || Bot.config.allowedCurrencySlugs.contains(slug)
     }
