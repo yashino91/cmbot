@@ -23,8 +23,8 @@ object DecimalFormatter {
     /**
      * Format price according to decimal dimension in USD
      *
-     * @param price price as BigDecimal
-     * @return formatted string price
+     * @param price [BigDecimal] Price as BigDecimal
+     * @return [String] Formatted price
      */
     fun formatPrice(price: BigDecimal?): String {
         return if (price == null) "-" else formatPrice(price, '$')
@@ -34,9 +34,9 @@ object DecimalFormatter {
     /**
      * Format price according to decimal dimension in the given symbol
      *
-     * @param price price as BigDecimal
-     * @param symbol currency symbol (EUR, USD,..)
-     * @return formatted string price
+     * @param price [BigDecimal] Price as BigDecimal
+     * @param symbol [Char] Currency symbol (EUR, USD,..)
+     * @return [String] Formatted price
      */
     fun formatPrice(price: BigDecimal?, symbol: Char = '$'): String {
 
@@ -57,8 +57,8 @@ object DecimalFormatter {
     /**
      * Format percentages according to decimal dimension
      *
-     * @param percentage percentage as BigDecimal
-     * @return formatted string percentages
+     * @param percentage [BigDecimal] Percentage
+     * @return [String] Formatted percentages
      */
     fun formatPercentage(percentage: BigDecimal?): String {
 
