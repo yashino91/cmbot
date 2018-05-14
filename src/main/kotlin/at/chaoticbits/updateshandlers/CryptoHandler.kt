@@ -4,7 +4,6 @@ import at.chaoticbits.coinmarket.*
 import at.chaoticbits.config.Bot
 import at.chaoticbits.config.Commands
 import mu.KotlinLogging
-import org.slf4j.event.Level
 import org.telegram.telegrambots.api.methods.AnswerInlineQuery
 import org.telegram.telegrambots.api.methods.send.SendMessage
 import org.telegram.telegrambots.api.objects.Message

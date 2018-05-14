@@ -10,26 +10,28 @@ import org.telegram.telegrambots.exceptions.TelegramApiException
 private val log = KotlinLogging.logger {}
 class Main {
 
-
-
     companion object {
 
         @JvmStatic
         fun main(args: Array<String>) {
 
-            // Exit if no Telegram Bot Token is specified
-            if (System.getenv("CMBOT_TELEGRAM_TOKEN") == null) {
-                log.error { "No Telegram Bot Token specified! Please declare a System Environment Variable with your Telegram API Key. CMBOT_TELEGRAM_TOKEN={YOUR_API_KEY}" }
-                return
-            }
-
-            initTelegramBot()
+            // Exit if bot initialization failed
+            if(!initTelegramBot()) return
         }
     }
 }
 
 
-private fun initTelegramBot() {
+/**
+ * Initializes Telegram Bot with the CryptoHandler
+ */
+fun initTelegramBot(): Boolean {
+
+    // no bot token specified
+    if (System.getenv("CMBOT_TELEGRAM_TOKEN") == null) {
+        log.error { "No Telegram Bot Token specified! Please declare a System Environment Variable with your Telegram API Key. CMBOT_TELEGRAM_TOKEN={YOUR_API_KEY}" }
+        return false
+    }
 
     ApiContextInitializer.init()
     val telegramBotsApi = TelegramBotsApi()
@@ -38,8 +40,10 @@ private fun initTelegramBot() {
 
         // Register long polling bots. They work regardless type of TelegramBotsApi
         telegramBotsApi.registerBot(CryptoHandler())
+        return true
 
     } catch (e: TelegramApiException) {
         log.error { e.message }
+        return false
     }
 }

@@ -2,7 +2,6 @@ package at.chaoticbits.updatehandlers
 
 import at.chaoticbits.coinmarket.Coin
 import at.chaoticbits.coinmarket.CoinMarketContainer
-import at.chaoticbits.coinmarket.CurrencyNotFoundException
 import at.chaoticbits.config.Bot
 import at.chaoticbits.config.Commands
 import at.chaoticbits.testdata.Config
@@ -12,7 +11,6 @@ import at.chaoticbits.updateshandlers.coinCommand
 import org.hamcrest.CoreMatchers.containsString
 import org.junit.*
 import org.junit.contrib.java.lang.system.EnvironmentVariables
-import org.slf4j.event.Level
 import org.telegram.telegrambots.api.objects.inlinequery.inputmessagecontent.InputTextMessageContent
 import org.telegram.telegrambots.api.objects.inlinequery.result.InlineQueryResultArticle
 
@@ -20,7 +18,7 @@ import org.telegram.telegrambots.api.objects.inlinequery.result.InlineQueryResul
 /**
  * Test Telegram Bot Update Handler
  */
-open class CryptoHandlerTest {
+class CryptoHandlerTest {
 
 
     companion object {
