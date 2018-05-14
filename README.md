@@ -7,14 +7,22 @@
 
 A simple telegram bot written in Kotlin, for fetching price information about crypto currencies from CoinMarketCap. 
 
-![Alt text](/screenshots/example.png?raw=true "Bot Example - Formatted as a String or rendered as an Image")
+![Alt text](/screenshots/example_old.png?raw=true "Bot Example - Formatted as an Image")
 
+You can browse all currencies on CoinMarketCap through [inline queries](https://core.telegram.org/bots/inline). 
+Just call the bot by its username and a query in the text input field. For example: @PriceLeechBot eth.
 
-As seen above the result can be displayed in 2 different ways:
-1. Rendered as an Image. Just use a single slash / for the command. I.e. /eth
-2. Formatted as a String with a Link to CoinMarketCap. Use double slash // for the command. I.e. //eth 
+Select a result and you'll get the most important information as a rendered image via Telegram.
 
 You can try it out  [here](https://telegram.me/PriceLeechBot).
+
+## Commands
+
+| Command   | Usage         | Description 								            |
+| ----------|---------------|-------------------------------------------------------|
+| /coin 	| /coin eth     | Request price details about a crypto coin             |
+| /help     | /help         | Displays the help                                     |
+
 
 
 ## Installation
@@ -64,5 +72,3 @@ The configuration is done in the config.yaml file, located in the resource direc
 | ----------------------    |-------------------------------------------------------|
 | botName 	                | Name of your Telegram Bot				                |
 | allowedCurrencySlugs      | Array of currency slugs that are allowed to request. If empty every currency is allowed |
-| stringCommand             | Command to request currency details as a formatted string |
-| imageCommand              | Command to request currency details as a rendered image |

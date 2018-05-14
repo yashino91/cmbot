@@ -1,2 +1,6 @@
-botName: !!str "PriceLeechBot"  # Name of your Telegram Bot
-allowedCurrencySlugs: []          # For example: [ethereum, bitcoin]. If empty, every currency is allowed to request
+# Name of your Telegram Bot
+botName: !!str "PriceLeechBot"
+
+# For a full list of all slug names see: https://api.coinmarketcap.com/v2/listings/
+# Example: [ethereum, bitcoin]. If empty, every currency is allowed to request.
+allowedCurrencySlugs: []
