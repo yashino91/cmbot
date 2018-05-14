@@ -20,8 +20,9 @@ You can try it out  [here](https://telegram.me/PriceLeechBot).
 
 | Command   | Usage         | Description 								            |
 | ----------|---------------|-------------------------------------------------------|
-| /coin 	| /coin eth     | Request price details about a crypto coin             |
+| /coin 	| /coin eth     | Request price details about a coin                    |
 | /help     | /help         | Displays the help                                     |
+| /start    | /start        | Displays the welcome message                          |
 
 
 
