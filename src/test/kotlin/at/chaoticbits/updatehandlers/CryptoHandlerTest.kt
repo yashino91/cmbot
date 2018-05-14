@@ -35,6 +35,12 @@ class CryptoHandlerTest {
             environmentVariables.set("CMBOT_TELEGRAM_TOKEN", Config.testBotToken)
             CoinMarketContainer.coinListings.add(Coin(1, 1, "Ethereum", "ETH", "ethereum"))
         }
+
+        @AfterClass
+        @JvmStatic
+        fun cleanUp() {
+            cryptoHandler.onClosing()
+        }
     }
 
 
