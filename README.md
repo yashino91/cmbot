@@ -9,8 +9,8 @@ A simple telegram bot written in Kotlin, for fetching price information about cr
 
 ![Alt text](/screenshots/example.png?raw=true "Bot Example - Formatted as an Image")
 
-You can browse all currencies on CoinMarketCap through [inline queries](https://core.telegram.org/bots/inline). 
-Just call the bot by its username and a query in the text input field. For example: @PriceLeechBot eth.
+You can browse all currencies on CoinMarketCap through [Inline Queries](https://core.telegram.org/bots/inline). 
+Just call the bot by its username and a query in the text input field. For example: `@PriceLeechBot eth`.
 
 Select a result and you'll get the most important information as a rendered image via Telegram.
 
@@ -75,3 +75,11 @@ The configuration is done in the config.yaml file, located in the resource direc
 | allowedCurrencySlugs          | Array of currency slugs that are allowed to request. If empty every currency is allowed |
 | autoclearMessages             | Deletes sent photo messages automatically if enabled |
 | autoclearMessagesDurationSec  | Number in seconds after sent photo messages should be deleted |
+
+
+##Contributing
+Use the issue tracker to report problems, suggestions and questions. You may also contribute by submitting pull requests.
+
+If you find this project helpful, please consider making a donation:
+ - [ETH](https://etherscan.io/address/0x00bC09660B16AA7614A77313a9D9d0643C47555c#): `0x00bC09660B16AA7614A77313a9D9d0643C47555c`
+ - [BTC](https://blockchain.info/address/1JFgCTawZDcar9qd6XAAqR9iEWAFRji9tT): `1JFgCTawZDcar9qd6XAAqR9iEWAFRji9tT`
