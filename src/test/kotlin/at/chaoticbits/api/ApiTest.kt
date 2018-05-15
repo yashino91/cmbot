@@ -11,7 +11,7 @@ import org.junit.Test
 class ApiTest {
 
     companion object {
-        private const val urlOK = "http://ip.jsontest.com/"
+        private const val urlOK = "https://reqres.in/api/users?page=1"
         private const val urlFail = "fail-test"
     }
 
@@ -20,7 +20,7 @@ class ApiTest {
         val response = Api.fetch(urlOK)
 
         Assert.assertNotNull(response)
-        Assert.assertEquals(response.status, 200)
+        Assert.assertEquals(200, response.status)
         Assert.assertNotNull(response.body)
     }
 

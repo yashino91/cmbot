@@ -14,28 +14,28 @@ class CoinMarketCapServiceTest {
 
     @Test
     fun testFormatPrice() {
-        Assert.assertEquals(DecimalFormatter.formatPrice(null), "-")
-        Assert.assertEquals(DecimalFormatter.formatPrice(BigDecimal("10.5"), '€'), " €10.50")
-        Assert.assertEquals(DecimalFormatter.formatPrice(BigDecimal("0.12345678"), '€'), " €0.12345678")
+        Assert.assertEquals("-", DecimalFormatter.formatPrice(null))
+        Assert.assertEquals(" €10.50", DecimalFormatter.formatPrice(BigDecimal("10.5"), '€'))
+        Assert.assertEquals(" €0.12345678", DecimalFormatter.formatPrice(BigDecimal("0.12345678"), '€'))
     }
 
     @Test
     fun testGetUpOrDownEmoji() {
-        Assert.assertEquals(CoinMarketCapService.getUpOrDownEmoji(BigDecimal("1")), ":chart_with_upwards_trend:")
-        Assert.assertEquals(CoinMarketCapService.getUpOrDownEmoji(BigDecimal("-1")), ":chart_with_downwards_trend:")
+        Assert.assertEquals(":chart_with_upwards_trend:", CoinMarketCapService.getUpOrDownEmoji(BigDecimal("1")))
+        Assert.assertEquals(":chart_with_downwards_trend:", CoinMarketCapService.getUpOrDownEmoji(BigDecimal("-1")))
     }
 
     @Test
     fun testFormatPercentage() {
-        Assert.assertEquals(DecimalFormatter.formatPercentage(null), "-")
-        Assert.assertEquals(DecimalFormatter.formatPercentage(BigDecimal("10.5")), " 10.50%")
-        Assert.assertEquals(DecimalFormatter.formatPercentage(BigDecimal("0.53")), " 0.53%")
+        Assert.assertEquals("-", DecimalFormatter.formatPercentage(null))
+        Assert.assertEquals(" 10.50%", DecimalFormatter.formatPercentage(BigDecimal("10.5")))
+        Assert.assertEquals(" 0.53%", DecimalFormatter.formatPercentage(BigDecimal("0.53")))
     }
 
     @Test
     fun testFormatPercentageWithEmoji() {
-        Assert.assertEquals(CoinMarketCapService.formatPercentageWithEmoji(null), "-")
-        Assert.assertEquals(CoinMarketCapService.formatPercentageWithEmoji(BigDecimal("10.5")), " 10.50%\t:chart_with_upwards_trend:")
+        Assert.assertEquals("-", CoinMarketCapService.formatPercentageWithEmoji(null))
+        Assert.assertEquals(" 10.50%\t:chart_with_upwards_trend:", CoinMarketCapService.formatPercentageWithEmoji(BigDecimal("10.5")))
     }
 
     @Test
@@ -50,7 +50,7 @@ class CoinMarketCapServiceTest {
     fun testFetchCurrency() {
         val currencyDetails= CoinMarketCapService.fetchCurrency("ethereum")
 
-        Assert.assertEquals(currencyDetails.name, "Ethereum")
+        Assert.assertEquals("Ethereum", currencyDetails.name)
 
         CoinMarketCapService.fetchCurrency("currencynotfound")
     }
