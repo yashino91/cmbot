@@ -10,4 +10,4 @@ allowedCurrencySlugs: []
 autoclearMessages: true
 
 # Number in seconds after sent photo messages should be deleted
-autoclearMessagesDurationSec: 600
+autoclearMessagesDurationSec: 1800
