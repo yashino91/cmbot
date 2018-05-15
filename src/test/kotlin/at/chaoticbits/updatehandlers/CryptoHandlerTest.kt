@@ -48,19 +48,19 @@ class CryptoHandlerTest {
     fun testGetBotUsername() {
         val botUsername = cryptoHandler.botUsername
         Assert.assertNotNull(botUsername)
-        Assert.assertEquals(botUsername, Bot.config.botName)
+        Assert.assertEquals( Bot.config.botName, botUsername)
     }
 
     @Test
     fun testGetBotToken() {
         val botToken = cryptoHandler.botToken
-        Assert.assertEquals(botToken, Config.testBotToken)
+        Assert.assertEquals(Config.testBotToken, botToken)
     }
 
     @Test
     fun testInitSendMessage() {
         val sendMessageRequest = cryptoHandler.initSendMessageRequest(Config.chatId)
-        Assert.assertEquals(sendMessageRequest.chatId, Config.chatId.toString())
+        Assert.assertEquals(Config.chatId.toString(), sendMessageRequest.chatId)
     }
 
     @Test
@@ -85,7 +85,7 @@ class CryptoHandlerTest {
         val inlineQueryResults = answerInlineQuery.results
 
         Assert.assertNotNull(answerInlineQuery)
-        Assert.assertEquals(inlineQueryResults.size, 0)
+        Assert.assertEquals(0, inlineQueryResults.size)
     }
 
 
@@ -105,7 +105,7 @@ class CryptoHandlerTest {
     @Test
     fun testEscapeMessage() {
         val message = cryptoHandler.escapeMessage("Currency not found _bla_")
-        Assert.assertEquals(message, "Currency not found \\_bla\\_")
+        Assert.assertEquals("Currency not found \\_bla\\_", message)
     }
 
     @Test
@@ -125,6 +125,6 @@ class CryptoHandlerTest {
     @Test
     fun testIndexOfCommandEnd() {
         val index = cryptoHandler.indexOfCommandEnd("/coin ethereum@BotName")
-        Assert.assertEquals(index, 14)
+        Assert.assertEquals(14, index)
     }
 }
