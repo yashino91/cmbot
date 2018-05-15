@@ -77,7 +77,7 @@ The configuration is done in the config.yaml file, located in the resource direc
 | autoclearMessagesDurationSec  | Number in seconds after sent photo messages should be deleted |
 
 
-##Contributing
+## Contributing
 Use the issue tracker to report problems, suggestions and questions. You may also contribute by submitting pull requests.
 
 If you find this project helpful, please consider making a donation:
