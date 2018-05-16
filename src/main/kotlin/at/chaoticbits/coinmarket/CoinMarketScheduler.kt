@@ -3,14 +3,10 @@ package at.chaoticbits.coinmarket
 import at.chaoticbits.api.Api
 import mu.KotlinLogging
 import org.json.JSONArray
-import org.json.JSONObject
-import java.io.FileNotFoundException
-import java.io.PrintWriter
-import java.io.UnsupportedEncodingException
 import java.util.*
 
 /**
- * Update symbol slug list periodically
+ * CoinMarketCap Scheduler, that periodically updates Coins and ERC20 Tokens
  */
 private val log = KotlinLogging.logger {}
 class CoinMarketScheduler : TimerTask() {
@@ -23,53 +19,30 @@ class CoinMarketScheduler : TimerTask() {
 
 
     /**
-     * Fetch CMC coin information and populate map with symbols related to their slug,
-     * in order to support searching via symbols (btc, eth,...)
-     * CoinMarketCap API currently only supports search by slug (bitcoin, ethereum,...)
+     * Fetch all coins from CoinMarketCap and populate a set of it for later usage.
+     * This set will be used for Inline Query Search or symbol <-> name mappings
      */
     private fun updateSymbolSlugs() {
-
 
         val response = Api.fetch("https://s2.coinmarketcap.com/generated/search/quick_search.json")
 
         if (response.status == 200) {
+            val jsonCoinArray = JSONArray(response.body)
 
-            val jsonArray = JSONArray(response.body)
+            for (i in 0 until jsonCoinArray.length())
+                CoinMarketContainer.addOrReplaceCoin(Coin(jsonCoinArray.getJSONObject(i)))
 
-            CoinMarketContainer.coinListings.clear()
-
-            try {
-                PrintWriter("telegram-commands.txt", "UTF-8").use { writer ->
-
-                    for (i in 0 until jsonArray.length()) {
-
-                        val jsonObject = jsonArray.getJSONObject(i)
-
-                        // populate top 85 coins in telegram commands
-                        if (i < 85)
-                            updateBotCommands(writer, jsonObject)
-
-                        CoinMarketContainer.coinListings.add(Coin(jsonObject))
-                        CoinMarketContainer.coinListings.sortBy { it.rank }
-                    }
-
-                    log.info { "Successfully updated coin listings" }
-
-                }
-            } catch (e: FileNotFoundException) {
-                log.error {  e.message }
-            } catch (e: UnsupportedEncodingException) {
-                log.error {  e.message }
-            }
+            log.info { "Successfully updated coins" }
 
         } else {
-            log.error { "Error fetching coin listings! StatusCode: ${response.status}" }
+            log.error { "Error fetching coins! StatusCode: ${response.status}" }
         }
     }
 
 
     /**
-     * Fetch Erc20 tokens and update cache
+     * Fetch Erc20 tokens and populate a map of it.
+     * This map will be used to check if a coin is an ERC20 token
      */
     private fun updateErc20TokenList() {
 
@@ -81,16 +54,12 @@ class CoinMarketScheduler : TimerTask() {
             for (i in 0 until jsonArray.length()) {
                 val erc20Symbol = jsonArray.getJSONObject(i).getString("symbol")
                 val erc20Address = jsonArray.getJSONObject(i).getString("address")
-                CoinMarketContainer.erc20Tokens[erc20Symbol] = erc20Address
+
+                CoinMarketContainer.addOrReplaceErc20Token(erc20Symbol, erc20Address)
             }
-            log.info { "Successfully updated erc20 tokens" }
+            log.info { "Successfully updated ERC20 tokens" }
 
         } else
-            log.error { "Error updating Erc20 Tokens! StatusCode: ${response.status}" }
+            log.error { "Error updating ERC20 Tokens! StatusCode: ${response.status}" }
     }
-
-
-    private fun updateBotCommands(writer: PrintWriter, jsonObject: JSONObject) =
-        writer.println(jsonObject.getString("symbol").toLowerCase() + " - " + jsonObject.getString("name"))
-
 }

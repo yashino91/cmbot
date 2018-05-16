@@ -4,7 +4,7 @@ import org.json.JSONObject
 
 
 /**
- * Illustrates a coin from the CoinMarketCap listings endpoint
+ * Illustrates a coin with basic information from CoinMarketCap
  */
 data class Coin(
         val id: Int,
@@ -12,7 +12,7 @@ data class Coin(
         val name: String,
         val symbol: String,
         val slug: String
-) {
+): Comparable<Coin> {
 
     constructor(jsonObject: JSONObject): this (
                 jsonObject.getInt("id"),
@@ -21,4 +21,15 @@ data class Coin(
                 jsonObject.getString("symbol"),
                 jsonObject.getString("slug")
     )
+
+
+    override fun compareTo(other: Coin): Int = comparator.compare(this, other)
+
+
+    /**
+     * Custom comparator to sort by rank
+     */
+    companion object {
+        val comparator = compareBy(Coin::rank)
+    }
 }
