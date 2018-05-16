@@ -154,6 +154,13 @@
             <artifactId>jackson-annotations</artifactId>
             <version>2.9.5</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.jetbrains.kotlinx/kotlinx-coroutines-core -->
+        <dependency>
+            <groupId>org.jetbrains.kotlinx</groupId>
+            <artifactId>kotlinx-coroutines-core</artifactId>
+            <version>0.22.5</version>
+        </dependency>
+
 
 
         <!--Test-->
