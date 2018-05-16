@@ -24,7 +24,7 @@ data class CurrencyDetails(
 
     constructor(jsonObject: JSONObject): this (
                 jsonObject.getInt("rank"),
-                CoinMarketContainer.erc20Tokens.containsKey(jsonObject.getString("symbol")),
+                CoinMarketContainer.isErc20Token(jsonObject.getString("symbol")),
                 jsonObject.getString("name"),
                 jsonObject.getString("symbol"),
 

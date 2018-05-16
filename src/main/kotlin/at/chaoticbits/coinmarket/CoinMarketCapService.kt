@@ -52,13 +52,8 @@ object CoinMarketCapService {
      * @param currency [String] Currency
      * @return [String] slug
      */
-    private fun getCurrencySlug(currency: String): String {
-        synchronized(CoinMarketContainer.coinListings) {
-            val coin = CoinMarketContainer.coinListings.find { it -> it.symbol == currency.toUpperCase() }
-
-            return coin?.slug ?: currency
-        }
-    }
+    private fun getCurrencySlug(currency: String): String =
+            CoinMarketContainer.findCoinBySymbol(currency)?.slug ?: currency
 
     /**
      * Format the given currency details to a readable string for telegram chat
