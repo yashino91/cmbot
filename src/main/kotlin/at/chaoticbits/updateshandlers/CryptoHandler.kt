@@ -3,6 +3,7 @@ package at.chaoticbits.updateshandlers
 import at.chaoticbits.coinmarket.*
 import at.chaoticbits.config.Bot
 import at.chaoticbits.config.Commands
+import at.chaoticbits.database.DatabaseManager
 import kotlinx.coroutines.experimental.asCoroutineDispatcher
 import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.runBlocking
@@ -47,10 +48,13 @@ open class CryptoHandler : TelegramLongPollingBot() {
      */
     init {
 
-        Timer().scheduleAtFixedRate(CoinMarketScheduler(),0,  10000)
+        Timer().scheduleAtFixedRate(CoinMarketScheduler(),0,  60 * 60 * 1000)
         if (Bot.config.autoclearMessages) {
             Timer().scheduleAtFixedRate(0, 10 * 1000) { clearOldPhotoMessages() }
         }
+
+        DatabaseManager
+
     }
 
 
@@ -90,6 +94,7 @@ open class CryptoHandler : TelegramLongPollingBot() {
 
                         if (command.startsWith(Commands.coin)) {
 
+                            // async fetch coin and generate rendered image
                             val photoDeferred = async(forkJoinPool1.asCoroutineDispatcher()) {
                                 coinCommand(message, command.substring(Commands.coin.length, indexOfCommandEnd(command)))
                             }

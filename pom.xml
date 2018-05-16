@@ -25,6 +25,10 @@
             <url>https://jcenter.bintray.com/</url>
         </repository>
         <repository>
+            <id>JetBrains</id>
+            <url>https://dl.bintray.com/kotlin/exposed</url>
+        </repository>
+        <repository>
             <id>emoji-repo</id>
             <name>Custom Emoji Repo with appropriate org.json dependency for telegram-bot</name>
             <url>https://raw.github.com/yashino91/emoji-java/json-20160810/</url>
@@ -160,6 +164,18 @@
             <artifactId>kotlinx-coroutines-core</artifactId>
             <version>0.22.5</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.xerial/sqlite-jdbc -->
+        <dependency>
+            <groupId>org.xerial</groupId>
+            <artifactId>sqlite-jdbc</artifactId>
+            <version>3.21.0.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains.exposed</groupId>
+            <artifactId>exposed</artifactId>
+            <version>0.10.2</version>
+        </dependency>
+
 
 
 
