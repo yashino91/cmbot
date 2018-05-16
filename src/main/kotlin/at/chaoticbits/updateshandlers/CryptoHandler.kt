@@ -28,21 +28,22 @@ import kotlin.concurrent.scheduleAtFixedRate
 private val log = KotlinLogging.logger {}
 open class CryptoHandler : TelegramLongPollingBot() {
 
-    // Holds a Triple(chatId, MessageId, date) of each sent photo message until they are deleted
-    // Only used if autoclearMessages is set to true.
-    private val sentPhotoMessages: MutableSet<Triple<Long, Int, Int>> = synchronizedSet(HashSet())
 
     /**
-     * Instantiate CryptoHandler and start coin market scheduler
+     * Holds a Triple(chatId, MessageId, date) of each sent photo message until they are deleted
+     * Only used if autoclearMessages is set to true.
+     */
+    @Volatile
+    private var sentPhotoMessages: MutableSet<Triple<Long, Int, Int>> = synchronizedSet(mutableSetOf())
+
+
+
+    /**
+     * Start schedulers
      */
     init {
 
-        val cmScheduler = CoinMarketScheduler()
-
-        val initialDelay = 100
-        val fixedRate = 60 * 60 * 1000 // every hour
-
-        Timer().schedule(cmScheduler, initialDelay.toLong(), fixedRate.toLong())
+        Timer().scheduleAtFixedRate(CoinMarketScheduler(),0,  60 * 60 * 1000)
         if (Bot.config.autoclearMessages) {
             Timer().scheduleAtFixedRate(0, 10 * 1000) { clearOldPhotoMessages() }
         }
@@ -186,6 +187,27 @@ open class CryptoHandler : TelegramLongPollingBot() {
         }
     }
 
+
+    /**
+     * Determines the end of a bot command
+     *
+     * @param command [String] Bot command
+     * @return [Int] Index of command end
+     */
+    fun indexOfCommandEnd(command: String): Int =
+            if (command.indexOf('@') == -1) command.length else command.indexOf('@')
+
+
+    /**
+     * Escapes the given string for sending it back to the telegram user
+     *
+     * @param message [String] Message
+     * @return [String] Escaped message (For sending messages back to telegram user)
+     */
+    fun escapeMessage(message: String?): String = message!!.replace("_".toRegex(), "\\\\_")
+
+
+
     /**
      * Takes care of clearing old sent photo messages
      */
@@ -205,23 +227,4 @@ open class CryptoHandler : TelegramLongPollingBot() {
         // remove all deleted messages from set
         this.sentPhotoMessages.removeAll(toBeCleared)
     }
-
-
-    /**
-     * Determines the end of a bot command
-     *
-     * @param command [String] Bot command
-     * @return [Int] Index of command end
-     */
-    fun indexOfCommandEnd(command: String): Int =
-            if (command.indexOf('@') == -1) command.length else command.indexOf('@')
-
-
-    /**
-     * Escapes the given string for sending it back to the telegram user
-     *
-     * @param message [String] Message
-     * @return [String] Escaped message (For sending messages back to telegram user)
-     */
-    fun escapeMessage(message: String?): String = message!!.replace("_".toRegex(), "\\\\_")
 }
