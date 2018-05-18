@@ -8,7 +8,6 @@ import mu.KotlinLogging
 import net.logstash.logback.marker.Markers
 import org.telegram.telegrambots.api.methods.send.SendPhoto
 import org.telegram.telegrambots.api.objects.Message
-import org.telegram.telegrambots.exceptions.TelegramApiException
 import java.io.UnsupportedEncodingException
 
 
