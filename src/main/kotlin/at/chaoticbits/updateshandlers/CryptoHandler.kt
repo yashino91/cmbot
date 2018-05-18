@@ -3,10 +3,6 @@ package at.chaoticbits.updateshandlers
 import at.chaoticbits.coinmarket.*
 import at.chaoticbits.config.Bot
 import at.chaoticbits.config.Commands
-import at.chaoticbits.database.DatabaseManager
-import kotlinx.coroutines.experimental.asCoroutineDispatcher
-import kotlinx.coroutines.experimental.async
-import kotlinx.coroutines.experimental.runBlocking
 import mu.KotlinLogging
 import org.telegram.telegrambots.api.methods.AnswerInlineQuery
 import org.telegram.telegrambots.api.methods.send.SendMessage
@@ -17,12 +13,12 @@ import org.telegram.telegrambots.api.objects.inlinequery.InlineQuery
 import org.telegram.telegrambots.api.objects.inlinequery.inputmessagecontent.InputTextMessageContent
 import org.telegram.telegrambots.api.objects.inlinequery.result.InlineQueryResult
 import org.telegram.telegrambots.api.objects.inlinequery.result.InlineQueryResultArticle
+import org.telegram.telegrambots.bots.DefaultBotOptions
 import org.telegram.telegrambots.bots.TelegramLongPollingBot
 import org.telegram.telegrambots.exceptions.TelegramApiException
 import java.io.UnsupportedEncodingException
 import java.util.*
 import java.util.Collections.synchronizedSet
-import java.util.concurrent.ForkJoinPool
 import kotlin.concurrent.scheduleAtFixedRate
 
 
@@ -31,7 +27,7 @@ import kotlin.concurrent.scheduleAtFixedRate
  * Crypto Polling Bot, that processes currency requests
  */
 private val log = KotlinLogging.logger {}
-open class CryptoHandler : TelegramLongPollingBot() {
+open class CryptoHandler(defaultBotOptions: DefaultBotOptions) : TelegramLongPollingBot(defaultBotOptions) {
 
 
     /**
@@ -41,7 +37,6 @@ open class CryptoHandler : TelegramLongPollingBot() {
     @Volatile
     private var sentPhotoMessages: MutableSet<Triple<Long, Int, Int>> = synchronizedSet(mutableSetOf())
 
-    private val forkJoinPool1 = ForkJoinPool(10)
 
     /**
      * Start schedulers
@@ -52,9 +47,6 @@ open class CryptoHandler : TelegramLongPollingBot() {
         if (Bot.config.autoclearMessages) {
             Timer().scheduleAtFixedRate(0, 10 * 1000) { clearOldPhotoMessages() }
         }
-
-        DatabaseManager
-
     }
 
 
@@ -94,17 +86,9 @@ open class CryptoHandler : TelegramLongPollingBot() {
 
                         if (command.startsWith(Commands.coin)) {
 
-                            // async fetch coin and generate rendered image
-                            val photoDeferred = async(forkJoinPool1.asCoroutineDispatcher()) {
-                                coinCommand(message, command.substring(Commands.coin.length, indexOfCommandEnd(command)))
-                            }
-
-                            runBlocking {
-                                val msg = sendPhoto(photoDeferred.await())
-
-                                if (Bot.config.autoclearMessages)
-                                    sentPhotoMessages.add(Triple(msg.chatId, msg.messageId, msg.date))
-                            }
+                            val msg = sendPhoto(coinCommand(message, command.substring(Commands.coin.length, indexOfCommandEnd(command))))
+                            if (Bot.config.autoclearMessages)
+                                sentPhotoMessages.add(Triple(msg.chatId, msg.messageId, msg.date))
 
                         } else {
                             sendMessageRequest.text = textRequest(command)
@@ -176,8 +160,6 @@ open class CryptoHandler : TelegramLongPollingBot() {
 
                 inlineQueryResult
             }
-
-            log.info {"Inline query results: ${coinsOfInterest.size}"}
 
             answerQuery.results = inlineQueryResults
 

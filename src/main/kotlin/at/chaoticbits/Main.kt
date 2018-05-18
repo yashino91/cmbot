@@ -4,6 +4,7 @@ import at.chaoticbits.updateshandlers.CryptoHandler
 import mu.KotlinLogging
 import org.telegram.telegrambots.ApiContextInitializer
 import org.telegram.telegrambots.TelegramBotsApi
+import org.telegram.telegrambots.bots.DefaultBotOptions
 import org.telegram.telegrambots.exceptions.TelegramApiException
 import org.telegram.telegrambots.generics.BotSession
 
@@ -37,14 +38,17 @@ fun initTelegramBot(): BotSession? {
     ApiContextInitializer.init()
     val telegramBotsApi = TelegramBotsApi()
 
-    try {
+    return try {
+
+        val defaultBotOptions = DefaultBotOptions()
+        defaultBotOptions.maxThreads = 10
 
         // Register long polling bots. They work regardless type of TelegramBotsApi
-        return telegramBotsApi.registerBot(CryptoHandler())
+        telegramBotsApi.registerBot(CryptoHandler(defaultBotOptions))
 
     } catch (e: TelegramApiException) {
         log.error { e.message }
-        return null
+        null
     }
 }
 

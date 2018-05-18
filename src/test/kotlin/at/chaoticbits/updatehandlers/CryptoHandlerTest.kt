@@ -13,6 +13,7 @@ import org.junit.*
 import org.junit.contrib.java.lang.system.EnvironmentVariables
 import org.telegram.telegrambots.api.objects.inlinequery.inputmessagecontent.InputTextMessageContent
 import org.telegram.telegrambots.api.objects.inlinequery.result.InlineQueryResultArticle
+import org.telegram.telegrambots.bots.DefaultBotOptions
 
 
 /**
@@ -23,7 +24,7 @@ class CryptoHandlerTest {
 
     companion object {
 
-        val cryptoHandler = CryptoHandler()
+        val cryptoHandler = CryptoHandler(DefaultBotOptions())
 
         @ClassRule
         @JvmField
