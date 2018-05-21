@@ -3,6 +3,7 @@ package at.chaoticbits.updateshandlers
 import at.chaoticbits.coinmarket.CoinMarketCapService
 import at.chaoticbits.coinmarket.CurrencyDetails
 import at.chaoticbits.coinmarket.CurrencyNotFoundException
+import at.chaoticbits.database.DatabaseManager
 import at.chaoticbits.render.HtmlImageService
 import mu.KotlinLogging
 import net.logstash.logback.marker.Markers

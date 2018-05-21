@@ -11,7 +11,7 @@ import org.jetbrains.exposed.sql.transactions.transaction
 import java.sql.Connection
 
 object Chats: IntIdTable() {
-    val chatId = varchar("chat_id", length = 20).index()
+    val chatId = long("chat_id").index()
 }
 
 
@@ -34,12 +34,25 @@ object DatabaseManager {
         transaction {
 
             SchemaUtils.create(Chats)
+            log.info { "Initialized Database" }
+        }
+    }
 
-            Chat.new { chatId = "12345" }
-            Chat.new { chatId = "67890" }
 
+    fun saveChatIfNotExist(_chatId: Long) {
+        transaction {
+            val chats = Chat.find { Chats.chatId eq _chatId }
+            val count = chats.count()
+            if (count == 0) {
+                Chat.new { chatId = _chatId }
+                log.debug { "Added new chatId to Database: $_chatId" }
+            }
+        }
+    }
 
-            log.info { "Chats: ${Chat.all().joinToString { it.chatId }}" }
+    fun getAllChats(): List<Long> {
+        return transaction {
+            Chat.all().map { it.chatId }
         }
     }
 }

@@ -29,7 +29,7 @@ class Main {
  */
 fun initTelegramBot(): BotSession? {
 
-    // no bot token specified
+    // No Telegram Bot Token specified
     if (System.getenv("CMBOT_TELEGRAM_TOKEN") == null) {
         log.error { "No Telegram Bot Token specified! Please declare a System Environment Variable with your Telegram API Key. CMBOT_TELEGRAM_TOKEN={YOUR_API_KEY}" }
         return null

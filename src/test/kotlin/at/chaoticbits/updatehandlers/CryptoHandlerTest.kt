@@ -90,17 +90,17 @@ class CryptoHandlerTest {
     }
 
 
-    @Test
-    fun testTextRequest() {
-        var replyMessage = cryptoHandler.textRequest(Commands.start)
-        Assert.assertThat(replyMessage, containsString("Welcome"))
-
-        replyMessage = cryptoHandler.textRequest(Commands.help)
-        Assert.assertThat(replyMessage, containsString("You can control me"))
-
-        replyMessage = cryptoHandler.textRequest("/commandnotfound")
-        Assert.assertThat(replyMessage, containsString("Command not found"))
-    }
+//    @Test
+//    fun testTextRequest() {
+//        var replyMessage = cryptoHandler.textRequest(Commands.start)
+//        Assert.assertThat(replyMessage, containsString("Welcome"))
+//
+//        replyMessage = cryptoHandler.textRequest(Commands.help)
+//        Assert.assertThat(replyMessage, containsString("You can control me"))
+//
+//        replyMessage = cryptoHandler.textRequest("/commandnotfound")
+//        Assert.assertThat(replyMessage, containsString("Command not found"))
+//    }
 
 
     @Test
