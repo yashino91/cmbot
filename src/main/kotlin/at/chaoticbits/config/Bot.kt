@@ -56,4 +56,5 @@ object Commands {
     const val start = "/start"
     const val help = "/help"
     const val coin = "/coin "
+    const val pushNotification = "/pushNotification"
 }
