@@ -1,5 +1,5 @@
 # Name of your Telegram Bot
-botName: !!str "PriceLeechBot"
+botName: !!str "testingcmbot"
 
 # For a full list of all slug names see: https://api.coinmarketcap.com/v2/listings/
 # Example: [ethereum, bitcoin]. If empty, every currency is allowed to request.

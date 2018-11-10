@@ -40,6 +40,8 @@ fun initTelegramBot(): BotSession? {
 
     return try {
 
+        log.info { "Registering bot with token: ${System.getenv("CMBOT_TELEGRAM_TOKEN")}" }
+
         val defaultBotOptions = DefaultBotOptions()
         defaultBotOptions.maxThreads = 10
 

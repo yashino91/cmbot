@@ -1,5 +1,7 @@
 package at.chaoticbits.coinmarket
 
+import at.chaoticbits.util.getBigDecimalOrNull
+import at.chaoticbits.util.getStringOrNull
 import org.json.JSONObject
 import java.math.BigDecimal
 
@@ -7,24 +9,44 @@ import java.math.BigDecimal
 /**
  * Illustrates a class, holding all available information about a currency
  */
-data class CurrencyDetails(
-        val rank: Int = 0,
-        val isErc20: Boolean,
-        val name: String,
-        val symbol: String,
-        val change1h: BigDecimal?,
-        val change24h: BigDecimal?,
-        val change7d: BigDecimal?,
-        val volume24h: BigDecimal?,
-        val marketCap: BigDecimal?,
-        val priceUsd: BigDecimal?,
-        val priceEur: BigDecimal?,
-        val priceBtc: BigDecimal?
+class CurrencyDetails(
+    val rank: Int = 0,
+    val name: String,
+    val symbol: String,
+    val low24h: BigDecimal?,
+    val change24h: BigDecimal?,
+    val high24h: BigDecimal?,
+    val volume24h: BigDecimal?,
+    val marketCap: BigDecimal?,
+    val priceUsd: BigDecimal?,
+    val priceEur: BigDecimal?,
+    val priceBtc: BigDecimal?
 ) {
 
+    companion object {
+        fun fromJsonObjectAndCoin(jsonObject: JSONObject, coin: Coin): CurrencyDetails {
+            val usdDetails = jsonObject.getJSONObject("USD")
+            val eurDetails = jsonObject.getJSONObject("EUR")
+            val btcDetails = jsonObject.getJSONObject("BTC")
+
+            return CurrencyDetails(
+                coin.rank,
+                coin.name,
+                coin.symbol,
+                usdDetails.getBigDecimalOrNull("LOW24HOUR"),
+                usdDetails.getBigDecimalOrNull("CHANGEPCT24HOUR"),
+                usdDetails.getBigDecimalOrNull("HIGH24HOUR"),
+                usdDetails.getBigDecimalOrNull("TOTALVOLUME24H"),
+                usdDetails.getBigDecimalOrNull("MKTCAP"),
+                usdDetails.getBigDecimalOrNull("PRICE"),
+                eurDetails.getBigDecimalOrNull("PRICE"),
+                btcDetails.getBigDecimalOrNull("PRICE")
+            )
+        }
+    }
+
     constructor(jsonObject: JSONObject): this (
-                jsonObject.getInt("rank"),
-                CoinMarketContainer.isErc20Token(jsonObject.getString("symbol")),
+                0,
                 jsonObject.getString("name"),
                 jsonObject.getString("symbol"),
 
@@ -33,7 +55,7 @@ data class CurrencyDetails(
                 getValueOrNull("percent_change_7d", jsonObject),
 
                 getValueOrNull("24h_volume_usd", jsonObject),
-                getValueOrNull("market_cap_usd", jsonObject),
+                getValueOrNull("MKTCAP", jsonObject),
 
                 getValueOrNull("price_usd", jsonObject),
                 getValueOrNull("price_eur", jsonObject),

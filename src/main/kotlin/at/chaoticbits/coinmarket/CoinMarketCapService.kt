@@ -5,10 +5,9 @@ import at.chaoticbits.api.Response
 import at.chaoticbits.config.Bot
 import at.chaoticbits.config.DecimalFormatter
 import at.chaoticbits.config.DecimalFormatter.formatPercentage
-import org.json.JSONArray
+import org.json.JSONObject
 import java.io.UnsupportedEncodingException
 import java.math.BigDecimal
-import java.net.URLEncoder
 
 
 /**
@@ -17,7 +16,8 @@ import java.net.URLEncoder
 object CoinMarketCapService {
 
 
-    private const val API_URL = "https://api.coinmarketcap.com/v1/ticker/"
+    const val API_URL = "https://min-api.cryptocompare.com/data"
+    const val BASE_URL = "https://www.cryptocompare.com"
 
 
     /**
@@ -28,32 +28,25 @@ object CoinMarketCapService {
      */
     @Throws(IllegalStateException::class, UnsupportedEncodingException::class, CurrencyNotFoundException::class)
     fun fetchCurrency(currency: String): CurrencyDetails {
+        val coin = CoinMarketContainer.findCoinBySymbolOrName(currency)
 
-        val slug = getCurrencySlug(currency)
-
-        if (!slugAllowed(slug))
-            throw CurrencyNotFoundException("Currency not found: *$slug*")
+        if (coin == null || !symbolAllowed(coin.symbol))
+            throw CurrencyNotFoundException("Currency not found: *$currency*")
 
 
-        val response: Response = Api.fetch(API_URL + URLEncoder.encode(slug, "UTF-8") + "/?convert=EUR")
+        val response: Response = Api.fetch("$API_URL/pricemultifull?fsyms=${coin.symbol}&tsyms=USD,EUR,BTC")
 
         if (response.status == 200 && response.body != null)
-            return CurrencyDetails(JSONArray(response.body).getJSONObject(0))
+            return CurrencyDetails.fromJsonObjectAndCoin(
+                JSONObject(response.body).getJSONObject("RAW").getJSONObject(coin.symbol),
+                coin
+            )
         else if (response.status == 404)
-            throw CurrencyNotFoundException("Currency not found: *$slug*")
+            throw CurrencyNotFoundException("Currency not found: *$currency*")
         else
             throw IllegalStateException("Error! StatusCode: " + response.status)
     }
 
-
-    /**
-     * Maps the requested currency to the appropriate slug for later price fetching
-     *
-     * @param currency [String] Currency
-     * @return [String] slug
-     */
-    private fun getCurrencySlug(currency: String): String =
-            CoinMarketContainer.findCoinBySymbol(currency)?.slug ?: currency
 
     /**
      * Format the given currency details to a readable string for telegram chat
@@ -63,18 +56,14 @@ object CoinMarketCapService {
      */
     fun formatCurrencyResult(currencyDetails: CurrencyDetails): String {
 
-
-        val erc20Token = if (currencyDetails.isErc20) "_Erc20_\n\n" else "\n"
-
         return "[" + currencyDetails.name + "](https://coinmarketcap.com/currencies/" + currencyDetails.name + ") (" + currencyDetails.symbol + ")" + "\n" +
-                erc20Token +
                 "*Rank: *" + currencyDetails.rank + "\n" +
                 "*EUR: *" + DecimalFormatter.formatPrice(currencyDetails.priceEur, '€') + "\n" +
                 "*USD: *" + DecimalFormatter.formatPrice(currencyDetails.priceUsd) + "\n" +
                 "*BTC: *" + DecimalFormatter.formatPrice(currencyDetails.priceBtc, ' ') + "\n" +
-                "*1h: *" + formatPercentageWithEmoji(currencyDetails.change1h) + "\n" +
+                "*1h: *" + formatPercentageWithEmoji(currencyDetails.low24h) + "\n" +
                 "*24h: *" + formatPercentageWithEmoji(currencyDetails.change24h) + "\n" +
-                "*7d: *" + formatPercentageWithEmoji(currencyDetails.change7d) + "\n" +
+                "*7d: *" + formatPercentageWithEmoji(currencyDetails.high24h) + "\n" +
                 "*Volume24h: *" + DecimalFormatter.formatPrice(currencyDetails.volume24h) + "\n" +
                 "*MarketCap: *" + DecimalFormatter.formatPrice(currencyDetails.marketCap)
 
@@ -107,13 +96,14 @@ object CoinMarketCapService {
 
 
     /**
-     * Determines if the given slug is allowed or not
+     * Determines if the given symbol is allowed or not
      *
-     * @param slug [String] CMC slug (ethereum, bitcoin, etc)
+     * @param slug [String] Coin Symbol (BTC, ETH,...)
      * @return [Boolean] True if allowed
      */
-    private fun slugAllowed(slug: String): Boolean {
-        return Bot.config.allowedCurrencySlugs.isEmpty() || Bot.config.allowedCurrencySlugs.contains(slug)
+    // TODO: manage allowed symbols instead of slugs
+    private fun symbolAllowed(symbol: String): Boolean {
+        return Bot.config.allowedCurrencySlugs.isEmpty() || Bot.config.allowedCurrencySlugs.contains(symbol)
     }
 
 }

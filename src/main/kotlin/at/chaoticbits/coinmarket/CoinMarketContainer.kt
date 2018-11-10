@@ -4,7 +4,7 @@ import java.util.Collections.*
 
 
 /**
- * Holding lists of symbols slugs and erc20 tokens
+ * Holding lists of symbols slugs
  */
 object CoinMarketContainer {
 
@@ -14,14 +14,6 @@ object CoinMarketContainer {
      */
     @Volatile
     private var coins: MutableSet<Coin> = synchronizedSet(sortedSetOf())
-
-
-    /**
-     * Holding a thread safe map of all ERC20 tokens
-     */
-    @Volatile
-    private var erc20Tokens: MutableMap<String, String> = synchronizedMap(mutableMapOf())
-
 
 
 
@@ -42,14 +34,15 @@ object CoinMarketContainer {
 
 
     /**
-     * Searches for a coin by the given symbol
+     * Searches for a coin by the given currency string
+     * and checks if the currency string equals the symbol or name of a coin (case will be ignored)
      *
-     * @param symbol [String] Symbol of a coin to search for
+     * @param currency [String] currency of a coin to search for
      * @return [Coin] The found coin or null
      */
     @Synchronized
-    fun findCoinBySymbol (symbol: String): Coin? =
-            coins.find { it -> it.symbol == symbol.toUpperCase() }
+    fun findCoinBySymbolOrName (currency: String): Coin? =
+            coins.find { it -> it.symbol.equals(currency, ignoreCase = true) || it.symbol.equals(currency, ignoreCase = true)}
 
 
     /**
@@ -70,40 +63,5 @@ object CoinMarketContainer {
      * Returns the set of coins
      */
     fun getCoins(): MutableSet<Coin> = coins
-
-
-
-
-    /*-------------------------------------*\
-     * ERC20 Token Access Functions
-    \*-------------------------------------*/
-
-
-    /**
-     * Updates the [erc20Tokens] map with the given symbol and address
-     *
-     * @param symbol [String] Symbol of a coin
-     * @param address [String] Contract Address
-     */
-    @Synchronized
-    fun addOrReplaceErc20Token (symbol: String, address: String) =
-            erc20Tokens.replace(symbol, address)
-
-
-    /**
-     * Checks if the given symbol is an ERC20 token
-     *
-     * @param symbol [String] Symbol of a coin (eth, btc,...)
-     * @return True if its an ERC20 token, otherwise false
-     */
-    @Synchronized
-    fun isErc20Token(symbol: String?): Boolean =
-            erc20Tokens.containsKey(symbol)
-
-
-    /**
-     * Returns the map of ERC20 Tokens
-     */
-    fun getErc20Tokens(): MutableMap<String, String> = erc20Tokens
 
 }

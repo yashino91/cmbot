@@ -6,6 +6,7 @@ import org.apache.http.conn.ssl.NoopHostnameVerifier
 import org.apache.http.entity.BufferedHttpEntity
 import org.apache.http.impl.client.CloseableHttpClient
 import org.apache.http.impl.client.HttpClientBuilder
+import org.apache.http.message.BasicHeader
 import org.apache.http.util.EntityUtils
 
 
@@ -23,10 +24,13 @@ object Api {
      * @param url [String] Endpoint
      * @return [Response] Containing the body and status code
      */
-    fun fetch(url: String): Response {
+    fun fetch(url: String, headers: Array<BasicHeader> = arrayOf()): Response {
+
+        val request = HttpGet(url)
+        request.setHeaders(headers)
 
         try {
-            client.execute(HttpGet(url)).use { response: CloseableHttpResponse ->
+            client.execute(request).use { response: CloseableHttpResponse ->
                 return Response(
                         response.statusLine.statusCode,
                         EntityUtils.toString(BufferedHttpEntity(response.entity), "UTF-8"))
@@ -35,6 +39,5 @@ object Api {
         } catch(e: Exception) {
             throw IllegalStateException("Error fetching url: $url! ${e.message}")
         }
-
     }
 }
