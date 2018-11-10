@@ -1,5 +1,6 @@
 package at.chaoticbits.coinmarket
 
+import at.chaoticbits.util.getStringOrNull
 import org.json.JSONObject
 
 
@@ -11,15 +12,15 @@ data class Coin(
         val rank: Int,
         val name: String,
         val symbol: String,
-        val slug: String
+        val imageUrl: String?
 ): Comparable<Coin> {
 
     constructor(jsonObject: JSONObject): this (
-                jsonObject.getInt("id"),
-                jsonObject.getInt("rank"),
-                jsonObject.getString("name"),
-                jsonObject.getString("symbol"),
-                jsonObject.getString("slug")
+                jsonObject.getInt("Id"),
+                jsonObject.getInt("SortOrder"),
+                jsonObject.getString("CoinName"),
+                jsonObject.getString("Symbol"),
+                jsonObject.getStringOrNull("ImageUrl")
     )
 
 
@@ -27,7 +28,7 @@ data class Coin(
 
 
     /**
-     * Custom comparator to sort by rank
+     * Custom comparator to sort by name
      */
     companion object {
         val comparator = compareBy(Coin::rank)

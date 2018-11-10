@@ -16,7 +16,6 @@ class CoinMarketSchedulerTest {
 
         coinMarketScheduler.run()
 
-        Assert.assertNotNull(CoinMarketContainer.getErc20Tokens())
         Assert.assertNotNull(CoinMarketContainer.getCoins())
     }
 }

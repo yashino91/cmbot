@@ -1,6 +1,7 @@
 package at.chaoticbits.updateshandlers
 
 import at.chaoticbits.coinmarket.*
+import at.chaoticbits.coinmarket.CoinMarketCapService.BASE_URL
 import at.chaoticbits.config.Bot
 import at.chaoticbits.config.Commands
 import at.chaoticbits.database.DatabaseManager
@@ -51,7 +52,7 @@ open class CryptoHandler(defaultBotOptions: DefaultBotOptions) : TelegramLongPol
      */
     init {
 
-        Timer().scheduleAtFixedRate(CoinMarketScheduler(),0,  60 * 60 * 1000)
+        Timer().scheduleAtFixedRate(CoinMarketScheduler(),0,  24 * 60 * 60 * 1000)
         if (Bot.config.autoclearMessages) {
             Timer().scheduleAtFixedRate(0, 10 * 1000) { clearOldPhotoMessages() }
         }
@@ -249,12 +250,12 @@ open class CryptoHandler(defaultBotOptions: DefaultBotOptions) : TelegramLongPol
 
                 val inlineQueryResult = InlineQueryResultArticle()
                 inlineQueryResult.id = UUID.randomUUID().toString()
-                inlineQueryResult.title = "${it.symbol} (${it.name})"
-                inlineQueryResult.thumbUrl = "https://s2.coinmarketcap.com/static/img/coins/64x64/${it.id}.png"
+                inlineQueryResult.title = it.symbol
+                inlineQueryResult.thumbUrl = "$BASE_URL${it.imageUrl}"
 
-                inlineQueryResult.description = "Rank: ${it.rank}"
+                inlineQueryResult.description = it.name
                 val inputTextMessage = InputTextMessageContent()
-                inputTextMessage.messageText = "/coin ${it.slug}"
+                inputTextMessage.messageText = "/coin ${it.symbol}"
 
                 inlineQueryResult.inputMessageContent = inputTextMessage
 

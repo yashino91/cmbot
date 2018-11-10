@@ -21,7 +21,6 @@ object TestData {
     fun currencyDetails(): Array<CurrencyDetails> = arrayOf(
             CurrencyDetails(
                     134,
-                    true,
                     "Golem Network Token",
                     "GNT",
                     BigDecimal.valueOf(-1.23),
@@ -34,7 +33,6 @@ object TestData {
                     BigDecimal.valueOf(0.00000234)),
             CurrencyDetails(
                     188,
-                    true,
                     "AppCoins",
                     "APPC",
                     BigDecimal.valueOf(1.23),
@@ -47,7 +45,6 @@ object TestData {
                     BigDecimal.valueOf(0.00000234)),
             CurrencyDetails(
                     2500,
-                    true,
                     "NoName",
                     "NON",
                     null,

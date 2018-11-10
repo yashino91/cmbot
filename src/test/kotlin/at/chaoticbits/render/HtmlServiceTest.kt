@@ -3,6 +3,8 @@ package at.chaoticbits.render
 import at.chaoticbits.testdata.TestData
 import org.junit.Assert
 import org.junit.Test
+import javax.imageio.ImageIO
+import java.io.File
 
 
 /**
@@ -16,8 +18,8 @@ class HtmlServiceTest {
 
         TestData.currencyDetails().forEach {
             val image = HtmlImageService.generateCryptoDetailsImage(it)
+            ImageIO.write(ImageIO.read(image), "png", File("${it.name}.png"))
             Assert.assertNotNull(image)
         }
     }
-
 }
