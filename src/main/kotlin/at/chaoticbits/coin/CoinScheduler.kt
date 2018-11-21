@@ -1,20 +1,17 @@
-package at.chaoticbits.coinmarket
+package at.chaoticbits.coin
 
 import at.chaoticbits.api.Api
-import at.chaoticbits.coinmarket.CoinMarketCapService.API_URL
+import at.chaoticbits.currencydetails.CurrencyDetailsService.API_URL
 import mu.KotlinLogging
 import org.json.JSONObject
 import java.util.*
 
 
-
-
-
 /**
- * CoinMarketCap Scheduler, that periodically updates Coins and ERC20 Tokens
+ * Coin Scheduler, that periodically updates available Coins, containing basic information
  */
 private val log = KotlinLogging.logger {}
-class CoinMarketScheduler : TimerTask() {
+class CoinScheduler : TimerTask() {
 
 
     override fun run() {
@@ -23,7 +20,7 @@ class CoinMarketScheduler : TimerTask() {
 
 
     /**
-     * Fetch all coins from CoinMarketCap and populate a set of it for later usage.
+     * Fetch all coins from crypto compare and populate a set of it for later usage.
      * This set will be used for Inline Query Search or symbol <-> name mappings
      */
     private fun updateSymbolSlugs() {
@@ -36,7 +33,7 @@ class CoinMarketScheduler : TimerTask() {
             while (keys.hasNext()) {
                 val coin = data.get(keys.next())
                 if (coin is JSONObject)
-                    CoinMarketContainer.addOrReplaceCoin(Coin(coin))
+                    CoinContainer.addOrReplaceCoin(Coin(coin))
             }
 
             log.info { "Successfully updated coins" }

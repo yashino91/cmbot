@@ -18,7 +18,6 @@ class HtmlServiceTest {
 
         TestData.currencyDetails().forEach {
             val image = HtmlImageService.generateCryptoDetailsImage(it)
-            ImageIO.write(ImageIO.read(image), "png", File("${it.name}.png"))
             Assert.assertNotNull(image)
         }
     }

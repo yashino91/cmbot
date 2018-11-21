@@ -1,9 +1,8 @@
 package at.chaoticbits.updateshandlers
 
-import at.chaoticbits.coinmarket.CoinMarketCapService
-import at.chaoticbits.coinmarket.CurrencyDetails
-import at.chaoticbits.coinmarket.CurrencyNotFoundException
-import at.chaoticbits.database.DatabaseManager
+import at.chaoticbits.currencydetails.CurrencyDetailsService
+import at.chaoticbits.currencydetails.CurrencyDetails
+import at.chaoticbits.currencydetails.CurrencyNotFoundException
 import at.chaoticbits.render.HtmlImageService
 import mu.KotlinLogging
 import net.logstash.logback.marker.Markers
@@ -23,7 +22,7 @@ private val log = KotlinLogging.logger {}
  */
 fun startCommand() =
         "*Welcome!*\n\n" +
-                "My name is *cmbot* and I am programmed to give you the newest price information about all crypto currencies from CoinMarketCap.\n\n" +
+                "My name is *cmbot* and I am programmed to give you the newest price information about all crypto currencies from cryptocompare.com.\n\n" +
                 "Use /help to see a list of my supported commands"
 
 
@@ -31,18 +30,14 @@ fun startCommand() =
 /**
  * Returns the bot's help command
  *
- * @param botUsername [String] Username of this bot
  * @return [String] Containing the help message
  */
-fun helpCommand(botUsername: String): String =
+fun helpCommand(): String =
         "You can control me by sending the following commands:\n\n" +
                 "*Commands*\n" +
-                "/coin currency *-* Request a coin from CoinMarketCap. *(i.e. /coin eth)*\n" +
+                "/coin currency *-* Request a coin from cryptocompare.com. *(i.e. /coin eth)*\n" +
                 "/help *-* Display the current help\n" +
                 "/start *-* Display the welcome message\n\n" +
-                "*Inline Queries*\n" +
-                "This is the recommended way to request price information. " +
-                "Just use @$botUsername to search through all coins on CoinMarketCap.\n\n" +
                 "For more information visit [cmbot](https://github.com/yashino91/cmbot/)"
 
 
@@ -58,7 +53,7 @@ fun commandNotFound(command: String): String = "Command not found: *$command*. U
 
 
 /**
- * Queries the given currency from CoinMarketCap and returns the result as a rendered image
+ * Queries the given currency and returns the result as a rendered image
  *
  * @param message [Message] The requested user message
  * @param currency [String] The requested currency
@@ -67,7 +62,7 @@ fun commandNotFound(command: String): String = "Command not found: *$command*. U
 @Throws(IllegalStateException::class, UnsupportedEncodingException::class, CurrencyNotFoundException::class)
 fun coinCommand(message: Message, currency: String): SendPhoto {
 
-    val currencyDetails: CurrencyDetails = CoinMarketCapService.fetchCurrency(currency)
+    val currencyDetails: CurrencyDetails = CurrencyDetailsService.fetchCurrency(currency)
 
     logCurrencyRequest(message, currencyDetails, "image")
 

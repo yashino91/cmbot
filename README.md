@@ -5,11 +5,15 @@
 [![codecov](https://codecov.io/gh/yashino91/cmbot/branch/master/graph/badge.svg)](https://codecov.io/gh/yashino91/cmbot)
 
 
-A simple telegram bot written in Kotlin, for fetching price information about crypto currencies from CoinMarketCap. 
+A simple telegram bot written in Kotlin, for fetching price information about crypto currencies from [CryptoCompare](https://www.cryptocompare.com/). 
+
+
+Originally this bot was requesting the public CoinMarketCap API. 
+Because of their Professional API migration on December 4th, 2018 (Does not offer sufficient requests/endpoints in the free tier), I had to switch to another provider.
 
 ![Alt text](/screenshots/example.png?raw=true "Bot Example - Formatted as an Image")
 
-You can browse all currencies on CoinMarketCap through [Inline Queries](https://core.telegram.org/bots/inline). 
+You can browse all currencies on [CryptoCompare](https://www.cryptocompare.com/) through [Inline Queries](https://core.telegram.org/bots/inline). 
 Just call the bot by its username and a query in the text input field. For example: `@PriceLeechBot eth`.
 
 Select a result and you'll get the most important information as a rendered image via Telegram.
@@ -72,7 +76,7 @@ The configuration is done in the config.yaml file, located in the resource direc
 | Key 			                | Value 								                |
 | ------------------------------|-------------------------------------------------------|
 | botName 	                    | Name of your Telegram Bot				                |
-| allowedCurrencySlugs          | Array of currency slugs that are allowed to request. If empty every currency is allowed |
+| allowedSymbols                | Array of currency symbols that are allowed to request. If empty every currency is allowed |
 | autoclearMessages             | Deletes sent photo messages automatically if enabled |
 | autoclearMessagesDurationSec  | Number in seconds after sent photo messages should be deleted |
 

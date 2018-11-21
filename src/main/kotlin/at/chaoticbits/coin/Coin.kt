@@ -1,11 +1,11 @@
-package at.chaoticbits.coinmarket
+package at.chaoticbits.coin
 
 import at.chaoticbits.util.getStringOrNull
 import org.json.JSONObject
 
 
 /**
- * Illustrates a coin with basic information from CoinMarketCap
+ * Illustrates a coin with basic information
  */
 data class Coin(
         val id: Int,

@@ -1,13 +1,13 @@
 package at.chaoticbits.updateshandlers
 
-import at.chaoticbits.coinmarket.*
-import at.chaoticbits.coinmarket.CoinMarketCapService.BASE_URL
+import at.chaoticbits.coin.CoinContainer
+import at.chaoticbits.coin.CoinScheduler
+import at.chaoticbits.currencydetails.*
+import at.chaoticbits.currencydetails.CurrencyDetailsService.BASE_URL
 import at.chaoticbits.config.Bot
 import at.chaoticbits.config.Commands
-import at.chaoticbits.database.DatabaseManager
 import mu.KotlinLogging
 import org.telegram.telegrambots.api.methods.AnswerInlineQuery
-import org.telegram.telegrambots.api.methods.BotApiMethod
 import org.telegram.telegrambots.api.methods.send.SendMessage
 import org.telegram.telegrambots.api.methods.updatingmessages.DeleteMessage
 import org.telegram.telegrambots.api.objects.Message
@@ -16,12 +16,9 @@ import org.telegram.telegrambots.api.objects.inlinequery.InlineQuery
 import org.telegram.telegrambots.api.objects.inlinequery.inputmessagecontent.InputTextMessageContent
 import org.telegram.telegrambots.api.objects.inlinequery.result.InlineQueryResult
 import org.telegram.telegrambots.api.objects.inlinequery.result.InlineQueryResultArticle
-import org.telegram.telegrambots.api.objects.replykeyboard.ForceReplyKeyboard
 import org.telegram.telegrambots.bots.DefaultBotOptions
 import org.telegram.telegrambots.bots.TelegramLongPollingBot
 import org.telegram.telegrambots.exceptions.TelegramApiException
-import org.telegram.telegrambots.exceptions.TelegramApiRequestException
-import org.telegram.telegrambots.updateshandlers.SentCallback
 import java.io.UnsupportedEncodingException
 import java.util.*
 import java.util.Collections.synchronizedSet
@@ -43,21 +40,15 @@ open class CryptoHandler(defaultBotOptions: DefaultBotOptions) : TelegramLongPol
     @Volatile
     private var sentPhotoMessages: MutableSet<Triple<Long, Int, Int>> = synchronizedSet(mutableSetOf())
 
-    private val WAITING_BOT_TOKEN = 0
-    private val WAITING_NOTIFICATION = 1
-
 
     /**
      * Start schedulers
      */
     init {
+        Timer().scheduleAtFixedRate(CoinScheduler(),0,  24 * 60 * 60 * 1000)
 
-        Timer().scheduleAtFixedRate(CoinMarketScheduler(),0,  24 * 60 * 60 * 1000)
-        if (Bot.config.autoclearMessages) {
+        if (Bot.config.autoclearMessages)
             Timer().scheduleAtFixedRate(0, 10 * 1000) { clearOldPhotoMessages() }
-        }
-
-        DatabaseManager
     }
 
 
@@ -83,135 +74,45 @@ open class CryptoHandler(defaultBotOptions: DefaultBotOptions) : TelegramLongPol
                 execute(this.answerInlineQuery(update.inlineQuery))
 
             // handle received messages
-            else if (update.hasMessage() && update.message.hasText())
-                this.handleIncomingMessage(update.message)
+            else if (update.hasMessage()) {
 
+                val message: Message = update.message
+
+                //check if the message has text
+                if (message.hasText() && message.text.startsWith("/")) {
+
+                    val sendMessageRequest  = initSendMessageRequest(message.chatId)
+                    val command             = message.text
+
+                    try {
+
+                        if (command.startsWith(Commands.coin)) {
+
+                            val msg = sendPhoto(coinCommand(message, command.substring(Commands.coin.length, indexOfCommandEnd(command))))
+                            if (Bot.config.autoclearMessages)
+                                sentPhotoMessages.add(Triple(msg.chatId, msg.messageId, msg.date))
+
+                        } else {
+                            sendMessageRequest.text = textRequest(command)
+                        }
+
+                    } catch (e: IllegalStateException) {
+                        log.error { e.message }
+                        sendMessageRequest.text = escapeMessage(e.message)
+                    } catch (e: UnsupportedEncodingException) {
+                        log.error { e.message }
+                        sendMessageRequest.text = escapeMessage(e.message)
+                    } catch (e: CurrencyNotFoundException) {
+                        log.warn { e.message }
+                        sendMessageRequest.text = escapeMessage(e.message)
+                    }
+
+                    if (sendMessageRequest.text != null)
+                        execute(sendMessageRequest)
+                }
+            }
         } catch (e: TelegramApiException) {
             log.error { e.message }
-        }
-    }
-
-
-    @Throws(TelegramApiException::class)
-    private fun handleIncomingMessage(message: Message) {
-
-        val command = message.text
-
-
-        // handle reply messages / execute async
-        if (message.isReply ||command.startsWith(Commands.pushNotification))
-            this.handleReplyMessages(message, command)
-
-        //handle one time message requests
-        else if (message.text.startsWith("/")) {
-            DatabaseManager.saveChatIfNotExist(message.chatId)
-
-            val sendMessageRequest  = initSendMessageRequest(message.chatId)
-
-            when {
-                command.startsWith(Commands.coin) ->
-                    sendMessageRequest.text = handleCoinRequest(message, command)
-                command.substring(0, indexOfCommandEnd(command)) == Commands.start ->
-                    sendMessageRequest.text = startCommand()
-                command.substring(0, indexOfCommandEnd(command)) == Commands.help ->
-                    sendMessageRequest.text = helpCommand(this.botUsername)
-                else ->
-                    sendMessageRequest.text = commandNotFound(command)
-            }
-
-            if (sendMessageRequest.text != null)
-                execute(sendMessageRequest)
-        }
-    }
-
-    @Throws(TelegramApiException::class)
-    fun handleReplyMessages(message: Message, command: String) {
-        when {
-            message.isReply && PushNotification.getStatus() == WAITING_BOT_TOKEN ->
-                this.onReceiveBotToken(message, command)
-            message.isReply && PushNotification.getStatus() == WAITING_NOTIFICATION ->
-                this.onReceiveNotificationMessage(message, command)
-            else ->
-                this.handlePushNotificationStart(message, command)
-        }
-    }
-
-    private fun onReceiveNotificationMessage(message: Message, command: String) {
-
-        log.info { "Notification: $command" }
-    }
-
-    @Throws(TelegramApiException::class)
-    fun handlePushNotificationStart(message: Message, command: String) {
-        val forceReplyKeyboard = ForceReplyKeyboard()
-        val sendMessageRequest = this.initSendMessageRequest(message.chatId)
-
-        forceReplyKeyboard.selective = true
-        sendMessageRequest.replyToMessageId = message.messageId
-        sendMessageRequest.replyMarkup = forceReplyKeyboard
-        sendMessageRequest.text = PushNotification.startMessage()
-
-
-        executeAsync(sendMessageRequest, object : SentCallback<Message> {
-            override fun onResult(method: BotApiMethod<Message>, sentMessage: Message?) {
-                if (sentMessage != null)
-                    PushNotification.setStatus(WAITING_BOT_TOKEN)
-            }
-            override fun onError(botApiMethod: BotApiMethod<Message>, e: TelegramApiRequestException) {}
-            override fun onException(botApiMethod: BotApiMethod<Message>, e: Exception) {}
-        })
-    }
-
-    @Throws(TelegramApiException::class)
-    fun onReceiveBotToken(message: Message, command: String) {
-        val forceReplyKeyboard = ForceReplyKeyboard()
-        val sendMessageRequest = this.initSendMessageRequest(message.chatId)
-
-        forceReplyKeyboard.selective = true
-        sendMessageRequest.replyToMessageId = message.messageId
-        sendMessageRequest.replyMarkup = forceReplyKeyboard
-        sendMessageRequest.text = PushNotification.authorize(
-                message.from.id,
-                this.botToken,
-                command
-        )
-
-
-        executeAsync(sendMessageRequest, object : SentCallback<Message> {
-            override fun onResult(method: BotApiMethod<Message>, sentMessage: Message?) {
-                if (sentMessage != null)
-                    PushNotification.setStatus(WAITING_NOTIFICATION)
-            }
-            override fun onError(botApiMethod: BotApiMethod<Message>, e: TelegramApiRequestException) {}
-            override fun onException(botApiMethod: BotApiMethod<Message>, e: Exception) {}
-        })
-    }
-
-
-
-    @Throws(TelegramApiException::class)
-    fun handleCoinRequest(message: Message, command: String): String? {
-
-        try {
-
-            val msg = sendPhoto(coinCommand(message, command.substring(Commands.coin.length, indexOfCommandEnd(command))))
-            if (Bot.config.autoclearMessages)
-                sentPhotoMessages.add(Triple(msg.chatId, msg.messageId, msg.date))
-
-            return null
-
-        } catch (e: Exception) {
-            return when(e) {
-                is IllegalStateException, is UnsupportedEncodingException -> {
-                    log.error { e.message }
-                    e.message
-                }
-                is CurrencyNotFoundException -> {
-                    log.warn { e.message }
-                    e.message
-                }
-                else -> throw e
-            }
         }
     }
 
@@ -235,7 +136,7 @@ open class CryptoHandler(defaultBotOptions: DefaultBotOptions) : TelegramLongPol
      * Generates a AnswerInlineQuery for the given update (containing the client inline query)
      *
      * @param inlineQuery [InlineQuery] The incoming inline query
-     * @return [AnswerInlineQuery] Contains a list of found coins on CoinMarketCap
+     * @return [AnswerInlineQuery] Contains a list of found coins on cryptocompare.com
      */
     fun answerInlineQuery(inlineQuery: InlineQuery): AnswerInlineQuery {
 
@@ -243,7 +144,7 @@ open class CryptoHandler(defaultBotOptions: DefaultBotOptions) : TelegramLongPol
         answerQuery.cacheTime = 300
         answerQuery.inlineQueryId = inlineQuery.id
 
-        val coinsOfInterest = CoinMarketContainer.findCoins(inlineQuery.query)
+        val coinsOfInterest = CoinContainer.findCoins(inlineQuery.query)
         if (coinsOfInterest.isNotEmpty()) {
 
             val inlineQueryResults: List<InlineQueryResult> = coinsOfInterest.take(50).map { it ->
@@ -269,6 +170,24 @@ open class CryptoHandler(defaultBotOptions: DefaultBotOptions) : TelegramLongPol
         }
 
         return answerQuery
+    }
+
+    /**
+     * Pocceses user commands that except a String as a response
+     *
+     * @param command [String] User command
+     * @return [String] Contains the response according to the requested command
+     */
+    fun textRequest(command: String): String {
+
+        return when {
+            command.substring(0, indexOfCommandEnd(command)) == Commands.start ->
+                startCommand()
+            command.substring(0, indexOfCommandEnd(command)) == Commands.help ->
+                helpCommand()
+            else ->
+                commandNotFound(command)
+        }
     }
 
 
