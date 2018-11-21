@@ -1,7 +1,7 @@
 package at.chaoticbits.updatehandlers
 
-import at.chaoticbits.coinmarket.Coin
-import at.chaoticbits.coinmarket.CoinMarketContainer
+import at.chaoticbits.coin.Coin
+import at.chaoticbits.coin.CoinContainer
 import at.chaoticbits.config.Bot
 import at.chaoticbits.config.Commands
 import at.chaoticbits.testdata.Config
@@ -34,7 +34,15 @@ class CryptoHandlerTest {
         @JvmStatic
         fun setup() {
             environmentVariables.set("CMBOT_TELEGRAM_TOKEN", Config.testBotToken)
-            CoinMarketContainer.addOrReplaceCoin(Coin(1, 1,  "Ethereum", "ETH", "ethereum"))
+            CoinContainer.addOrReplaceCoin(
+                Coin(
+                    1,
+                    1,
+                    "Ethereum",
+                    "ETH",
+                    ""
+                )
+            )
         }
 
         @AfterClass
@@ -74,10 +82,10 @@ class CryptoHandlerTest {
 
         val firstResult: InlineQueryResultArticle = inlineQueryResults.first() as InlineQueryResultArticle
 
-        Assert.assertThat(firstResult.description, containsString("Rank"))
+        Assert.assertThat(firstResult.description, containsString("Ethereum"))
 
         val textMessageContent = firstResult.inputMessageContent as InputTextMessageContent
-        Assert.assertEquals(textMessageContent.messageText,"/coin ethereum")
+        Assert.assertEquals(textMessageContent.messageText,"/coin ETH")
     }
 
     @Test
@@ -118,7 +126,7 @@ class CryptoHandlerTest {
     @Test
     fun testCoinCommand() {
         val update  = TestData.requestImageUpdate()
-        val photo   = coinCommand(update!!.message, "ethereum")
+        val photo   = coinCommand(update!!.message, "eth")
 
         Assert.assertNotNull(photo)
     }

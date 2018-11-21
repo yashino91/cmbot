@@ -1,6 +1,6 @@
 package at.chaoticbits.render
 
-import at.chaoticbits.coinmarket.CurrencyDetails
+import at.chaoticbits.currencydetails.CurrencyDetails
 import at.chaoticbits.config.DecimalFormatter
 import org.thymeleaf.TemplateEngine
 import org.thymeleaf.context.Context
@@ -48,13 +48,17 @@ object HtmlImageService {
     fun generateCryptoDetailsImage(currencyDetails: CurrencyDetails): InputStream {
         val context = Context(Locale.forLanguageTag("de-AT"))
 
+        val classloader = Thread.currentThread().contextClassLoader
+
         context.setVariable("currencyDetails", currencyDetails)
         context.setVariable("DecimalFormatter", DecimalFormatter)
+        context.setVariable("change24hColor", getPercentageColor(currencyDetails.change24h))
+        context.setVariable("bootstrapCss", classloader.getResource("css/bootstrap.min.css"))
 
         val html = templateEngine.process("html/currency-details.html", context)
 
-        try {
 
+        try {
             val htmlInputStream = ByteArrayInputStream(html.toByteArray(StandardCharsets.UTF_8))
 
             // create a w3c document of the generated html input stream
@@ -72,6 +76,13 @@ object HtmlImageService {
             throw IllegalStateException("Error writing Image: " + e.message)
         }
 
+    }
+
+
+    private fun getPercentageColor(change24h: BigDecimal?): String {
+        if (change24h == null) return "grey"
+
+        return if (change24h > BigDecimal.ZERO) "#4CAF50" else "#BF360C"
     }
 
 }

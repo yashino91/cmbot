@@ -1,4 +1,4 @@
-package at.chaoticbits.coinmarket
+package at.chaoticbits.coin
 
 import java.util.Collections.*
 
@@ -6,20 +6,16 @@ import java.util.Collections.*
 /**
  * Holding lists of symbols slugs
  */
-object CoinMarketContainer {
+object CoinContainer {
 
 
     /**
-     * Holding a thread safe set of all coins on CoinMarketCap
+     * Holding a thread safe set of all coins
      */
     @Volatile
     private var coins: MutableSet<Coin> = synchronizedSet(sortedSetOf())
 
 
-
-    /*-------------------------------------*\
-     * Coins Access Function
-    \*-------------------------------------*/
 
     /**
      * Searches for coins that match the given query.
@@ -42,7 +38,7 @@ object CoinMarketContainer {
      */
     @Synchronized
     fun findCoinBySymbolOrName (currency: String): Coin? =
-            coins.find { it -> it.symbol.equals(currency, ignoreCase = true) || it.symbol.equals(currency, ignoreCase = true)}
+            coins.find { it -> it.symbol.equals(currency, ignoreCase = true) }
 
 
     /**

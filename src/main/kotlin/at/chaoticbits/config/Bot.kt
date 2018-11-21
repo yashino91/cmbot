@@ -22,7 +22,7 @@ interface Config {
     /**
      * List of allowed currency slugs, that can be requested by coin market cap.
      */
-    val allowedCurrencySlugs: List<String>
+    val allowedSymbols: List<String>
 
     /**
      * Indicates if sent telegram messages should be deleted after a given time

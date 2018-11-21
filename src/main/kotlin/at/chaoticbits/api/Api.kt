@@ -26,7 +26,7 @@ object Api {
      */
     fun fetch(url: String, headers: Array<BasicHeader> = arrayOf()): Response {
 
-        val request = HttpGet(url)
+        val request =HttpGet(url)
         request.setHeaders(headers)
 
         try {
@@ -37,7 +37,7 @@ object Api {
 
             }
         } catch(e: Exception) {
-            throw IllegalStateException("Error fetching url: $url! ${e.message}")
+            throw IllegalStateException("Error fetching endpoint: $url! ${e.message}")
         }
     }
 }
