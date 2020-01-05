@@ -88,9 +88,11 @@ open class CryptoHandler(defaultBotOptions: DefaultBotOptions) : TelegramLongPol
 
                         if (command.startsWith(Commands.coin)) {
 
-                            val msg = sendPhoto(coinCommand(message, command.substring(Commands.coin.length, indexOfCommandEnd(command))))
-                            if (Bot.config.autoclearMessages)
-                                sentPhotoMessages.add(Triple(msg.chatId, msg.messageId, msg.date))
+//                            val msg = sendPhoto(coinImageCommand(message, command.substring(Commands.coin.length, indexOfCommandEnd(command))))
+//                            if (Bot.config.autoclearMessages)
+//                                sentPhotoMessages.add(Triple(msg.chatId, msg.messageId, msg.date))
+
+                            sendMessageRequest.text = escapeMessage(coinTextCommand(message, command.substring(Commands.coin.length, indexOfCommandEnd(command))))
 
                         } else {
                             sendMessageRequest.text = textRequest(command)

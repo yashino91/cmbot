@@ -3,11 +3,10 @@ package at.chaoticbits.updatehandlers
 import at.chaoticbits.coin.Coin
 import at.chaoticbits.coin.CoinContainer
 import at.chaoticbits.config.Bot
-import at.chaoticbits.config.Commands
 import at.chaoticbits.testdata.Config
 import at.chaoticbits.testdata.TestData
 import at.chaoticbits.updateshandlers.CryptoHandler
-import at.chaoticbits.updateshandlers.coinCommand
+import at.chaoticbits.updateshandlers.coinImageCommand
 import org.hamcrest.CoreMatchers.containsString
 import org.junit.*
 import org.junit.contrib.java.lang.system.EnvironmentVariables
@@ -126,7 +125,7 @@ class CryptoHandlerTest {
     @Test
     fun testCoinCommand() {
         val update  = TestData.requestImageUpdate()
-        val photo   = coinCommand(update!!.message, "eth")
+        val photo   = coinImageCommand(update!!.message, "eth")
 
         Assert.assertNotNull(photo)
     }

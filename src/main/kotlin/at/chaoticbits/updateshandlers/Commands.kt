@@ -4,6 +4,7 @@ import at.chaoticbits.currencydetails.CurrencyDetailsService
 import at.chaoticbits.currencydetails.CurrencyDetails
 import at.chaoticbits.currencydetails.CurrencyNotFoundException
 import at.chaoticbits.render.HtmlImageService
+import at.chaoticbits.render.TextRenderService
 import mu.KotlinLogging
 import net.logstash.logback.marker.Markers
 import org.telegram.telegrambots.api.methods.send.SendPhoto
@@ -60,7 +61,7 @@ fun commandNotFound(command: String): String = "Command not found: *$command*. U
  * @return [SendPhoto] Object containing a rendered image that displays price information about the requested coin
  */
 @Throws(IllegalStateException::class, UnsupportedEncodingException::class, CurrencyNotFoundException::class)
-fun coinCommand(message: Message, currency: String): SendPhoto {
+fun coinImageCommand(message: Message, currency: String): SendPhoto {
 
     val currencyDetails: CurrencyDetails = CurrencyDetailsService.fetchCurrency(currency)
 
@@ -73,6 +74,22 @@ fun coinCommand(message: Message, currency: String): SendPhoto {
     return photo
 }
 
+/**
+ * Queries the given currency and returns the result as a rendered image
+ *
+ * @param message [Message] The requested user message
+ * @param currency [String] The requested currency
+ * @return [SendPhoto] Object containing a rendered image that displays price information about the requested coin
+ */
+@Throws(IllegalStateException::class, UnsupportedEncodingException::class, CurrencyNotFoundException::class)
+fun coinTextCommand(message: Message, currency: String): String {
+
+    val currencyDetails: CurrencyDetails = CurrencyDetailsService.fetchCurrency(currency)
+
+    logCurrencyRequest(message, currencyDetails, "text")
+
+    return TextRenderService.formatCurrencyResult(currencyDetails)
+}
 
 
 /**
