@@ -15,7 +15,7 @@
         <telegrambots.version>3.6.1</telegrambots.version>
         <json.version>20160810</json.version>
         <jsoup.version>1.11.2</jsoup.version>
-        <commonsio.version>2.5</commonsio.version>
+        <commonsio.version>2.7</commonsio.version>
         <kotlin.version>1.2.20</kotlin.version>
     </properties>
 
