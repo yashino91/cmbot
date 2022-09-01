@@ -14,7 +14,7 @@
         <httpcompontents.version>4.5.3</httpcompontents.version>
         <telegrambots.version>3.6.1</telegrambots.version>
         <json.version>20160810</json.version>
-        <jsoup.version>1.11.2</jsoup.version>
+        <jsoup.version>1.15.3</jsoup.version>
         <commonsio.version>2.5</commonsio.version>
         <kotlin.version>1.2.20</kotlin.version>
     </properties>
